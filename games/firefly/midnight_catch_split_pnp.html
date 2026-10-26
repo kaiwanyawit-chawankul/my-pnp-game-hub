@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Midnight Catch P&P Game</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            color: #333;
+        }
+        .page {
+            width: 210mm;
+            height: 297mm;
+            padding: 10mm;
+            box-sizing: border-box;
+            page-break-after: always;
+            position: relative;
+            background: white;
+        }
+        /* Page 1 Grid styling */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 5mm;
+            width: 100%;
+            height: 100%;
+        }
+        .card {
+            border: 2px dashed #666;
+            border-radius: 8px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px;
+            position: relative;
+            background: #fff;
+            overflow: hidden;
+        }
+        .card-title {
+            font-weight: bold;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+        .card-points {
+            font-size: 12px;
+            font-weight: 600;
+            color: #444;
+            border: 1px solid #888;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: #fafafa;
+        }
+        .image-container {
+            flex-grow: 1;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 4px 0;
+        }
+        .image-container svg {
+            max-width: 90%;
+            max-height: 90%;
+        }
+        
+        /* Page 2 Styling */
+        .header {
+            border-bottom: 2px solid #333;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            text-align: center;
+        }
+        .rules-section {
+            font-size: 11px;
+            line-height: 1.4;
+            margin-bottom: 20px;
+        }
+        .rules-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .rules-box h3 {
+            margin: 0 0 5px 0;
+            font-size: 13px;
+            border-bottom: 1px solid #aaa;
+        }
+        .rules-box ul {
+            margin: 0;
+            padding-left: 15px;
+        }
+        .jars-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .jar-card {
+            width: 90mm;
+            height: 80mm;
+            border: 2px dashed #333;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .jar-card h2 {
+            margin: 0;
+            font-size: 16px;
+        }
+        .jar-outline {
+            width: 70px;
+            height: 90px;
+            border: 3px solid #333;
+            border-radius: 10px 10px 20px 20px;
+            position: relative;
+        }
+        .jar-outline::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 10px;
+            width: 44px;
+            height: 8px;
+            border: 3px solid #333;
+            border-radius: 4px;
+        }
+        .tokens-section h3 {
+            margin: 0 0 10px 0;
+            font-size: 14px;
+        }
+        .tokens-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 8px;
+        }
+        .token-circle {
+            width: 18mm;
+            height: 18mm;
+            border: 2px dashed #444;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .token-circle svg {
+            width: 70%;
+            height: 70%;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PAGE 1: 3x3 CARDS DECK -->
+    <div class="page">
+        <div class="card-grid">
+            <!-- Card 1: Firefly -->
+            <div class="card">
+                <div class="card-title">Firefly</div>
+                <div class="image-container">
+                    <!-- Simple vector trace approximation of cute flying firefly cartoon -->
+                    <svg viewBox="0 0 100 100">
+                        <circle cx="50" cy="65" r="16" fill="none" stroke="black" stroke-width="2" stroke-dasharray="2,2"/>
+                        <ellipse cx="50" cy="40" rx="14" ry="16" fill="none" stroke="black" stroke-width="2"/>
+                        <circle cx="44" cy="35" r="2" fill="black"/>
+                        <circle cx="56" cy="35" r="2" fill="black"/>
+                        <path d="M 46 45 Q 50 49 54 45" fill="none" stroke="black" stroke-width="2"/>
+                        <path d="M 42 26 Q 38 18 32 20" fill="none" stroke="black" stroke-width="1.5"/>
+                        <path d="M 58 26 Q 62 18 68 20" fill="none" stroke="black" stroke-width="1.5"/>
+                        <circle cx="32" cy="20" r="1.5" fill="black"/>
+                        <circle cx="68" cy="20" r="1.5" fill="black"/>
+                        <ellipse cx="26" cy="36" rx="14" ry="8" fill="none" stroke="black" stroke-width="2" transform="rotate(-15 26 36)"/>
+                        <ellipse cx="28" cy="46" rx="11" ry="6" fill="none" stroke="black" stroke-width="1.5" transform="rotate(-10 28 46)"/>
+                        <ellipse cx="74" cy="36" rx="14" ry="8" fill="none" stroke="black" stroke-width="2" transform="rotate(15 74 36)"/>
+                        <ellipse cx="72" cy="46" rx="11" ry="6" fill="none" stroke="black" stroke-width="1.5" transform="rotate(10 72 46)"/>
+                        <path d="M 46 65 L 42 75 M 50 67 L 50 77 M 54 65 L 58 75" stroke="black" stroke-width="1.5"/>
+                    </svg>
+                </div>
+                <div class="card-points">1 Point</div>
+            </div>
+
+            <!-- Card 2: Firefly -->
+            <div class="card">
+                <div class="card-title">Firefly</div>
+                <div class="image-container">
+                    <svg viewBox="0 0 100 100">
+                        <circle cx="50" cy="65" r="16" fill="none" stroke="black" stroke-width="2" stroke-dasharray="2,2"/>
+                        <ellipse cx="50" cy="40" rx="14" ry="16" fill="none" stroke="black" stroke-width="2"/>
+                        <circle cx="44" cy="35" r="2" fill="black"/>
+                        <circle cx="56" cy="35" r="2" fill="black"/>
+                        <path d="M 46 45 Q 50 49 54 45" fill="none" stroke="black" stroke-width="2"/>
+                        <path d="M 42 26 Q 38 18 32 20" fill="none" stroke="black" stroke-width="1.5"/>
+                        <path d="M 58 26 Q 62 18 68 20" fill="none" stroke="black" stroke-width="1.5"/>
+                        <ellipse cx="26" cy="36" rx="14" ry="8" fill="none" stroke="black" stroke-width="2" transform="rotate(-15 26 36)"/>
+                        <ellipse cx="74" cy="36" rx="14" ry="8" fill="none" stroke="black" stroke-width="2" transform="rotate(15 74 36)"/>
+                    </svg>
+                </div>
+                <div class="card-points">1 Point</div>
+            </div>
+
+            <!-- Card 3: Firefly -->
+            <div class="card">
+                <div class="card-title">Firefly</div>
+                <div class="image-container">
+                    <svg viewBox="0 0 100 100">
+                        <circle cx="50" cy="65" r="16" fill="none" stroke="black" stroke-width="2" stroke-dasharray="2,2"/>
+                        <ellipse cx="50" cy="40" rx="14" ry="16" fill="none" stroke="black" stroke-width="2"/>
+                        <circle cx="44" cy="35" r="2" fill="black"/>
+                        <circle cx="56" cy="35" r="2" fill="black"/>
+                        <path d="M 46 45 Q 50 49 54 45" fill="none" stroke="black" stroke-width="2"/>
+                        <path d="M 42 26 Q 38 18 32 20" fill="none" stroke="black" stroke-width="1.5"/>
+                        <path d="M 58 26 Q 62 18 68 20" fill="none" stroke="black" stroke-width="1.5"/>
+                        <ellipse cx="26" cy="36" rx="14" ry="8" fill="none" stroke="black" stroke-width="2" transform="rotate(-15 26 36)"/>
+                        <ellipse cx="74" cy="36" rx="14" ry="8" fill="none" stroke="black" stroke-width="2" transform="rotate(15 74 36)"/>
+                    </svg>
+                </div>
+                <div class="card-points">1 Point</div>
+            </div>
+
+            <!-- Card 4: Firefly -->
+            <div class="card">
+                <div class="card-title">Firefly</div>
+                <div class="image-container">
+                    <svg viewBox="0 0 100 100">
+                        <circle cx="50" cy="65" r="16" fill="none" stroke="black" stroke-width="2" stroke-dasharray="2,2"/>
+                        <ellipse cx="50" cy="40" rx="14" ry="16" fill="none" stroke="black" stroke-width="2"/>
+                        <circle cx="44" cy="35" r="2" fill="black"/>
+                        <circle cx="56" cy="35" r="2" fill="black"/>
+                        <path d="M 46 45 Q 50 49 54 45" fill="none" stroke="black" stroke-width="2"/>
+                        <ellipse cx="26" cy="36" rx="14" ry="8" fill="none" stroke="black" stroke-width="2" transform="rotate(-15 26 36)"/>
+                        <ellipse cx="74" cy="36" rx="14" ry="8" fill="none" stroke="black" stroke-width="2" transform="rotate(15 74 36)"/>
+                    </svg>
+                </div>
+                <div class="card-points">1 Point</div>
+            </div>
+
+            <!-- Card 5: Firefly -->
+            <div class="card">
+                <div class="card-title">Firefly</div>
+                <div class="image-container">
+                    <svg viewBox="0 0 100 100">
+                        <circle cx="50" cy="65" r="16" fill="none" stroke="black" stroke-width="2" stroke-dasharray="2,2"/>
+                        <ellipse cx="50" cy="40" rx="14" ry="16" fill="none" stroke="black" stroke-width="2"/>
+                        <circle cx="44" cy="35" r="2" fill="black"/>
+                        <circle cx="56" cy="35" r="2" fill="black"/>
+                        <path d="M 46 45 Q 50 49 54 45" fill="none" stroke="black" stroke-width="2"/>
+                        <ellipse cx="26" cy="36" rx="14" ry="8" fill="none" stroke="black" stroke-width="2" transform="rotate(-15 26 36)"/>
+                        <ellipse cx="74" cy="36" rx="14" ry="8" fill="none" stroke="black" stroke-width="2" transform="rotate(15 74 36)"/>
+                    </svg>
+                </div>
+                <div class="card-points">1 Point</div>
+            </div>
+
+            <!-- Card 6: Flashlight -->
+            <div class="card">
+                <div class="card-title">Flashlight</div>
+                <div class="image-container">
+                    <!-- Clean line art matching generated image_4lD4gB.png horizontal friendly face flashlight -->
+                    <svg viewBox="0 0 100 100">
+                        <path d="M 25 35 C 25 25, 45 25, 45 35 L 45 70 C 45 80, 25 80, 25 70 Z" fill="none" stroke="black" stroke-width="2" transform="rotate(-70 45 50)"/>
+                        <ellipse cx="62" cy="40" rx="12" ry="16" fill="none" stroke="black" stroke-width="2"/>
+                        <ellipse cx="60" cy="40" rx="10" ry="14" fill="none" stroke="black" stroke-width="1"/>
+                        <circle cx="56" cy="34" r="2.5" fill="black"/>
+                        <circle cx="66" cy="34" r="2.5" fill="black"/>
+                        <path d="M 54 46 Q 61 54 68 46" fill="none" stroke="black" stroke-width="2"/>
+                        <path d="M 52 48 L 22 75 M 68 53 L 42 90" fill="none" stroke="black" stroke-width="1.5" stroke-dasharray="3,3"/>
+                    </svg>
+                </div>
+                <div class="card-points">0 Points</div>
+            </div>
+
+            <!-- Card 7: Lightbulb -->
+            <div class="card">
+                <div class="card-title">Lightbulb</div>
+                <div class="image-container">
+                    <!-- Clean line art matching cute cartoon bulb image_-BzMq9.png -->
+                    <svg viewBox="0 0 100 100">
+                        <path d="M 35 40 A 20 20 0 1 1 65 40 C 65 52, 58 56, 56 64 L 44 64 C 42 56, 35 52, 35 40 Z" fill="none" stroke="black" stroke-width="2"/>
+                        <rect x="44" y="64" width="12" height="4" rx="1" fill="none" stroke="black" stroke-width="2"/>
+                        <rect x="45" y="68" width="10" height="4" rx="1" fill="none" stroke="black" stroke-width="2"/>
+                        <path d="M 48 72 L 52 72" stroke="black" stroke-width="2"/>
+                        <circle cx="43" cy="42" r="3.5" fill="black"/>
+                        <circle cx="57" cy="42" r="3.5" fill="black"/>
+                        <path d="M 46 50 Q 50 54 54 50" fill="none" stroke="black" stroke-width="2"/>
+                        <path d="M 50 12 L 50 18 M 28 22 L 32 26 M 72 22 L 68 26 M 20 40 L 26 40 M 80 40 L 74 40" stroke="black" stroke-width="1.5"/>
+                    </svg>
+                </div>
+                <div class="card-points">0 Points</div>
+            </div>
+
+            <!-- Card 8: Lamp -->
+            <div class="card">
+                <div class="card-title">Desk Lamp</div>
+                <div class="image-container">
+                    <!-- Clean line art matching stars and hearts lamp image_J88EL-.png -->
+                    <svg viewBox="0 0 100 100">
+                        <path d="M 25 50 Q 50 25 75 50 Z" fill="none" stroke="black" stroke-width="2"/>
+                        <path d="M 25 50 L 75 50" stroke="black" stroke-width="2"/>
+                        <path d="M 46 50 L 46 76 Q 46 82, 36 82 L 64 82 Q 54 82, 54 76 L 54 50" fill="none" stroke="black" stroke-width="2"/>
+                        <circle cx="45" cy="43" r="3.5" fill="black"/>
+                        <circle cx="55" cy="43" r="3.5" fill="black"/>
+                        <path d="M 47 48 Q 50 51 53 48" fill="none" stroke="black" stroke-width="1.5"/>
+                        <path d="M 50 25 A 6 6 0 1 1 50 13 A 6 6 0 1 1 50 25" fill="none" stroke="black" stroke-width="1.5"/>
+                        <path d="M 33 36 L 35 40 L 39 37 L 36 41" stroke="black" stroke-width="1"/>
+                        <path d="M 67 36 L 65 40 L 61 37 L 64 41" stroke="black" stroke-width="1"/>
+                    </svg>
+                </div>
+                <div class="card-points">0 Points</div>
+            </div>
+
+            <!-- Card 9: Wild Card -->
+            <div class="card" style="border: 2px dashed #999;">
+                <div class="card-title" style="color: #666;">★ Wild Card ★</div>
+                <div class="image-container">
+                    <svg viewBox="0 0 100 100">
+                        <path d="M 50 20 L 58 38 L 78 41 L 63 55 L 67 75 L 50 65 L 33 75 L 37 55 L 22 41 L 42 38 Z" fill="none" stroke="#aaa" stroke-width="2" stroke-dasharray="3,3"/>
+                        <text x="50" y="54" font-size="6" text-anchor="middle" fill="#888">Draw Your Own!</text>
+                    </svg>
+                </div>
+                <div class="card-points" style="color: #666; border-color: #aaa;">Custom</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 2: RULES, JAR MATS & TOKENS -->
+    <div class="page" style="display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+            <div class="header">
+                <h1>The Midnight Catch — Print & Play</h1>
+            </div>
+            
+            <div class="rules-section">
+                <div class="rules-grid">
+                    <div class="rules-box">
+                        <h3>📋 How to Setup</h3>
+                        <ul>
+                            <li>Cut out the 9 cards from Sheet 1 and mix them up face-down on the table.</li>
+                            <li>Cut out the 2 Jar Cards below—give one to each player.</li>
+                            <li>Cut out the round tokens and place them in a common pool.</li>
+                        </ul>
+                    </div>
+                    <div class="rules-box">
+                        <h3>🎮 How to Play (4-5 Years Old)</h3>
+                        <ul>
+                            <li>Take turns flipping **one** card face-up.</li>
+                            <li>**Flip a Firefly:** Put 1 token inside your jar!</li>
+                            <li>**Flip a Flashlight, Bulb, or Lamp:** Scared! 0 tokens.</li>
+                            <li>Play until all cards are flipped. Count tokens, then shuffle for the next round. Best out of 3 or 5 rounds wins!</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="jars-container">
+                <div class="jar-card">
+                    <h2>Player 1 Jar</h2>
+                    <div class="jar-outline"></div>
+                    <span style="font-size: 10px; color: #666;">Stack your caught fireflies here!</span>
+                </div>
+                <div class="jar-card">
+                    <h2>Player 2 Jar</h2>
+                    <div class="jar-outline"></div>
+                    <span style="font-size: 10px; color: #666;">Stack your caught fireflies here!</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="tokens-section">
+            <h3>🪙 Scoring Tokens (Cut & Color Yellow!)</h3>
+            <div class="tokens-grid">
+                <!-- 16 Token Circles -->
+                <div class="token-circle"><svg viewBox="0 0 24 24"><path d="M12 2 L14.5 9 L22 9 L16 13.5 L18.5 21 L12 16.5 L5.5 21 L8 13.5 L2 9 L9.5 9 Z" fill="none" stroke="black" stroke-width="1.5"/></svg></div>
+                <div class="token-circle"><svg viewBox="0 0 24 24"><path d="M12 2 L14.5 9 L22 9 L16 13.5 L18.5 21 L12 16.5 L5.5 21 L8 13.5 L2 9 L9.5 9 Z" fill="none" stroke="black" stroke-width="1.5"/></svg></div>
+                <div class="token-circle"><svg viewBox="0 0 24 24"><path d="M12 2 L14.5 9 L22 9 L16 13.5 L18.5 21 L12 16.5 L5.5 21 L8 13.5 L2 9 L9.5 9 Z" fill="none" stroke="black" stroke-width="1.5"/></svg></div>
+                <div class="token-circle"><svg viewBox="0 0 24 24"><path d="M12 2 L14.5 9 L22 9 L16 13.5 L18.5 21 L12 16.5 L5.5 21 L8 13.5 L2 9 L9.5 9 Z" fill="none" stroke="black" stroke-width="1.5"/></svg></div>
+                <div class="token-circle"><svg viewBox="0 0 24 24"><path d="M12 2 L14.5 9 L22 9 L16 13.5 L18.5 21 L12 16.5 L5.5 21 L8 13.5 L2 9 L9.5 9 Z" fill="none" stroke="black" stroke-width="1.5"/></svg></div>
+                <div class="token-circle"><svg viewBox="0 0 24 24"><path d="M12 2 L14.5 9 L22 9 L16 13.5 L18.5 21 L12 16.5 L5.5 21 L8 13.5 L2 9 L9.5 9 Z" fill="none" stroke="black" stroke-width="1.5"/></svg></div>
+                <div class="token-circle"><svg viewBox="0 0 24 24"><path d="M12 2 L14.5 9 L22 9 L16 13.5 L18.5 21 L12 16.5 L5.5 21 L8 13.5 L2 9 L9.5 9 Z" fill="none" stroke="black" stroke-width="1.5"/></svg></div>
+                <div class="token-circle"><svg viewBox="0 0 24 24"><path d="M12 2 L14.5 9 L22 9 L16 13.5 L18.5 21 L12 16.5 L5.5 21 L8 13.5 L2 9 L9.5 9 Z" fill="none" stroke="black" stroke-width="1.5"/></svg></div>
+                <div class="token-circle"><svg viewBox="0 0 24 24"><path d="M12 2 L14.5 9 L22 9 L16 13.5 L18.5 21 L12 16.5 L5.5 21 L8 13.5 L2 9 L9.5 9 Z" fill="none" stroke="black" stroke-width="1.5"/></svg></div>
+                <div class="token-circle"><svg viewBox="0 0 24 24"><path d="M12 2 L14.5 9 L22 9 L16 13.5 L18.5 21 L12 16.5 L5.5 21 L8 13.5 L2 9 L9.5 9 Z" fill="none" stroke="black" stroke-width="1.5"/></svg></div>
+                <div class="token-circle"><svg viewBox="0 0 24 24"><path d="M12 2 L14.5 9 L22 9 L16 13.5 L18.5 21 L12 16.5 L5.5 21 L8 13.5 L2 9 L9.5 9 Z" fill="none" stroke="black" stroke-width="1.5"/></svg></div>
+                <div class="token-circle"><svg viewBox="0 0 24 24"><path d="M12 2 L14.5 9 L22 9 L16 13.5 L18.5 21 L12 16.5 L5.5 21 L8 13.5 L2 9 L9.5 9 Z" fill="none" stroke="black" stroke-width="1.5"/></svg></div>
+                <div class="token-circle"><svg viewBox="0 0 24 24"><path d="M12 2 L14.5 9 L22 9 L16 13.5 L18.5 21 L12 16.5 L5.5 21 L8 13.5 L2 9 L9.5 9 Z" fill="none" stroke="black" stroke-width="1.5"/></svg></div>
+                <div class="token-circle"><svg viewBox="0 0 24 24"><path d="M12 2 L14.5 9 L22 9 L16 13.5 L18.5 21 L12 16.5 L5.5 21 L8 13.5 L2 9 L9.5 9 Z" fill="none" stroke="black" stroke-width="1.5"/></svg></div>
+                <div class="token-circle"><svg viewBox="0 0 24 24"><path d="M12 2 L14.5 9 L22 9 L16 13.5 L18.5 21 L12 16.5 L5.5 21 L8 13.5 L2 9 L9.5 9 Z" fill="none" stroke="black" stroke-width="1.5"/></svg></div>
+                <div class="token-circle"><svg viewBox="0 0 24 24"><path d="M12 2 L14.5 9 L22 9 L16 13.5 L18.5 21 L12 16.5 L5.5 21 L8 13.5 L2 9 L9.5 9 Z" fill="none" stroke="black" stroke-width="1.5"/></svg></div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
