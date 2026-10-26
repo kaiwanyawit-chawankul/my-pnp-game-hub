@@ -38,7 +38,11 @@ export default function App() {
       <main className="game-grid">
         {filteredGames.map(game => (
           <div key={game.id} className="game-card" onClick={() => setActiveGame(game)}>
-            <img src={game.thumbnail} alt={game.title} className="game-thumb" />
+            {game.thumbnail ? (
+              <img src={game.thumbnail} alt={game.title} className="game-thumb" />
+            ) : (
+              <div className="game-thumb-placeholder">🎲 {game.title}</div>
+            )}
             <div className="game-info">
               <h3>{game.title}</h3>
               <p className="tagline">{game.tagline}</p>
@@ -63,12 +67,19 @@ export default function App() {
             <p>{activeGame.tagline}</p>
 
             <div className="modal-actions">
-              <a href={activeGame.downloads.printAndPlayPDF} className="btn primary" target="_blank" rel="noopener noreferrer">
-                📥 Download PnP Sheet (PDF)
-              </a>
-              <a href={activeGame.downloads.rulebook} className="btn secondary" target="_blank" rel="noopener noreferrer">
-                📖 Read Rulebook
-              </a>
+              {activeGame.downloads && Object.entries(activeGame.downloads).map(([key, url]) => {
+                // Formats camelCase keys like "printAndPlayPDF" into readable labels like "Print And Play PDF"
+                const label = key
+                  .replace(/([A-Z])/g, ' $1')
+                  .replace(/^./, str => str.toUpperCase());
+
+                return (
+                  <a key={key} href={url} className="btn primary" target="_blank" rel="noopener noreferrer">
+                    📥 Download {label}
+                  </a>
+                );
+              })}
+
               {activeGame.playableInBrowser && (
                 <button className="btn play" onClick={() => alert('Launch browser game route here!')}>
                   🚀 Play in Browser
