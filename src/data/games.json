@@ -25,5 +25,18 @@
       "printAndPlayCards": "https://raw.githubusercontent.com/kaiwanyawit-chawankul/my-pnp-game-hub/master/games/9CardsMosquitos/Mosquito%20Bites%20-%20Print%20and%20Play%20Cards%20(A4).pdf"
     },
     "playableInBrowser": false
+  },
+  {
+    "id": "9cardsKissTheFrog",
+    "title": "9 Cards Kiss The Frog",
+    "tagline": "A print-and-play micro game.",
+    "thumbnail": "",
+    "playerCount": "1-5 Players",
+    "playTime": "15 mins",
+    "tags": ["PnP", "9-Card"],
+    "downloads": {
+      "printAndPlayCards": "https://raw.githubusercontent.com/kaiwanyawit-chawankul/my-pnp-game-hub/master/games/9cardsKissTheFrog/Kiss%20the%20Frog%20v2%20-%204-Page%20A4%20Print%20&%20Play.pdf"
+    },
+    "playableInBrowser": false
   }
 ]

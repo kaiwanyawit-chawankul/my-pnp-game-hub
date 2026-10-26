@@ -1,0 +1,1943 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kiss the Frog v2 - 4-Page A4 Print & Play</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Quicksand", sans-serif;
+        background-color: #f3f4f6;
+        color: #1f2937;
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      .font-fun {
+        font-family: "Fredoka One", cursive;
+      }
+
+      /* A4 Page Setup for Screen Preview & High-Res Printing */
+      .a4-page {
+        width: 210mm;
+        height: 297mm;
+        padding: 10mm;
+        margin: 10mm auto;
+        background: white;
+        box-shadow:
+          0 10px 25px -5px rgba(0, 0, 0, 0.1),
+          0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        position: relative;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        overflow: hidden;
+      }
+
+      /* 3x3 Card Grid Layout for Page 2 & Page 3 */
+      .card-grid-3x3 {
+        display: grid;
+        grid-template-columns: repeat(3, 62mm);
+        grid-template-rows: repeat(3, 88mm);
+        gap: 2mm;
+        justify-content: center;
+        align-content: center;
+      }
+
+      /* Card Front Layout */
+      .card-front-frame {
+        border: 2px dashed #9ca3af;
+        border-radius: 8mm;
+        padding: 2.5mm;
+        background-color: #ffffff;
+        position: relative;
+        box-sizing: border-box;
+        height: 88mm;
+        width: 62mm;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      /* Card Back Layout */
+      .card-back-frame {
+        border: 2px dashed #6b7280;
+        border-radius: 8mm;
+        height: 88mm;
+        width: 62mm;
+        box-sizing: border-box;
+        position: relative;
+        overflow: hidden;
+        background: radial-gradient(circle at center, #10b981 0%, #064e3b 100%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* Token Circular Frame */
+      .token-circle {
+        border: 2px dashed #9ca3af;
+        border-radius: 9999px;
+        width: 42mm;
+        height: 42mm;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: white;
+        box-sizing: border-box;
+        position: relative;
+      }
+
+      /* Image Placeholder Box */
+      .img-placeholder {
+        border: 1.5px dashed #cbd5e1;
+        background-color: #f8fafc;
+        border-radius: 6mm;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 4px;
+        text-align: center;
+      }
+
+      /* Screen Only Navigation */
+      @media screen {
+        .page-hidden {
+          display: none !important;
+        }
+      }
+
+      /* Strict CSS A4 Print Rules */
+      @media print {
+        @page {
+          size: A4 portrait;
+          margin: 0;
+        }
+        body {
+          background: white;
+          margin: 0;
+          padding: 0;
+        }
+        .no-print {
+          display: none !important;
+        }
+        .a4-page {
+          box-shadow: none !important;
+          margin: 0 !important;
+          width: 210mm !important;
+          height: 297mm !important;
+          padding: 8mm !important;
+          page-break-after: always !important;
+          page-break-inside: avoid !important;
+          display: flex !important;
+        }
+        .page-hidden {
+          display: flex !important;
+        }
+      }
+    </style>
+  </head>
+  <body class="pb-12">
+    <div
+      class="no-print"
+      style="
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        background: #065f46;
+        padding: 8px;
+        text-align: center;
+      "
+    >
+      <button
+        onclick="window.print()"
+        style="
+          background: #fff;
+          color: #065f46;
+          font-weight: 700;
+          border: 0;
+          border-radius: 10px;
+          padding: 8px 20px;
+          cursor: pointer;
+        "
+      >
+        🖨️ Print all 4 pages
+      </button>
+    </div>
+
+    <!-- PAGE 1: BACKSTORY & RULEBOOK (v2) -->
+    <div id="page-1" class="a4-page border-t-8 border-emerald-600">
+      <div>
+        <div
+          class="flex justify-between items-center border-b-2 border-emerald-800 pb-2 mb-3"
+        >
+          <div>
+            <h1
+              class="text-2xl font-fun text-emerald-900 tracking-wide uppercase"
+            >
+              Kiss the Frog 💄🐸
+              <span class="text-amber-600 text-base">v2</span>
+            </h1>
+            <p class="text-xs font-bold text-emerald-700">
+              Fairy-Tale Memory &amp; Take-That Party Game • 2–4 Players • ~15
+              min
+            </p>
+          </div>
+          <div class="text-right">
+            <span
+              class="text-xs font-bold bg-emerald-100 text-emerald-900 px-3 py-1 rounded-full border border-emerald-300"
+              >Page 1 of 4: Rulebook</span
+            >
+          </div>
+        </div>
+
+        <div
+          class="bg-gradient-to-r from-amber-50 to-pink-50 border-2 border-amber-300 p-3.5 rounded-2xl mb-3 relative overflow-hidden shadow-sm"
+        >
+          <div class="absolute -right-2 -bottom-2 text-6xl opacity-15">👑</div>
+          <h2
+            class="font-fun text-amber-900 text-sm mb-1 flex items-center gap-2"
+          >
+            <i class="fa-solid fa-wine-glass-empty text-pink-600"></i> The Great
+            Wasted Witch &amp; Drunk Prince Incident
+          </h2>
+          <p class="text-[11px] text-amber-950 leading-relaxed italic">
+            At the annual Royal Grand Gala, the Wicked Witch got fed up with the
+            deafening karaoke music and cast a devastating Frog Curse on the
+            Royal Prince! However, the Prince was way too drunk. Instead of
+            panicking, he stumbled around sloppy-kissing EVERYONE—Princesses,
+            wolves, pigs, magical beings, and party guests! Now, all the
+            Princesses have been turned into frogs! There is only ONE True Frog
+            Prince in the pond. Every Princess must scramble through the magical
+            pond to find him, kiss him with true love (or total desperation),
+            reverse the curse, and live Happily Ever After... before they get
+            stuck eating flies forever!
+          </p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 text-xs mb-3">
+          <div
+            class="bg-slate-50 border border-slate-200 p-3 rounded-xl flex flex-col justify-between"
+          >
+            <div>
+              <h3
+                class="font-fun text-emerald-800 text-xs mb-1.5 flex items-center gap-1.5"
+              >
+                <i class="fa-solid fa-sliders text-emerald-600"></i> Setup (2–4
+                Players)
+              </h3>
+              <ul
+                class="list-disc list-inside space-y-1 text-slate-700 text-[11px]"
+              >
+                <li>
+                  Cut out the <b>9 Pond Cards</b> (Page 2) &amp;
+                  <b>4 Tokens</b> (Page 4).
+                </li>
+                <li>
+                  Everyone starts in <b>Princess Mode</b> 👸 with
+                  <b>0 cards</b> in hand.
+                </li>
+                <li>
+                  Shuffle the 9 cards and lay them
+                  <b>face-down in a 3&times;3 grid</b> (<b>The Pond</b>).
+                </li>
+                <li>
+                  First player: whoever kissed someone most recently. The
+                  <b>second player gets 1 extra Flip</b> on their first turn.
+                </li>
+              </ul>
+            </div>
+            <div
+              class="mt-2 bg-pink-100/70 border border-pink-300 p-1.5 rounded-lg text-[10px] text-pink-900"
+            >
+              <span class="font-bold">🖐️ Hand Limit: 2 Cards!</span> Ending your
+              turn with 2? Play one, or put one back face-down in an empty slot.
+            </div>
+          </div>
+          <div class="bg-emerald-50 border border-emerald-200 p-3 rounded-xl">
+            <h3
+              class="font-fun text-emerald-800 text-xs mb-1.5 flex items-center gap-1.5"
+            >
+              <i class="fa-solid fa-trophy text-amber-500"></i> Winning the Game
+            </h3>
+            <div class="space-y-1 text-slate-700 text-[11px]">
+              <p class="font-bold text-emerald-950">
+                Kiss the True Frog Prince TWICE:
+              </p>
+              <p>
+                1️⃣ <b>1st Kiss (As Princess 👸):</b> Flip the Prince face-up
+                &rarr; turn your token to <b>Frog Mode 🐸</b>! Then the
+                <b>Shell Game</b> hides him (see below).
+              </p>
+              <p>
+                2️⃣ <b>2nd Kiss (As Frog 🐸):</b> Flip the Prince again &rarr;
+                <b>YOU WIN IMMEDIATELY! 🏆</b>
+                Frog = one kiss from winning. Everyone will try to knock you back.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="bg-emerald-900 text-emerald-50 p-3.5 rounded-2xl shadow-inner mb-3"
+        >
+          <h3
+            class="font-fun text-amber-400 text-sm mb-1 flex items-center justify-between"
+          >
+            <span class="flex items-center gap-2"
+              ><i class="fa-solid fa-bolt"></i> On Your Turn (Spend 2
+              Actions)</span
+            >
+            <span class="text-[11px] text-amber-300 font-normal"
+              >Any mix, repeats allowed</span
+            >
+          </h3>
+          <p class="text-[11px] text-emerald-200 mb-2">
+            Flipped cards are <b>public</b>: remember where everything is!
+          </p>
+          <div class="grid grid-cols-3 gap-2 text-xs">
+            <div
+              class="bg-emerald-800/90 p-2 rounded-xl border border-emerald-700"
+            >
+              <div class="font-bold text-amber-300 text-[11px] mb-0.5">
+                1. FLIP
+              </div>
+              <p class="text-emerald-100 text-[10px] leading-tight">
+                Turn 1 Pond card face-up for all to see. Keep it in hand (max
+                2), or flip it back face-down in the same slot.
+              </p>
+            </div>
+            <div
+              class="bg-emerald-800/90 p-2 rounded-xl border border-emerald-700"
+            >
+              <div class="font-bold text-amber-300 text-[11px] mb-0.5">
+                2. PLAY
+              </div>
+              <p class="text-emerald-100 text-[10px] leading-tight">
+                Cast a card from your hand, then place it face-down in any empty
+                Pond slot (the Witch is banished instead).
+              </p>
+            </div>
+            <div
+              class="bg-emerald-800/90 p-2 rounded-xl border border-emerald-700"
+            >
+              <div class="font-bold text-amber-300 text-[11px] mb-0.5">
+                3. SCRAMBLE
+              </div>
+              <p class="text-emerald-100 text-[10px] leading-tight">
+                Swap any 2 Pond cards face-down while everyone watches, to ruin
+                the leader's memory!
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="bg-amber-50 border-2 border-amber-300 p-2.5 rounded-xl mb-3 text-[11px] text-amber-950"
+        >
+          <span class="font-fun text-amber-900 text-xs"
+            >🐚 The Shell Game:</span
+          >
+          after any kiss, turn the Prince face-down and
+          <b>swap him with other Pond cards 5 times, in the open</b>, while
+          everyone tries to track him. Then the next player's turn begins.
+        </div>
+
+        <div>
+          <h3
+            class="font-fun text-slate-800 text-xs mb-1.5 flex items-center gap-1.5"
+          >
+            <i class="fa-solid fa-list-check text-emerald-600"></i> Card
+            Abilities Cheat Sheet (9 Cards Total)
+          </h3>
+          <div class="grid grid-cols-3 gap-1.5 text-[10px]">
+            <div class="p-1.5 border border-slate-200 rounded-lg bg-white">
+              <span class="font-bold text-amber-800">👑 Prince:</span> Flip =
+              kiss. Princess &rarr; Frog + Shell Game. Frog &rarr; WIN
+            </div>
+            <div class="p-1.5 border border-slate-200 rounded-lg bg-white">
+              <span class="font-bold text-purple-800">🧞 Genie:</span> A
+              Princess swaps tokens with any Frog
+            </div>
+            <div class="p-1.5 border border-slate-200 rounded-lg bg-white">
+              <span class="font-bold text-cyan-800">🔱 Triton:</span> Hands go
+              face-down into Pond, then swap 3 pairs blind
+            </div>
+            <div class="p-1.5 border border-slate-200 rounded-lg bg-white">
+              <span class="font-bold text-pink-800">🧚‍♀️ Fairy:</span> Turn any
+              Frog back into a Princess
+            </div>
+            <div class="p-1.5 border border-slate-200 rounded-lg bg-white">
+              <span class="font-bold text-stone-800">🐺 Wolf:</span> Steal 1
+              random card from an opponent
+            </div>
+            <div class="p-1.5 border border-slate-200 rounded-lg bg-white">
+              <span class="font-bold text-emerald-800">🧙‍♀️ Witch:</span> Banish a
+              Pond card or a card from a hand. Not the Prince. Then
+              banish the Witch
+            </div>
+            <div class="p-1.5 border border-slate-200 rounded-lg bg-white">
+              <span class="font-bold text-blue-800">🪞 Mirror:</span> Privately
+              peek at 2 Pond cards
+            </div>
+            <div class="p-1.5 border border-slate-200 rounded-lg bg-white">
+              <span class="font-bold text-red-800">🍎 Apple:</span> Target
+              player skips next turn
+            </div>
+            <div class="p-1.5 border border-slate-200 rounded-lg bg-white">
+              <span class="font-bold text-rose-800">🐷 Pig:</span> Everyone
+              passes 1 card of their choice left 👈
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="border-t border-slate-200 pt-1.5 flex justify-between items-center text-[10px] text-slate-400"
+      >
+        <span>Kiss the Frog © Print &amp; Play Edition v2</span
+        ><span>Page 1 of 4</span>
+      </div>
+    </div>
+
+    <!-- PAGE 2: 3x3 CARD FRONT PRINT GRID -->
+    <div id="page-2" class="a4-page border-t-8 border-amber-400">
+      <div>
+        <!-- Print Sheet Header -->
+        <div
+          class="flex justify-between items-end pb-1.5 mb-2 border-b border-gray-200"
+        >
+          <div>
+            <h2 class="text-xl font-fun text-slate-800">
+              Page 2: 3x3 Card Front Print Grid
+            </h2>
+            <p class="text-xs text-slate-500">
+              Cut along dashed outer lines. Align with Page 3 for card backs.
+            </p>
+          </div>
+          <div
+            class="text-xs font-bold bg-amber-100 text-amber-900 px-3 py-1 rounded-full border border-amber-300"
+          >
+            A4 Printable Page 2
+          </div>
+        </div>
+
+        <!-- 3x3 Cards Grid -->
+        <div class="card-grid-3x3">
+          <!-- 1. Frog Prince -->
+          <div class="card-front-frame border-amber-400 bg-amber-50/40">
+            <div class="text-center">
+              <span
+                class="text-[8px] font-fun uppercase tracking-wider text-amber-800 bg-amber-200 px-2 py-0.5 rounded-full"
+                >Pond Card</span
+              >
+              <h4 class="font-fun text-sm text-amber-950 mt-1">
+                Frog Prince 👑
+              </h4>
+            </div>
+            <div class="img-placeholder h-24 border-amber-300 bg-amber-50">
+              <svg
+                class="w-8 h-8 text-amber-600 mb-0.5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M12 2l2.4 4.8 5.3.8-3.8 3.7.9 5.3L12 14.1l-4.8 2.5.9-5.3L4.3 7.6l5.3-.8L12 2z"
+                ></path>
+              </svg>
+              <span class="text-[8px] font-bold text-amber-800"
+                >[ IMAGE PLACEHOLDER: ]</span
+              >
+              <span class="text-[7px] text-amber-700">Drunk Prince Frog</span>
+            </div>
+            <div
+              class="bg-white p-1.5 rounded-xl border border-amber-200 text-center shadow-sm"
+            >
+              <p class="text-[9px] font-bold text-amber-950">
+                True Love's Kiss!
+              </p>
+              <p class="text-[8px] text-slate-600 leading-tight">
+                <b>Princess:</b> Frog 🐸 + Shell Game<br /><b>Frog:</b> YOU WIN!
+                🏆
+              </p>
+            </div>
+          </div>
+
+          <!-- 2. Genie -->
+          <div class="card-front-frame border-purple-400 bg-purple-50/40">
+            <div class="text-center">
+              <span
+                class="text-[8px] font-fun uppercase tracking-wider text-purple-800 bg-purple-200 px-2 py-0.5 rounded-full"
+                >Spell Card</span
+              >
+              <h4 class="font-fun text-sm text-purple-950 mt-1">Genie 🧞</h4>
+            </div>
+            <div class="img-placeholder h-24 border-purple-300 bg-purple-50">
+              <svg
+                class="w-8 h-8 text-purple-600 mb-0.5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L5.6 15.12a2 2 0 00-1.023.547l-1.2 1.2a2 2 0 000 2.828l1.2 1.2a2 2 0 002.828 0l1.2-1.2a2 2 0 00.547-1.022l.477-2.387a6 6 0 00-.517-3.86l-.158-.318a6 6 0 01-.517-3.86l.477-2.387a2 2 0 00-.547-1.022l-1.2-1.2a2 2 0 00-2.828 0l-1.2 1.2a2 2 0 000 2.828l1.2 1.2z"
+                ></path>
+              </svg>
+              <span class="text-[8px] font-bold text-purple-800"
+                >[ IMAGE PLACEHOLDER: ]</span
+              >
+              <span class="text-[7px] text-purple-700">Genie Lamp</span>
+            </div>
+            <div
+              class="bg-white p-1.5 rounded-xl border border-purple-200 text-center shadow-sm"
+            >
+              <p class="text-[9px] font-bold text-purple-950">State Swap!</p>
+              <p class="text-[8px] text-slate-600 leading-tight">
+                A Princess swaps tokens with any Frog!
+              </p>
+            </div>
+          </div>
+
+          <!-- 3. Triton -->
+          <div class="card-front-frame border-cyan-400 bg-cyan-50/40">
+            <div class="text-center">
+              <span
+                class="text-[8px] font-fun uppercase tracking-wider text-cyan-800 bg-cyan-200 px-2 py-0.5 rounded-full"
+                >Spell Card</span
+              >
+              <h4 class="font-fun text-sm text-cyan-950 mt-1">Triton 🔱</h4>
+            </div>
+            <div class="img-placeholder h-24 border-cyan-300 bg-cyan-50">
+              <svg
+                class="w-8 h-8 text-cyan-600 mb-0.5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M13 10V3L4 14h7v7l9-11h-7z"
+                ></path>
+              </svg>
+              <span class="text-[8px] font-bold text-cyan-800"
+                >[ IMAGE PLACEHOLDER: ]</span
+              >
+              <span class="text-[7px] text-cyan-700">Triton Wave</span>
+            </div>
+            <div
+              class="bg-white p-1.5 rounded-xl border border-cyan-200 text-center shadow-sm"
+            >
+              <p class="text-[9px] font-bold text-cyan-950">Oceanic Tide!</p>
+              <p class="text-[8px] text-slate-600 leading-tight">
+                Hands go face-down into the Pond, then swap 3 pairs blind!
+              </p>
+            </div>
+          </div>
+
+          <!-- 4. Fairy -->
+          <div class="card-front-frame border-pink-400 bg-pink-50/40">
+            <div class="text-center">
+              <span
+                class="text-[8px] font-fun uppercase tracking-wider text-pink-800 bg-pink-200 px-2 py-0.5 rounded-full"
+                >Spell Card</span
+              >
+              <h4 class="font-fun text-sm text-pink-950 mt-1">Fairy 🧚‍♀️</h4>
+            </div>
+            <div class="img-placeholder h-24 border-pink-300 bg-pink-50">
+              <svg
+                class="w-8 h-8 text-pink-600 mb-0.5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                ></path>
+              </svg>
+              <span class="text-[8px] font-bold text-pink-800"
+                >[ IMAGE PLACEHOLDER: ]</span
+              >
+              <span class="text-[7px] text-pink-700">Fairy Wings</span>
+            </div>
+            <div
+              class="bg-white p-1.5 rounded-xl border border-pink-200 text-center shadow-sm"
+            >
+              <p class="text-[9px] font-bold text-pink-950">Curse Cure!</p>
+              <p class="text-[8px] text-slate-600 leading-tight">
+                Turn any Frog back into a Princess 👸!
+              </p>
+            </div>
+          </div>
+
+          <!-- 5. Wolf -->
+          <div class="card-front-frame border-stone-400 bg-stone-50/40">
+            <div class="text-center">
+              <span
+                class="text-[8px] font-fun uppercase tracking-wider text-stone-800 bg-stone-200 px-2 py-0.5 rounded-full"
+                >Trick Card</span
+              >
+              <h4 class="font-fun text-sm text-stone-950 mt-1">Wolf 🐺</h4>
+            </div>
+            <div class="img-placeholder h-24 border-stone-300 bg-stone-50">
+              <svg
+                class="w-8 h-8 text-stone-600 mb-0.5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                ></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                ></path>
+              </svg>
+              <span class="text-[8px] font-bold text-stone-800"
+                >[ IMAGE PLACEHOLDER: ]</span
+              >
+              <span class="text-[7px] text-stone-700">Sneaky Wolf</span>
+            </div>
+            <div
+              class="bg-white p-1.5 rounded-xl border border-stone-200 text-center shadow-sm"
+            >
+              <p class="text-[9px] font-bold text-stone-950">Snatch & Grab!</p>
+              <p class="text-[8px] text-slate-600 leading-tight">
+                Steal 1 card from opponent's hand.
+              </p>
+            </div>
+          </div>
+
+          <!-- 6. Witch -->
+          <div class="card-front-frame border-emerald-400 bg-emerald-50/40">
+            <div class="text-center">
+              <span
+                class="text-[8px] font-fun uppercase tracking-wider text-emerald-800 bg-emerald-200 px-2 py-0.5 rounded-full"
+                >Curse Card</span
+              >
+              <h4 class="font-fun text-sm text-emerald-950 mt-1">Witch 🧙‍♀️</h4>
+            </div>
+            <div class="img-placeholder h-24 border-emerald-300 bg-emerald-50">
+              <svg
+                class="w-8 h-8 text-emerald-600 mb-0.5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L5.6 15.12a2 2 0 00-1.023.547l-1.2 1.2a2 2 0 000 2.828l1.2 1.2a2 2 0 002.828 0l1.2-1.2a2 2 0 00.547-1.022l.477-2.387a6 6 0 00-.517-3.86l-.158-.318a6 6 0 01-.517-3.86l.477-2.387a2 2 0 00-.547-1.022l-1.2-1.2a2 2 0 00-2.828 0l-1.2 1.2a2 2 0 000 2.828l1.2 1.2z"
+                ></path>
+              </svg>
+              <span class="text-[8px] font-bold text-emerald-800"
+                >[ IMAGE PLACEHOLDER: ]</span
+              >
+              <span class="text-[7px] text-emerald-700">Wicked Witch</span>
+            </div>
+            <div
+              class="bg-white p-1.5 rounded-xl border border-emerald-200 text-center shadow-sm"
+            >
+              <p class="text-[9px] font-bold text-emerald-950">Banish!</p>
+              <p class="text-[8px] text-slate-600 leading-tight">
+                Banish a Pond or hand card (not the Prince), then banish this
+                Witch!
+              </p>
+            </div>
+          </div>
+
+          <!-- 7. Mirror -->
+          <div class="card-front-frame border-blue-400 bg-blue-50/40">
+            <div class="text-center">
+              <span
+                class="text-[8px] font-fun uppercase tracking-wider text-blue-800 bg-blue-200 px-2 py-0.5 rounded-full"
+                >Vision Card</span
+              >
+              <h4 class="font-fun text-sm text-blue-950 mt-1">Mirror 🪞</h4>
+            </div>
+            <div class="img-placeholder h-24 border-blue-300 bg-blue-50">
+              <svg
+                class="w-8 h-8 text-blue-600 mb-0.5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                ></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                ></path>
+              </svg>
+              <span class="text-[8px] font-bold text-blue-800"
+                >[ IMAGE PLACEHOLDER: ]</span
+              >
+              <span class="text-[7px] text-blue-700">Magic Mirror</span>
+            </div>
+            <div
+              class="bg-white p-1.5 rounded-xl border border-blue-200 text-center shadow-sm"
+            >
+              <p class="text-[9px] font-bold text-blue-950">Magic Glance!</p>
+              <p class="text-[8px] text-slate-600 leading-tight">
+                Peek at up to 2 face-down cards in pool.
+              </p>
+            </div>
+          </div>
+
+          <!-- 8. Apple -->
+          <div class="card-front-frame border-red-400 bg-red-50/40">
+            <div class="text-center">
+              <span
+                class="text-[8px] font-fun uppercase tracking-wider text-red-800 bg-red-200 px-2 py-0.5 rounded-full"
+                >Trap Card</span
+              >
+              <h4 class="font-fun text-sm text-red-950 mt-1">Apple 🍎</h4>
+            </div>
+            <div class="img-placeholder h-24 border-red-300 bg-red-50">
+              <svg
+                class="w-8 h-8 text-red-600 mb-0.5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
+              </svg>
+              <span class="text-[8px] font-bold text-red-800"
+                >[ IMAGE PLACEHOLDER: ]</span
+              >
+              <span class="text-[7px] text-red-700">Poison Apple</span>
+            </div>
+            <div
+              class="bg-white p-1.5 rounded-xl border border-red-200 text-center shadow-sm"
+            >
+              <p class="text-[9px] font-bold text-red-950">Poison Slumber!</p>
+              <p class="text-[8px] text-slate-600 leading-tight">
+                Target player skips next turn.
+              </p>
+            </div>
+          </div>
+
+          <!-- 9. Pig -->
+          <div class="card-front-frame border-rose-400 bg-rose-50/40">
+            <div class="text-center">
+              <span
+                class="text-[8px] font-fun uppercase tracking-wider text-rose-800 bg-rose-200 px-2 py-0.5 rounded-full"
+                >Chaos Card</span
+              >
+              <h4 class="font-fun text-sm text-rose-950 mt-1">Pig 🐷</h4>
+            </div>
+            <div class="img-placeholder h-24 border-rose-300 bg-rose-50">
+              <svg
+                class="w-8 h-8 text-rose-600 mb-0.5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
+                ></path>
+              </svg>
+              <span class="text-[8px] font-bold text-rose-800"
+                >[ IMAGE PLACEHOLDER: ]</span
+              >
+              <span class="text-[7px] text-rose-700">Muddy Pig</span>
+            </div>
+            <div
+              class="bg-white p-1.5 rounded-xl border border-rose-200 text-center shadow-sm"
+            >
+              <p class="text-[9px] font-bold text-rose-950">Muddy Swap!</p>
+              <p class="text-[8px] text-slate-600 leading-tight">
+                Everyone passes 1 card of their choice left 👈.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Page Footer -->
+      <div
+        class="border-t border-slate-200 pt-1.5 flex justify-between items-center text-[10px] text-slate-400"
+      >
+        <span>Kiss the Frog © Print & Play Edition</span>
+        <span>Page 2 of 4</span>
+      </div>
+    </div>
+
+    <!-- PAGE 3: CARD BACK PATTERN GRID -->
+    <div id="page-3" class="a4-page border-t-8 border-emerald-800">
+      <div>
+        <!-- Print Sheet Header -->
+        <div
+          class="flex justify-between items-end pb-1.5 mb-2 border-b border-gray-200"
+        >
+          <div>
+            <h2 class="text-xl font-fun text-slate-800">
+              Page 3: 3x3 Card Back Pattern Grid
+            </h2>
+            <p class="text-xs text-slate-500">
+              Print on the back of Page 2 for double-sided cards.
+            </p>
+          </div>
+          <div
+            class="text-xs font-bold bg-emerald-100 text-emerald-900 px-3 py-1 rounded-full border border-emerald-300"
+          >
+            A4 Printable Page 3
+          </div>
+        </div>
+
+        <!-- 3x3 Card Back Grid -->
+        <div class="card-grid-3x3">
+          <!-- Helper Macro for 9 Card Backs with Realistic Vector Lipstick Kiss Mark -->
+          <!-- Card Back 1 -->
+          <div class="card-back-frame">
+            <div
+              class="absolute inset-1 border border-emerald-400/40 rounded-xl"
+            ></div>
+            <div class="relative flex flex-col items-center justify-center">
+              <div class="text-5xl opacity-80 filter drop-shadow">🐸</div>
+              <!-- Realistic Vector Lipstick Kiss Mark Overlay -->
+              <div
+                class="absolute -bottom-2 -right-3 transform rotate-12 filter drop-shadow-md"
+              >
+                <svg
+                  class="w-10 h-10 text-rose-500 fill-current"
+                  viewBox="0 0 100 100"
+                >
+                  <!-- Upper Lip -->
+                  <path
+                    d="M 12 42 C 22 28, 38 32, 50 38 C 62 32, 78 28, 88 42 C 78 46, 62 48, 50 44 C 38 48, 22 46, 12 42 Z"
+                  />
+                  <path
+                    d="M 22 34 C 32 26, 42 30, 50 35 C 58 30, 68 26, 78 34"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                  />
+                  <!-- Lower Lip -->
+                  <path
+                    d="M 16 52 C 30 68, 70 68, 84 52 C 70 60, 30 60, 16 52 Z"
+                  />
+                  <path
+                    d="M 28 58 C 40 68, 60 68, 72 58"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                  />
+                  <!-- Lip Ridges / Lines for Realism -->
+                  <line
+                    x1="32"
+                    y1="36"
+                    x2="33"
+                    y2="44"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="50"
+                    y1="37"
+                    x2="50"
+                    y2="43"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="68"
+                    y1="36"
+                    x2="67"
+                    y2="44"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="35"
+                    y1="53"
+                    x2="36"
+                    y2="61"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="50"
+                    y1="54"
+                    x2="50"
+                    y2="63"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="65"
+                    y1="53"
+                    x2="64"
+                    y2="61"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                </svg>
+              </div>
+            </div>
+            <h3
+              class="font-fun text-xs text-emerald-100 mt-3 tracking-wider uppercase text-center"
+            >
+              Kiss the Frog
+            </h3>
+            <div
+              class="mt-1 text-[7px] font-bold text-emerald-300/80 bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-500/30"
+            >
+              PARTY CARD GAME
+            </div>
+          </div>
+
+          <!-- Card Back 2 -->
+          <div class="card-back-frame">
+            <div
+              class="absolute inset-1 border border-emerald-400/40 rounded-xl"
+            ></div>
+            <div class="relative flex flex-col items-center justify-center">
+              <div class="text-5xl opacity-80 filter drop-shadow">🐸</div>
+              <div
+                class="absolute -bottom-2 -right-3 transform rotate-12 filter drop-shadow-md"
+              >
+                <svg
+                  class="w-10 h-10 text-rose-500 fill-current"
+                  viewBox="0 0 100 100"
+                >
+                  <path
+                    d="M 12 42 C 22 28, 38 32, 50 38 C 62 32, 78 28, 88 42 C 78 46, 62 48, 50 44 C 38 48, 22 46, 12 42 Z"
+                  />
+                  <path
+                    d="M 22 34 C 32 26, 42 30, 50 35 C 58 30, 68 26, 78 34"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M 16 52 C 30 68, 70 68, 84 52 C 70 60, 30 60, 16 52 Z"
+                  />
+                  <path
+                    d="M 28 58 C 40 68, 60 68, 72 58"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                  />
+                  <line
+                    x1="32"
+                    y1="36"
+                    x2="33"
+                    y2="44"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="50"
+                    y1="37"
+                    x2="50"
+                    y2="43"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="68"
+                    y1="36"
+                    x2="67"
+                    y2="44"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="35"
+                    y1="53"
+                    x2="36"
+                    y2="61"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="50"
+                    y1="54"
+                    x2="50"
+                    y2="63"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="65"
+                    y1="53"
+                    x2="64"
+                    y2="61"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                </svg>
+              </div>
+            </div>
+            <h3
+              class="font-fun text-xs text-emerald-100 mt-3 tracking-wider uppercase text-center"
+            >
+              Kiss the Frog
+            </h3>
+            <div
+              class="mt-1 text-[7px] font-bold text-emerald-300/80 bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-500/30"
+            >
+              PARTY CARD GAME
+            </div>
+          </div>
+
+          <!-- Card Back 3 -->
+          <div class="card-back-frame">
+            <div
+              class="absolute inset-1 border border-emerald-400/40 rounded-xl"
+            ></div>
+            <div class="relative flex flex-col items-center justify-center">
+              <div class="text-5xl opacity-80 filter drop-shadow">🐸</div>
+              <div
+                class="absolute -bottom-2 -right-3 transform rotate-12 filter drop-shadow-md"
+              >
+                <svg
+                  class="w-10 h-10 text-rose-500 fill-current"
+                  viewBox="0 0 100 100"
+                >
+                  <path
+                    d="M 12 42 C 22 28, 38 32, 50 38 C 62 32, 78 28, 88 42 C 78 46, 62 48, 50 44 C 38 48, 22 46, 12 42 Z"
+                  />
+                  <path
+                    d="M 22 34 C 32 26, 42 30, 50 35 C 58 30, 68 26, 78 34"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M 16 52 C 30 68, 70 68, 84 52 C 70 60, 30 60, 16 52 Z"
+                  />
+                  <path
+                    d="M 28 58 C 40 68, 60 68, 72 58"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                  />
+                  <line
+                    x1="32"
+                    y1="36"
+                    x2="33"
+                    y2="44"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="50"
+                    y1="37"
+                    x2="50"
+                    y2="43"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="68"
+                    y1="36"
+                    x2="67"
+                    y2="44"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="35"
+                    y1="53"
+                    x2="36"
+                    y2="61"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="50"
+                    y1="54"
+                    x2="50"
+                    y2="63"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="65"
+                    y1="53"
+                    x2="64"
+                    y2="61"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                </svg>
+              </div>
+            </div>
+            <h3
+              class="font-fun text-xs text-emerald-100 mt-3 tracking-wider uppercase text-center"
+            >
+              Kiss the Frog
+            </h3>
+            <div
+              class="mt-1 text-[7px] font-bold text-emerald-300/80 bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-500/30"
+            >
+              PARTY CARD GAME
+            </div>
+          </div>
+
+          <!-- Card Back 4 -->
+          <div class="card-back-frame">
+            <div
+              class="absolute inset-1 border border-emerald-400/40 rounded-xl"
+            ></div>
+            <div class="relative flex flex-col items-center justify-center">
+              <div class="text-5xl opacity-80 filter drop-shadow">🐸</div>
+              <div
+                class="absolute -bottom-2 -right-3 transform rotate-12 filter drop-shadow-md"
+              >
+                <svg
+                  class="w-10 h-10 text-rose-500 fill-current"
+                  viewBox="0 0 100 100"
+                >
+                  <path
+                    d="M 12 42 C 22 28, 38 32, 50 38 C 62 32, 78 28, 88 42 C 78 46, 62 48, 50 44 C 38 48, 22 46, 12 42 Z"
+                  />
+                  <path
+                    d="M 22 34 C 32 26, 42 30, 50 35 C 58 30, 68 26, 78 34"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M 16 52 C 30 68, 70 68, 84 52 C 70 60, 30 60, 16 52 Z"
+                  />
+                  <path
+                    d="M 28 58 C 40 68, 60 68, 72 58"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                  />
+                  <line
+                    x1="32"
+                    y1="36"
+                    x2="33"
+                    y2="44"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="50"
+                    y1="37"
+                    x2="50"
+                    y2="43"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="68"
+                    y1="36"
+                    x2="67"
+                    y2="44"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="35"
+                    y1="53"
+                    x2="36"
+                    y2="61"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="50"
+                    y1="54"
+                    x2="50"
+                    y2="63"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="65"
+                    y1="53"
+                    x2="64"
+                    y2="61"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                </svg>
+              </div>
+            </div>
+            <h3
+              class="font-fun text-xs text-emerald-100 mt-3 tracking-wider uppercase text-center"
+            >
+              Kiss the Frog
+            </h3>
+            <div
+              class="mt-1 text-[7px] font-bold text-emerald-300/80 bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-500/30"
+            >
+              PARTY CARD GAME
+            </div>
+          </div>
+
+          <!-- Card Back 5 -->
+          <div class="card-back-frame">
+            <div
+              class="absolute inset-1 border border-emerald-400/40 rounded-xl"
+            ></div>
+            <div class="relative flex flex-col items-center justify-center">
+              <div class="text-5xl opacity-80 filter drop-shadow">🐸</div>
+              <div
+                class="absolute -bottom-2 -right-3 transform rotate-12 filter drop-shadow-md"
+              >
+                <svg
+                  class="w-10 h-10 text-rose-500 fill-current"
+                  viewBox="0 0 100 100"
+                >
+                  <path
+                    d="M 12 42 C 22 28, 38 32, 50 38 C 62 32, 78 28, 88 42 C 78 46, 62 48, 50 44 C 38 48, 22 46, 12 42 Z"
+                  />
+                  <path
+                    d="M 22 34 C 32 26, 42 30, 50 35 C 58 30, 68 26, 78 34"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M 16 52 C 30 68, 70 68, 84 52 C 70 60, 30 60, 16 52 Z"
+                  />
+                  <path
+                    d="M 28 58 C 40 68, 60 68, 72 58"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                  />
+                  <line
+                    x1="32"
+                    y1="36"
+                    x2="33"
+                    y2="44"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="50"
+                    y1="37"
+                    x2="50"
+                    y2="43"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="68"
+                    y1="36"
+                    x2="67"
+                    y2="44"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="35"
+                    y1="53"
+                    x2="36"
+                    y2="61"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="50"
+                    y1="54"
+                    x2="50"
+                    y2="63"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="65"
+                    y1="53"
+                    x2="64"
+                    y2="61"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                </svg>
+              </div>
+            </div>
+            <h3
+              class="font-fun text-xs text-emerald-100 mt-3 tracking-wider uppercase text-center"
+            >
+              Kiss the Frog
+            </h3>
+            <div
+              class="mt-1 text-[7px] font-bold text-emerald-300/80 bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-500/30"
+            >
+              PARTY CARD GAME
+            </div>
+          </div>
+
+          <!-- Card Back 6 -->
+          <div class="card-back-frame">
+            <div
+              class="absolute inset-1 border border-emerald-400/40 rounded-xl"
+            ></div>
+            <div class="relative flex flex-col items-center justify-center">
+              <div class="text-5xl opacity-80 filter drop-shadow">🐸</div>
+              <div
+                class="absolute -bottom-2 -right-3 transform rotate-12 filter drop-shadow-md"
+              >
+                <svg
+                  class="w-10 h-10 text-rose-500 fill-current"
+                  viewBox="0 0 100 100"
+                >
+                  <path
+                    d="M 12 42 C 22 28, 38 32, 50 38 C 62 32, 78 28, 88 42 C 78 46, 62 48, 50 44 C 38 48, 22 46, 12 42 Z"
+                  />
+                  <path
+                    d="M 22 34 C 32 26, 42 30, 50 35 C 58 30, 68 26, 78 34"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M 16 52 C 30 68, 70 68, 84 52 C 70 60, 30 60, 16 52 Z"
+                  />
+                  <path
+                    d="M 28 58 C 40 68, 60 68, 72 58"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                  />
+                  <line
+                    x1="32"
+                    y1="36"
+                    x2="33"
+                    y2="44"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="50"
+                    y1="37"
+                    x2="50"
+                    y2="43"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="68"
+                    y1="36"
+                    x2="67"
+                    y2="44"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="35"
+                    y1="53"
+                    x2="36"
+                    y2="61"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="50"
+                    y1="54"
+                    x2="50"
+                    y2="63"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="65"
+                    y1="53"
+                    x2="64"
+                    y2="61"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                </svg>
+              </div>
+            </div>
+            <h3
+              class="font-fun text-xs text-emerald-100 mt-3 tracking-wider uppercase text-center"
+            >
+              Kiss the Frog
+            </h3>
+            <div
+              class="mt-1 text-[7px] font-bold text-emerald-300/80 bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-500/30"
+            >
+              PARTY CARD GAME
+            </div>
+          </div>
+
+          <!-- Card Back 7 -->
+          <div class="card-back-frame">
+            <div
+              class="absolute inset-1 border border-emerald-400/40 rounded-xl"
+            ></div>
+            <div class="relative flex flex-col items-center justify-center">
+              <div class="text-5xl opacity-80 filter drop-shadow">🐸</div>
+              <div
+                class="absolute -bottom-2 -right-3 transform rotate-12 filter drop-shadow-md"
+              >
+                <svg
+                  class="w-10 h-10 text-rose-500 fill-current"
+                  viewBox="0 0 100 100"
+                >
+                  <path
+                    d="M 12 42 C 22 28, 38 32, 50 38 C 62 32, 78 28, 88 42 C 78 46, 62 48, 50 44 C 38 48, 22 46, 12 42 Z"
+                  />
+                  <path
+                    d="M 22 34 C 32 26, 42 30, 50 35 C 58 30, 68 26, 78 34"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M 16 52 C 30 68, 70 68, 84 52 C 70 60, 30 60, 16 52 Z"
+                  />
+                  <path
+                    d="M 28 58 C 40 68, 60 68, 72 58"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                  />
+                  <line
+                    x1="32"
+                    y1="36"
+                    x2="33"
+                    y2="44"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="50"
+                    y1="37"
+                    x2="50"
+                    y2="43"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="68"
+                    y1="36"
+                    x2="67"
+                    y2="44"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="35"
+                    y1="53"
+                    x2="36"
+                    y2="61"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="50"
+                    y1="54"
+                    x2="50"
+                    y2="63"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="65"
+                    y1="53"
+                    x2="64"
+                    y2="61"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                </svg>
+              </div>
+            </div>
+            <h3
+              class="font-fun text-xs text-emerald-100 mt-3 tracking-wider uppercase text-center"
+            >
+              Kiss the Frog
+            </h3>
+            <div
+              class="mt-1 text-[7px] font-bold text-emerald-300/80 bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-500/30"
+            >
+              PARTY CARD GAME
+            </div>
+          </div>
+
+          <!-- Card Back 8 -->
+          <div class="card-back-frame">
+            <div
+              class="absolute inset-1 border border-emerald-400/40 rounded-xl"
+            ></div>
+            <div class="relative flex flex-col items-center justify-center">
+              <div class="text-5xl opacity-80 filter drop-shadow">🐸</div>
+              <div
+                class="absolute -bottom-2 -right-3 transform rotate-12 filter drop-shadow-md"
+              >
+                <svg
+                  class="w-10 h-10 text-rose-500 fill-current"
+                  viewBox="0 0 100 100"
+                >
+                  <path
+                    d="M 12 42 C 22 28, 38 32, 50 38 C 62 32, 78 28, 88 42 C 78 46, 62 48, 50 44 C 38 48, 22 46, 12 42 Z"
+                  />
+                  <path
+                    d="M 22 34 C 32 26, 42 30, 50 35 C 58 30, 68 26, 78 34"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M 16 52 C 30 68, 70 68, 84 52 C 70 60, 30 60, 16 52 Z"
+                  />
+                  <path
+                    d="M 28 58 C 40 68, 60 68, 72 58"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                  />
+                  <line
+                    x1="32"
+                    y1="36"
+                    x2="33"
+                    y2="44"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="50"
+                    y1="37"
+                    x2="50"
+                    y2="43"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="68"
+                    y1="36"
+                    x2="67"
+                    y2="44"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="35"
+                    y1="53"
+                    x2="36"
+                    y2="61"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="50"
+                    y1="54"
+                    x2="50"
+                    y2="63"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="65"
+                    y1="53"
+                    x2="64"
+                    y2="61"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                </svg>
+              </div>
+            </div>
+            <h3
+              class="font-fun text-xs text-emerald-100 mt-3 tracking-wider uppercase text-center"
+            >
+              Kiss the Frog
+            </h3>
+            <div
+              class="mt-1 text-[7px] font-bold text-emerald-300/80 bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-500/30"
+            >
+              PARTY CARD GAME
+            </div>
+          </div>
+
+          <!-- Card Back 9 -->
+          <div class="card-back-frame">
+            <div
+              class="absolute inset-1 border border-emerald-400/40 rounded-xl"
+            ></div>
+            <div class="relative flex flex-col items-center justify-center">
+              <div class="text-5xl opacity-80 filter drop-shadow">🐸</div>
+              <div
+                class="absolute -bottom-2 -right-3 transform rotate-12 filter drop-shadow-md"
+              >
+                <svg
+                  class="w-10 h-10 text-rose-500 fill-current"
+                  viewBox="0 0 100 100"
+                >
+                  <path
+                    d="M 12 42 C 22 28, 38 32, 50 38 C 62 32, 78 28, 88 42 C 78 46, 62 48, 50 44 C 38 48, 22 46, 12 42 Z"
+                  />
+                  <path
+                    d="M 22 34 C 32 26, 42 30, 50 35 C 58 30, 68 26, 78 34"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M 16 52 C 30 68, 70 68, 84 52 C 70 60, 30 60, 16 52 Z"
+                  />
+                  <path
+                    d="M 28 58 C 40 68, 60 68, 72 58"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                  />
+                  <line
+                    x1="32"
+                    y1="36"
+                    x2="33"
+                    y2="44"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="50"
+                    y1="37"
+                    x2="50"
+                    y2="43"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="68"
+                    y1="36"
+                    x2="67"
+                    y2="44"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="35"
+                    y1="53"
+                    x2="36"
+                    y2="61"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="50"
+                    y1="54"
+                    x2="50"
+                    y2="63"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                  <line
+                    x1="65"
+                    y1="53"
+                    x2="64"
+                    y2="61"
+                    stroke="#be123c"
+                    stroke-width="1.5"
+                  />
+                </svg>
+              </div>
+            </div>
+            <h3
+              class="font-fun text-xs text-emerald-100 mt-3 tracking-wider uppercase text-center"
+            >
+              Kiss the Frog
+            </h3>
+            <div
+              class="mt-1 text-[7px] font-bold text-emerald-300/80 bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-500/30"
+            >
+              PARTY CARD GAME
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Page Footer -->
+      <div
+        class="border-t border-slate-200 pt-1.5 flex justify-between items-center text-[10px] text-slate-400"
+      >
+        <span>Kiss the Frog © Print & Play Edition</span>
+        <span>Page 3 of 4</span>
+      </div>
+    </div>
+
+    <!-- PAGE 4: PRINTABLE PLAYER TOKENS -->
+    <div id="page-4" class="a4-page border-t-8 border-pink-400">
+      <div>
+        <!-- Print Sheet Header -->
+        <div
+          class="flex justify-between items-end pb-1.5 mb-2 border-b border-gray-200"
+        >
+          <div>
+            <h2 class="text-xl font-fun text-slate-800">
+              Page 4: Printable Player State Tokens (4 Players)
+            </h2>
+            <p class="text-xs text-slate-500">
+              Cut circular tokens. Glue FRONT and BACK together for double-sided
+              state tokens.
+            </p>
+          </div>
+          <div
+            class="text-xs font-bold bg-pink-100 text-pink-900 px-3 py-1 rounded-full border border-pink-300"
+          >
+            A4 Printable Page 4
+          </div>
+        </div>
+
+        <!-- Tokens List (4 Player Token Pairs) -->
+        <div class="space-y-3 my-2">
+          <!-- Player 1 -->
+          <div
+            class="bg-slate-50 border border-slate-200 p-2.5 rounded-2xl flex items-center justify-between"
+          >
+            <span
+              class="text-xs font-fun bg-slate-200 text-slate-800 px-3 py-1 rounded-xl"
+              >PLAYER 1</span
+            >
+            <div class="flex items-center gap-8">
+              <div class="flex flex-col items-center">
+                <span class="text-[9px] font-bold text-pink-700 mb-0.5"
+                  >FRONT (Princess)</span
+                >
+                <div class="token-circle border-pink-400 bg-pink-50">
+                  <span class="text-2xl">👸</span>
+                  <span class="text-[8px] font-bold text-pink-900"
+                    >PRINCESS</span
+                  >
+                  <span class="text-[6px] text-pink-600 font-bold"
+                    >[ IMAGE PLACEHOLDER ]</span
+                  >
+                </div>
+              </div>
+              <i class="fa-solid fa-arrows-rotate text-gray-400"></i>
+              <div class="flex flex-col items-center">
+                <span class="text-[9px] font-bold text-emerald-700 mb-0.5"
+                  >BACK (Frog)</span
+                >
+                <div class="token-circle border-emerald-400 bg-emerald-50">
+                  <span class="text-2xl">🐸</span>
+                  <span class="text-[8px] font-bold text-emerald-900"
+                    >FROG</span
+                  >
+                  <span class="text-[6px] text-emerald-600 font-bold"
+                    >[ IMAGE PLACEHOLDER ]</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Player 2 -->
+          <div
+            class="bg-slate-50 border border-slate-200 p-2.5 rounded-2xl flex items-center justify-between"
+          >
+            <span
+              class="text-xs font-fun bg-slate-200 text-slate-800 px-3 py-1 rounded-xl"
+              >PLAYER 2</span
+            >
+            <div class="flex items-center gap-8">
+              <div class="flex flex-col items-center">
+                <span class="text-[9px] font-bold text-pink-700 mb-0.5"
+                  >FRONT (Princess)</span
+                >
+                <div class="token-circle border-pink-400 bg-pink-50">
+                  <span class="text-2xl">👸</span>
+                  <span class="text-[8px] font-bold text-pink-900"
+                    >PRINCESS</span
+                  >
+                  <span class="text-[6px] text-pink-600 font-bold"
+                    >[ IMAGE PLACEHOLDER ]</span
+                  >
+                </div>
+              </div>
+              <i class="fa-solid fa-arrows-rotate text-gray-400"></i>
+              <div class="flex flex-col items-center">
+                <span class="text-[9px] font-bold text-emerald-700 mb-0.5"
+                  >BACK (Frog)</span
+                >
+                <div class="token-circle border-emerald-400 bg-emerald-50">
+                  <span class="text-2xl">🐸</span>
+                  <span class="text-[8px] font-bold text-emerald-900"
+                    >FROG</span
+                  >
+                  <span class="text-[6px] text-emerald-600 font-bold"
+                    >[ IMAGE PLACEHOLDER ]</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Player 3 -->
+          <div
+            class="bg-slate-50 border border-slate-200 p-2.5 rounded-2xl flex items-center justify-between"
+          >
+            <span
+              class="text-xs font-fun bg-slate-200 text-slate-800 px-3 py-1 rounded-xl"
+              >PLAYER 3</span
+            >
+            <div class="flex items-center gap-8">
+              <div class="flex flex-col items-center">
+                <span class="text-[9px] font-bold text-pink-700 mb-0.5"
+                  >FRONT (Princess)</span
+                >
+                <div class="token-circle border-pink-400 bg-pink-50">
+                  <span class="text-2xl">👸</span>
+                  <span class="text-[8px] font-bold text-pink-900"
+                    >PRINCESS</span
+                  >
+                  <span class="text-[6px] text-pink-600 font-bold"
+                    >[ IMAGE PLACEHOLDER ]</span
+                  >
+                </div>
+              </div>
+              <i class="fa-solid fa-arrows-rotate text-gray-400"></i>
+              <div class="flex flex-col items-center">
+                <span class="text-[9px] font-bold text-emerald-700 mb-0.5"
+                  >BACK (Frog)</span
+                >
+                <div class="token-circle border-emerald-400 bg-emerald-50">
+                  <span class="text-2xl">🐸</span>
+                  <span class="text-[8px] font-bold text-emerald-900"
+                    >FROG</span
+                  >
+                  <span class="text-[6px] text-emerald-600 font-bold"
+                    >[ IMAGE PLACEHOLDER ]</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Player 4 -->
+          <div
+            class="bg-slate-50 border border-slate-200 p-2.5 rounded-2xl flex items-center justify-between"
+          >
+            <span
+              class="text-xs font-fun bg-slate-200 text-slate-800 px-3 py-1 rounded-xl"
+              >PLAYER 4</span
+            >
+            <div class="flex items-center gap-8">
+              <div class="flex flex-col items-center">
+                <span class="text-[9px] font-bold text-pink-700 mb-0.5"
+                  >FRONT (Princess)</span
+                >
+                <div class="token-circle border-pink-400 bg-pink-50">
+                  <span class="text-2xl">👸</span>
+                  <span class="text-[8px] font-bold text-pink-900"
+                    >PRINCESS</span
+                  >
+                  <span class="text-[6px] text-pink-600 font-bold"
+                    >[ IMAGE PLACEHOLDER ]</span
+                  >
+                </div>
+              </div>
+              <i class="fa-solid fa-arrows-rotate text-gray-400"></i>
+              <div class="flex flex-col items-center">
+                <span class="text-[9px] font-bold text-emerald-700 mb-0.5"
+                  >BACK (Frog)</span
+                >
+                <div class="token-circle border-emerald-400 bg-emerald-50">
+                  <span class="text-2xl">🐸</span>
+                  <span class="text-[8px] font-bold text-emerald-900"
+                    >FROG</span
+                  >
+                  <span class="text-[6px] text-emerald-600 font-bold"
+                    >[ IMAGE PLACEHOLDER ]</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Assembly Guide Banner -->
+        <div
+          class="mt-2 bg-pink-50 border border-pink-200 p-2 rounded-xl text-center"
+        >
+          <p class="text-[10px] font-bold text-pink-900">
+            ✂️ Token Assembly Instruction:
+          </p>
+          <p class="text-[9px] text-pink-800">
+            Cut out each pair, apply glue to the back, and fold/press
+            back-to-back to create double-sided state tokens!
+          </p>
+        </div>
+      </div>
+
+      <!-- Page Footer -->
+      <div
+        class="border-t border-slate-200 pt-1.5 flex justify-between items-center text-[10px] text-slate-400"
+      >
+        <span>Kiss the Frog © Print & Play Edition</span>
+        <span>Page 4 of 4</span>
+      </div>
+    </div>
+
+    <!-- UI View Switcher Script -->
+  </body>
+</html>
