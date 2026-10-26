@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mosquito Bites - Game Rules</title>
+    <style>
+        /* Page setup for A4 printing */
+        @page {
+            size: A4;
+            margin: 12mm 15mm;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: #111;
+            background-color: #fff;
+            font-size: 10pt;
+            line-height: 1.35;
+            margin: 0;
+            padding: 0;
+        }
+
+        .page-container {
+            width: 100%;
+            max-width: 180mm; /* Fits comfortably within A4 width with margins */
+            margin: 0 auto;
+        }
+
+        /* Header Styles */
+        header {
+            text-align: center;
+            border-bottom: 2px solid #222;
+            padding-bottom: 6px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 20pt;
+            margin: 0 0 2px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            font-size: 10pt;
+            font-style: italic;
+            color: #444;
+            margin: 0;
+        }
+
+        .source-credit {
+            font-size: 8pt;
+            color: #666;
+            margin-top: 2px;
+        }
+
+        /* Two-column layout for space efficiency on A4 */
+        .content-columns {
+            column-count: 2;
+            column-gap: 6mm;
+        }
+
+        section {
+            break-inside: avoid;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 11pt;
+            text-transform: uppercase;
+            border-bottom: 1px solid #444;
+            padding-bottom: 2px;
+            margin: 0 0 4px 0;
+            break-after: avoid;
+        }
+
+        h3 {
+            font-size: 10pt;
+            margin: 6px 0 2px 0;
+            break-after: avoid;
+            color: #222;
+        }
+
+        p, ul, ol {
+            margin: 0 0 4px 0;
+        }
+
+        ul, ol {
+            padding-left: 15px;
+        }
+
+        li {
+            margin-bottom: 2px;
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 4px 0;
+            font-size: 8.5pt;
+            break-inside: avoid;
+        }
+
+        th, td {
+            border: 1px solid #666;
+            padding: 3px 5px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+
+        .full-width-section {
+            column-span: all;
+            break-inside: avoid;
+            margin-top: 6px;
+            border-top: 1px dashed #ccc;
+            padding-top: 6px;
+        }
+
+        /* Print Optimization */
+        @media print {
+            body {
+                background: none;
+                color: #000;
+            }
+            no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-container">
+    <header>
+        <h1>Mosquito Bites</h1>
+        <p class="subtitle">A fast-paced push-your-luck & take-that card game for 1–5 Players</p>
+    </header>
+
+    <div class="content-columns">
+
+        <!-- OVERVIEW -->
+        <section>
+            <h2>Overview</h2>
+            <p>You are a gang of hungry mosquitos attempting to drain blood from a human host without getting swatted. Deploy your swarm strategically, use reserves to manipulate where the host slaps, and be the first gang to reach <strong>10 Blood Points</strong>!</p>
+        </section>
+
+        <!-- COMPONENTS -->
+        <section>
+            <h2>Components</h2>
+            <ul>
+                <li>3 Body Location Cards (Neck, Arms, Legs)</li>
+                <li>1 Slap Dice (6-sided)</li>
+                <li><strong>Per Player (Up to 5 players):</strong>
+                    <ul>
+                        <li>1 Mosquito Tracking Card</li>
+                        <li>1 Blood Tracker Token</li>
+                        <li>2 Mosquito Tokens</li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+
+        <!-- SETUP -->
+        <section>
+            <h2>Setup</h2>
+            <ol>
+                <li>Place the 3 Body Location Cards (<strong>Neck</strong>, <strong>Arms</strong>, <strong>Legs</strong>) face-up in the center of the table.</li>
+                <li>Each player takes 1 Mosquito Tracking Card, 1 Blood Tracker Token (placed at <strong>0</strong>), and 2 Mosquito Tokens.</li>
+            </ol>
+        </section>
+
+        <!-- GAMEPLAY -->
+        <section>
+            <h2>Gameplay</h2>
+            <p>The game is played in rounds until a player reaches <strong>10 Blood Points</strong>. Each round consists of 4 steps:</p>
+
+            <h3>Step 1: Placement & Reserve</h3>
+            <p>Simultaneously (or in turn order), each player chooses how to deploy their 2 Mosquito Tokens:</p>
+            <ul>
+                <li><strong>All-In (Normal Stinger):</strong> Place <strong>both Mosquito Tokens</strong> across the 3 Body Location Cards (2 points per surviving token).</li>
+                <li><strong>Hold in Reserve:</strong> Place <strong>1 Mosquito Token</strong> on a Body Location Card and keep <strong>1 token in your hand</strong> (Reserve).</li>
+            </ul>
+        </section>
+
+        <!-- STEP 2: ROLL SLAP DICE -->
+        <section>
+            <h3>Step 2: Roll the Slap Dice</h3>
+            <p>One player rolls the Slap Dice:</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Roll</th>
+                        <th>Result</th>
+                        <th>Effect</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>1</strong></td>
+                        <td>No Slap</td>
+                        <td>Safe! No location is slapped.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2</strong></td>
+                        <td>Slap Neck</td>
+                        <td>The <strong>Neck</strong> card is slapped.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3</strong></td>
+                        <td>Slap Arms</td>
+                        <td>The <strong>Arms</strong> card is slapped.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>4</strong></td>
+                        <td>Slap Legs</td>
+                        <td>The <strong>Legs</strong> card is slapped.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>5</strong></td>
+                        <td>Heavy Target (Tie Safe)</td>
+                        <td>Slaps location with <strong>MOST</strong> mosquitos. <em>If tied, NO location is slapped.</em></td>
+                    </tr>
+                    <tr>
+                        <td><strong>6</strong></td>
+                        <td>Frenzy Slap (Tie Danger)</td>
+                        <td>Slaps location with <strong>MOST</strong> mosquitos. <em>If tied, ALL tied locations slapped!</em></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- STEP 3 & 4 -->
+        <section>
+            <h3>Step 3: Late Stinger Action</h3>
+            <p>If <strong>Dice 5 or Dice 6</strong> is rolled, any player who kept a token in <strong>Reserve</strong> may place it onto any location <strong>before</strong> the slap resolves:</p>
+            <ul>
+                <li><strong>Forcing a Tie-Safe (Dice 5):</strong> Tie the highest location. <strong>NO location gets slapped!</strong></li>
+                <li><strong>Triggering a Frenzy (Dice 6):</strong> Tie it with another location. <strong>BOTH locations get wiped out!</strong></li>
+            </ul>
+            <p style="font-size: 8pt; color: #555;"><em>(Resolve in clockwise order starting from the dice roller.)</em></p>
+
+            <h3>Step 4: Slap Resolution & Feeding</h3>
+            <ol>
+                <li><strong>Swatting:</strong> Slapped tokens are squished and collect no blood.</li>
+                <li><strong>Normal Stinger:</strong> Each surviving token from Step 1 scores <strong>+2 Blood Points</strong>.</li>
+                <li><strong>Late Stinger:</strong> Each surviving token from Step 3 scores <strong>+1 Blood Point</strong>.</li>
+                <li>Advance Blood Tracker and return all tokens to hands.</li>
+            </ol>
+        </section>
+
+        <!-- END OF GAME (Full width section at bottom) -->
+        <section class="full-width-section">
+            <h2>End of Game & Winning</h2>
+            <p>The game ends immediately at the end of any round in which one or more players reach <strong>10 Blood Points</strong>. The player with the highest score wins!</p>
+            <p><strong>Tie-Breakers:</strong></p>
+            <ol>
+                <li><strong>Most Active Mosquitos:</strong> The tied player with the most surviving Mosquito Tokens in the final round.</li>
+                <li><strong>Mosquito Attractor / Repellent:</strong> The player who <strong>got bit by a real mosquito most recently</strong> OR is <strong>currently holding mosquito repellent</strong> wins!</li>
+            </ol>
+        </section>
+
+    </div>
+</div>
+
+</body>
+</html>

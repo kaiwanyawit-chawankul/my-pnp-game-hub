@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mosquito Bites - Print and Play Cards (A4)</title>
+    <style>
+        /* Page setup for A4 printing */
+        @page {
+            size: A4 portrait;
+            margin: 10mm;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #555;
+            color: #111;
+            font-size: 7.5pt;
+            line-height: 1.2;
+        }
+
+        .sheet {
+            width: 210mm;
+            height: 297mm;
+            padding: 10mm;
+            margin: 0 auto;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            page-break-after: always;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 4mm;
+        }
+
+        .card {
+            border: 2px dashed #bbb;
+            border-radius: 4px;
+            padding: 6px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            background-color: #fff;
+            overflow: hidden;
+            height: 100%;
+        }
+
+        /* Location Card Style */
+        .card.location {
+            background: linear-gradient(135deg, #fdfbf7 0%, #f3efe6 100%);
+            border: 2px solid #333;
+        }
+
+        /* Player Tracker Card Style */
+        .card.tracker {
+            background: radial-gradient(circle, #f9f9f9 0%, #ececec 100%);
+            border: 2px solid #555;
+        }
+
+        .card.tracker::before {
+            content: "🦟";
+            position: absolute;
+            right: -5px;
+            bottom: -5px;
+            font-size: 4rem;
+            opacity: 0.06;
+            z-index: 0;
+        }
+
+        /* Rule/Guide Card Style */
+        .card.rule {
+            background: #fff;
+            border: 2px solid #222;
+            font-size: 7pt;
+        }
+
+        /* Card Back Style */
+        .card.back {
+            background: #000;
+            color: #fff;
+            border: 2px solid #000;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .card-header {
+            text-align: center;
+            border-bottom: 1px solid #444;
+            padding-bottom: 2px;
+            margin-bottom: 3px;
+            z-index: 1;
+        }
+
+        .card-header h3 {
+            font-size: 9pt;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card-body {
+            flex-grow: 1;
+            z-index: 1;
+        }
+
+        .card-footer {
+            font-size: 6pt;
+            text-align: center;
+            color: #666;
+            border-top: 1px solid #ddd;
+            padding-top: 2px;
+            z-index: 1;
+        }
+
+        /* SVG Art Container */
+        .card-art-container {
+            width: 100%;
+            height: 100px;
+            background: #000;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #333;
+            object-fit: contain; /* Shows the FULL image without cropping */
+            object-position: center;
+        }
+
+        .card-art-container svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Card Back Art Container */
+        .back-art-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 4px;
+        }
+
+        .back-art-container svg {
+            width: 80px;
+            height: 60px;
+        }
+
+        .back-art-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Shows the FULL image without cropping */
+            object-position: center;
+        }
+
+        ul, ol {
+            padding-left: 10px;
+            margin: 2px 0;
+        }
+
+        li {
+            margin-bottom: 1px;
+        }
+
+        /* 1 to 10 Tracker Track */
+        .tracker-track {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 1px;
+            background: #bbb;
+            border-radius: 2px;
+            padding: 1px;
+            margin: 4px 0;
+            text-align: center;
+        }
+
+        .tracker-step {
+            background: #fff;
+            font-size: 6.5pt;
+            font-weight: bold;
+            padding: 3px 0;
+            text-align: center;
+        }
+
+        .tracker-step.win {
+            background: #ffcccc;
+            color: #d90429;
+        }
+
+        .mini-section {
+            background: rgba(255,255,255,0.85);
+            border: 1px solid #ddd;
+            border-radius: 2px;
+            padding: 3px;
+            margin-top: 3px;
+        }
+
+        .mini-section h4 {
+            font-size: 7pt;
+            text-transform: uppercase;
+            margin-bottom: 1px;
+            color: #333;
+        }
+
+        .back-title-text {
+            font-size: 11pt;
+            font-weight: 300;
+            letter-spacing: 1px;
+            line-height: 1.1;
+            color: #fff;
+            text-align: center;
+        }
+
+        .back-title-text strong {
+            font-weight: 700;
+            display: block;
+            font-size: 13pt;
+        }
+
+        /* Print Media Override */
+        @media print {
+            body {
+                background: none;
+            }
+            .sheet {
+                box-shadow: none;
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SHEET 1: FRONT CARDS (Locations, Trackers, Rules) -->
+    <div class="sheet">
+
+        <!-- CARD 1: Location - Neck -->
+        <div class="card location">
+            <div class="card-header"><h3>Location 1</h3></div>
+            <div class="card-body">
+                <div class="card-art-container">
+                    <!-- <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M 20,40 Q 60,30 90,60 T 180,60" stroke="white" stroke-width="2.5" fill="none"/>
+                        <path d="M 70,75 Q 90,100 160,85" stroke="white" stroke-width="2.5" fill="none"/>
+                        <path d="M 50,45 Q 60,60 70,75" stroke="white" stroke-width="2" fill="none"/>
+                        <g transform="translate(130, 42) scale(0.6)">
+                            <ellipse cx="20" cy="15" rx="8" ry="5" fill="white"/>
+                            <circle cx="28" cy="12" r="3" fill="white"/>
+                            <line x1="15" y1="15" x2="2" y2="25" stroke="white" stroke-width="1.5"/>
+                            <line x1="22" y1="10" x2="35" y2="2" stroke="white" stroke-width="1.2"/>
+                            <line x1="22" y1="20" x2="10" y2="35" stroke="white" stroke-width="1.2"/>
+                        </g>
+                    </svg> -->
+                    <image src="neck.webp" alt="Body Location Art" style="width:100%; height:100%; object-fit:cover;"/>
+                </div>
+                <h2 style="text-align:center; font-size:10pt; margin-bottom:2px;">NECK</h2>
+                <p style="text-align:center; font-size:7pt;"><em>Vulnerable & Exposed</em></p>
+                <ul style="margin-top:4px; font-size:7pt;">
+                    <li>Slapped on Roll: <strong>2</strong></li>
+                    <li>Surviving Token: <strong>+2 Blood</strong></li>
+                    <li>Late Stinger Target: Valid</li>
+                </ul>
+            </div>
+            <div class="card-footer">Mosquito Bites - Body Card</div>
+        </div>
+
+        <!-- CARD 2: Location - Body -->
+        <div class="card location">
+            <div class="card-header"><h3>Location 2</h3></div>
+            <div class="card-body">
+                <div class="card-art-container">
+                    <!-- <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M 60,30 Q 80,50 90,90 T 110,120" stroke="white" stroke-width="2.5" fill="none"/>
+                        <path d="M 120,30 Q 110,60 140,110" stroke="white" stroke-width="2.5" fill="none"/>
+                        <path d="M 60,30 Q 40,50 30,80" stroke="white" stroke-width="2.5" fill="none"/>
+                        <g transform="translate(125, 45) scale(0.6)">
+                            <ellipse cx="20" cy="15" rx="8" ry="5" fill="white"/>
+                            <circle cx="28" cy="12" r="3" fill="white"/>
+                            <line x1="15" y1="15" x2="2" y2="25" stroke="white" stroke-width="1.5"/>
+                            <line x1="22" y1="10" x2="35" y2="2" stroke="white" stroke-width="1.2"/>
+                            <line x1="22" y1="20" x2="10" y2="35" stroke="white" stroke-width="1.2"/>
+                        </g>
+                    </svg> -->
+                    <image src="arms.webp" alt="Arms Location Art" style="width:100%; height:100%; object-fit:cover;"/>
+                </div>
+                <h2 style="text-align:center; font-size:10pt; margin-bottom:2px;">ARMS</h2>
+                <p style="text-align:center; font-size:7pt;"><em>Easy target for hit and run</em></p>
+                <ul style="margin-top:4px; font-size:7pt;">
+                    <li>Slapped on Roll: <strong>3</strong></li>
+                    <li>Surviving Token: <strong>+2 Blood</strong></li>
+                    <li>Late Stinger Target: Valid</li>
+                </ul>
+            </div>
+            <div class="card-footer">Mosquito Bites - Body Card</div>
+        </div>
+
+        <!-- CARD 3: Location - Legs -->
+        <div class="card location">
+            <div class="card-header"><h3>Location 3</h3></div>
+            <div class="card-body">
+                <div class="card-art-container">
+                    <!-- <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M 80,20 Q 70,50 90,80 T 130,110 L 150,110" stroke="white" stroke-width="2.5" fill="none"/>
+                        <path d="M 110,20 Q 120,50 110,80 T 125,110" stroke="white" stroke-width="2.5" fill="none"/>
+                        <g transform="translate(100, 52) scale(0.6)">
+                            <ellipse cx="20" cy="15" rx="8" ry="5" fill="white"/>
+                            <circle cx="28" cy="12" r="3" fill="white"/>
+                            <line x1="15" y1="15" x2="2" y2="25" stroke="white" stroke-width="1.5"/>
+                            <line x1="22" y1="10" x2="35" y2="2" stroke="white" stroke-width="1.2"/>
+                            <line x1="22" y1="20" x2="10" y2="35" stroke="white" stroke-width="1.2"/>
+                        </g>
+                    </svg> -->
+                    <image src="legs.webp" alt="Legs Location Art" style="width:100%; height:100%; object-fit:cover;"/>
+                </div>
+                <h2 style="text-align:center; font-size:10pt; margin-bottom:2px;">LEGS</h2>
+                <p style="text-align:center; font-size:7pt;"><em>Lower Target Zone</em></p>
+                <ul style="margin-top:4px; font-size:7pt;">
+                    <li>Slapped on Roll: <strong>4</strong></li>
+                    <li>Surviving Token: <strong>+2 Blood</strong></li>
+                    <li>Late Stinger Target: Valid</li>
+                </ul>
+            </div>
+            <div class="card-footer">Mosquito Bites - Body Card</div>
+        </div>
+
+        <!-- PLAYER TRACKERS CONTAINER -->
+        <div id="tracker-container" style="display: contents;"></div>
+
+        <!-- CARD 9: Quick Reference & Rules Guide -->
+        <div class="card rule">
+            <div class="card-header"><h3>Quick Reference</h3></div>
+            <div class="card-body">
+                <ol style="font-size:6.5pt;">
+                    <li><strong>Placement:</strong> Deploy 2 tokens (All-In) OR 1 token (Hold Reserve).</li>
+                    <li><strong>Roll Slap Dice:</strong>
+                        <ul>
+                            <li><strong>1:</strong> Safe</li>
+                            <li><strong>2-4:</strong> Neck/Arms/Legs</li>
+                            <li><strong>5:</strong> Heavy Target (Tie Safe)</li>
+                            <li><strong>6:</strong> Frenzy (Tie Danger)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Late Stinger:</strong> On 5 or 6, reserve tokens can be placed to manipulate ties.</li>
+                    <li><strong>Feeding:</strong> Surviving Normal = +2 pts. Reserve = +1 pt. First to 10 wins!</li>
+                </ol>
+            </div>
+            <div class="card-footer">Mosquito Bites - Rules Summary</div>
+        </div>
+
+    </div>
+
+    <!-- SHEET 2: CARD BACKS -->
+    <div class="sheet" id="back-container"></div>
+
+    <!-- TEMPLATE FOR PLAYER TRACKERS -->
+    <template id="tracker-template">
+        <div class="card tracker">
+            <div class="card-header"><h3 class="player-title">Player Tracker</h3></div>
+            <div class="card-body">
+                <p style="font-size:7pt; font-weight:bold;">Blood Points (1 to 10):</p>
+                <div class="tracker-track">
+                    <div class="tracker-step">1</div>
+                    <div class="tracker-step">2</div>
+                    <div class="tracker-step">3</div>
+                    <div class="tracker-step">4</div>
+                    <div class="tracker-step">5</div>
+                    <div class="tracker-step">6</div>
+                    <div class="tracker-step">7</div>
+                    <div class="tracker-step">8</div>
+                    <div class="tracker-step">9</div>
+                    <div class="tracker-step win">10</div>
+                </div>
+                <div class="mini-section">
+                    <h4>Scoring & Tie-Breakers</h4>
+                    <ul style="font-size:6.5pt;">
+                        <li><strong>Feed:</strong> Normal +2 | Reserve +1</li>
+                        <li><strong>Tie 1:</strong> Most active mosquitos</li>
+                        <li><strong>Tie 2:</strong> Recent bite / repellent</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card-footer">Mosquito Bites - Player Card</div>
+        </div>
+    </template>
+
+    <!-- TEMPLATE FOR MATCHING CARD BACKS -->
+    <template id="back-template">
+        <div class="card back">
+            <div class="back-art-container">
+                <!-- <svg viewBox="0 0 120 90" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M 35,40 Q 60,15 85,25" stroke="white" stroke-width="2.5" fill="none"/>
+                    <ellipse cx="60" cy="35" rx="14" ry="8" fill="white" transform="rotate(-15 60 35)"/>
+                    <circle cx="74" cy="30" r="4.5" fill="white"/>
+                    <path d="M 72,33 L 88,40 M 74,35 L 92,36 M 73,37 L 90,44" stroke="white" stroke-width="1.5" fill="none"/>
+                    <line x1="55" y1="40" x2="45" y2="75" stroke="white" stroke-width="2"/>
+                    <line x1="58" y1="41" x2="60" y2="78" stroke="white" stroke-width="2"/>
+                    <line x1="62" y1="40" x2="80" y2="72" stroke="white" stroke-width="2"/>
+                    <line x1="50" y1="35" x2="20" y2="60" stroke="white" stroke-width="2"/>
+                </svg> -->
+                <image src="mosquito-back.webp" alt="Mosquito Back Art" style="width:100%; height:100%; object-fit:cover;"/>
+            </div>
+            <!-- <div class="back-title-text">
+                Mosquito
+                <strong>Bite</strong>
+            </div> -->
+        </div>
+    </template>
+
+    <script>
+        // Automatically generate 5 player track cards using the template
+        const trackerContainer = document.getElementById('tracker-container');
+        const trackerTemplate = document.getElementById('tracker-template');
+
+        for (let i = 1; i <= 5; i++) {
+            const clone = trackerTemplate.content.cloneNode(true);
+            clone.querySelector('.player-title').textContent = `Player ${i} Tracker`;
+            trackerContainer.appendChild(clone);
+        }
+
+        // Automatically generate 9 matching card backs for sheet 2
+        const backContainer = document.getElementById('back-container');
+        const backTemplate = document.getElementById('back-template');
+
+        for (let i = 1; i <= 9; i++) {
+            const clone = backTemplate.content.cloneNode(true);
+            backContainer.appendChild(clone);
+        }
+    </script>
+</body>
+</html>

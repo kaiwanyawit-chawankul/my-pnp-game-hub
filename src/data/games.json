@@ -11,5 +11,18 @@
       "printAndPlayPDF": "https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME/main/games/glow/Glow%20P%26P%20Game.pdf"
     },
     "playableInBrowser": false
+  },
+  {
+    "id": "9CardsMosquitos",
+    "title": "9 Cards Mosquitos",
+    "tagline": "A print-and-play micro game.",
+    "thumbnail": "",
+    "playerCount": "1-5 Players",
+    "playTime": "15 mins",
+    "tags": ["PnP", "9-Card"],
+    "downloads": {
+      "printAndPlayPDF": "https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME/main/games/9CardsMosquitos/9%20Cards%20Mosquitos%20P%26P%20Game.pdf"
+    },
+    "playableInBrowser": false
   }
 ]
