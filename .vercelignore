@@ -1,0 +1,8 @@
+# Ignore raw design or master source files
+src/games/**/*.psd
+src/games/**/*.ai
+src/games/**/*.kra
+
+# Or ignore entire folders containing raw print-and-play production assets
+# if you only want the compressed web thumbnails uploaded to public/
+games
