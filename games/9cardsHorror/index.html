@@ -1,0 +1,2570 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>9 Cards of Horrors - Print &amp; Play</title>
+    <style>
+      @page {
+        size: A4;
+        margin: 0;
+      }
+      * {
+        box-sizing: border-box;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: #1c1c1c;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        color: #000;
+      }
+      .toolbar {
+        background: #000;
+        color: #fff;
+        padding: 10px 16px;
+        font-size: 13px;
+        line-height: 1.5;
+        text-align: center;
+      }
+      .toolbar b {
+        font-weight: 700;
+      }
+      .toolbar button {
+        margin-left: 12px;
+        padding: 5px 14px;
+        font: inherit;
+        font-weight: 700;
+        background: #fff;
+        color: #000;
+        border: 0;
+        border-radius: 3px;
+        cursor: pointer;
+      }
+      .page {
+        position: relative;
+        width: 210mm;
+        height: 297mm;
+        margin: 14px auto;
+        background: #fff;
+        overflow: hidden;
+        page-break-after: always;
+        break-after: page;
+        box-shadow: 0 2px 14px rgba(0, 0, 0, 0.6);
+      }
+      .page:last-child {
+        page-break-after: auto;
+        break-after: auto;
+      }
+      @media print {
+        body {
+          background: #fff;
+        }
+        .toolbar {
+          display: none;
+        }
+        .page {
+          margin: 0;
+          box-shadow: none;
+        }
+      }
+
+      /* rules */
+      .ptitle {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 8mm;
+        text-align: center;
+        font:
+          700 32pt/1 "Times New Roman",
+          Times,
+          serif;
+        letter-spacing: 0.5pt;
+      }
+      .psub {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 20mm;
+        text-align: center;
+        font:
+          italic 9pt/1 "Helvetica Neue",
+          Helvetica,
+          Arial,
+          sans-serif;
+      }
+      .prule {
+        position: absolute;
+        left: 12mm;
+        right: 12mm;
+        top: 26mm;
+        height: 0.7mm;
+        background: #000;
+      }
+      .story {
+        position: absolute;
+        left: 12mm;
+        right: 12mm;
+        top: 31mm;
+        height: 32mm;
+        border: 0.4mm solid #000;
+        padding: 3mm 4mm;
+        font:
+          italic 8.7pt/11pt "Helvetica Neue",
+          Helvetica,
+          Arial,
+          sans-serif;
+      }
+      .story p {
+        margin: 0 0 1.6mm;
+      }
+      .sh {
+        font:
+          normal 700 9.6pt/1 "Times New Roman",
+          Times,
+          serif;
+        letter-spacing: 1.2pt;
+        margin: 0 0 2mm;
+      }
+      .rules {
+        position: absolute;
+        left: 12mm;
+        right: 12mm;
+        top: 67mm;
+        bottom: 12mm;
+        font-size: 8.5pt;
+        line-height: 10.5pt;
+      }
+      .cols {
+        height: 218mm;
+        column-count: 2;
+        column-gap: 10mm;
+        column-fill: auto;
+      }
+      .rules h2 {
+        margin: 0 0 1.6mm;
+        padding: 0.8mm 1.6mm;
+        background: #000;
+        color: #fff;
+        font:
+          700 9.6pt/12pt "Helvetica Neue",
+          Helvetica,
+          Arial,
+          sans-serif;
+        text-transform: uppercase;
+        break-after: avoid;
+        page-break-after: avoid;
+      }
+      .rules h2:not(:first-child) {
+        margin-top: 3mm;
+      }
+      .rules p {
+        margin: 0 0 1.2mm;
+      }
+      .rules ul {
+        margin: 0 0 1.2mm;
+        padding: 0 0 0 4mm;
+      }
+      .rules li {
+        margin: 0 0 0.9mm;
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+
+      /* cards */
+      .grid {
+        position: absolute;
+        left: 12mm;
+        top: 16.5mm;
+        width: 187mm;
+        font-size: 0;
+        line-height: 0;
+      }
+      .m {
+        position: absolute;
+        background: #000;
+        display: block;
+      }
+      .card {
+        position: relative;
+        display: inline-block;
+        vertical-align: top;
+        width: 62mm;
+        height: 88mm;
+        background: #fff;
+        overflow: hidden;
+      }
+      .card:before {
+        content: "";
+        position: absolute;
+        left: 0.6mm;
+        top: 0.6mm;
+        right: 0.6mm;
+        bottom: 0.6mm;
+        border: 0.45mm solid #000;
+        border-radius: 3mm;
+      }
+      .banner {
+        position: absolute;
+        left: 3mm;
+        top: 3mm;
+        width: 56mm;
+        height: 10mm;
+        line-height: 10mm;
+        background: #000;
+        color: #fff;
+        border-radius: 1.5mm;
+        text-align: center;
+        font:
+          700 11.5pt/10mm "Times New Roman",
+          Times,
+          serif;
+        white-space: nowrap;
+      }
+      .art {
+        position: absolute;
+        left: 3mm;
+        top: 14.6mm;
+        width: 56mm;
+        height: 31mm;
+        background: #000;
+        border-radius: 1.5mm;
+      }
+      .art svg {
+        position: absolute;
+        left: 18.5mm;
+        top: 3.2mm;
+        width: 19mm;
+        height: 19mm;
+      }
+      .flavor {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 2mm;
+        text-align: center;
+        color: #fff;
+        font:
+          italic 6.6pt/1 "Helvetica Neue",
+          Helvetica,
+          Arial,
+          sans-serif;
+      }
+      .txt {
+        position: absolute;
+        left: 4.5mm;
+        top: 48.4mm;
+        width: 53mm;
+        height: 32mm;
+      }
+      .lab {
+        display: inline-block;
+        height: 3.5mm;
+        line-height: 3.5mm;
+        padding: 0 1.8mm;
+        background: #000;
+        color: #fff;
+        border-radius: 0.8mm;
+        font:
+          700 6.2pt/3.5mm "Helvetica Neue",
+          Helvetica,
+          Arial,
+          sans-serif;
+        letter-spacing: 0.2pt;
+      }
+      .b {
+        margin: 1.3mm 0 1.8mm;
+        font:
+          7.2pt/3mm "Helvetica Neue",
+          Helvetica,
+          Arial,
+          sans-serif;
+        color: #000;
+      }
+      .foot {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 3mm;
+        text-align: center;
+        font:
+          4.6pt/1 "Helvetica Neue",
+          Helvetica,
+          Arial,
+          sans-serif;
+        color: #666;
+      }
+      .back {
+        background: #fff;
+      }
+      .back:before {
+        background: #000;
+        border-color: #000;
+      }
+      .back:after {
+        content: "";
+        position: absolute;
+        left: 3mm;
+        top: 3mm;
+        right: 3mm;
+        bottom: 3mm;
+        border: 0.3mm solid #fff;
+        border-radius: 2mm;
+      }
+      .bt1,
+      .bt2 {
+        position: absolute;
+        left: 0;
+        right: 0;
+        text-align: center;
+        color: #fff;
+        font-family: "Times New Roman", Times, serif;
+        font-weight: 700;
+        z-index: 2;
+      }
+      .bt1 {
+        top: 8mm;
+        font-size: 13pt;
+        line-height: 1;
+      }
+      .bt2 {
+        top: 14mm;
+        font-size: 10pt;
+        line-height: 1;
+      }
+      .btun {
+        position: absolute;
+        left: 16mm;
+        top: 26mm;
+        width: 30mm;
+        height: 30mm;
+        z-index: 2;
+      }
+      .beye {
+        position: absolute;
+        left: 24mm;
+        top: 62mm;
+        width: 14mm;
+        height: 14mm;
+        z-index: 2;
+      }
+      .cap {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 6mm;
+        text-align: center;
+        font:
+          6.5pt/1 "Helvetica Neue",
+          Helvetica,
+          Arial,
+          sans-serif;
+        color: #666;
+      }
+
+      /* tokens */
+      .ttitle {
+        position: absolute;
+        left: 10mm;
+        top: 8mm;
+        font:
+          700 20pt/1 "Times New Roman",
+          Times,
+          serif;
+      }
+      .tsub {
+        position: absolute;
+        left: 10mm;
+        top: 17mm;
+        font:
+          italic 8pt/1 "Helvetica Neue",
+          Helvetica,
+          Arial,
+          sans-serif;
+        color: #666;
+      }
+      .tl {
+        position: absolute;
+        left: 10mm;
+        font:
+          700 8pt/1 "Helvetica Neue",
+          Helvetica,
+          Arial,
+          sans-serif;
+      }
+      .row {
+        position: absolute;
+        left: 10mm;
+        width: 191mm;
+        font-size: 0;
+        line-height: 0;
+      }
+      .tok {
+        position: relative;
+        display: inline-block;
+        vertical-align: top;
+        width: 18mm;
+        height: 18mm;
+        margin: 1.5mm;
+        border-radius: 50%;
+        border: 0.35mm solid #000;
+        background: #fff;
+      }
+      .tok:after {
+        content: "";
+        position: absolute;
+        left: 1.2mm;
+        top: 1.2mm;
+        right: 1.2mm;
+        bottom: 1.2mm;
+        border-radius: 50%;
+        border: 0.15mm solid #000;
+      }
+      .tok svg {
+        position: absolute;
+        left: 2.25mm;
+        top: 2.25mm;
+        width: 13.5mm;
+        height: 13.5mm;
+      }
+      .tf,
+      .tp {
+        background: #000;
+      }
+      .tf:after,
+      .tp:after {
+        border-color: #fff;
+      }
+      .tk:after,
+      .tg:after {
+        border-style: dashed;
+      }
+      .tp b {
+        position: absolute;
+        left: 0;
+        width: 17.3mm;
+        top: 0;
+        height: 17.3mm;
+        line-height: 17.3mm;
+        text-align: center;
+        color: #fff;
+        font:
+          700 22pt/17.3mm "Helvetica Neue",
+          Helvetica,
+          Arial,
+          sans-serif;
+        z-index: 2;
+      }
+      .tg svg {
+        left: 2mm;
+        top: 1.2mm;
+        width: 14mm;
+        height: 14mm;
+      }
+      .tl2 svg {
+        left: 3.8mm;
+        top: 1.6mm;
+        width: 10.4mm;
+        height: 10.4mm;
+      }
+      .tl2 i {
+        position: absolute;
+        left: 0;
+        width: 17.3mm;
+        top: 13.2mm;
+        text-align: center;
+        font:
+          normal 700 3.9pt/1 "Helvetica Neue",
+          Helvetica,
+          Arial,
+          sans-serif;
+        letter-spacing: 0.2pt;
+      }
+      .tr svg {
+        left: 3.6mm;
+        top: 1.8mm;
+        width: 10.4mm;
+        height: 10.4mm;
+      }
+      .tr i {
+        position: absolute;
+        left: 0;
+        width: 17.3mm;
+        top: 13.2mm;
+        text-align: center;
+        font:
+          normal 700 3.9pt/1 "Helvetica Neue",
+          Helvetica,
+          Arial,
+          sans-serif;
+        letter-spacing: 0.2pt;
+      }
+      .tg b {
+        position: absolute;
+        left: 0;
+        width: 17.3mm;
+        top: 10.4mm;
+        text-align: center;
+        color: #fff;
+        font:
+          700 7.5pt/3mm "Helvetica Neue",
+          Helvetica,
+          Arial,
+          sans-serif;
+        z-index: 2;
+      }
+      .kt {
+        display: inline-block;
+        vertical-align: top;
+        width: 18mm;
+        height: 18mm;
+        margin: 1.5mm;
+      }
+      .kt svg {
+        display: block;
+      }
+      .kill {
+        position: absolute;
+        width: 38mm;
+        height: 38mm;
+        font-size: 0;
+        line-height: 0;
+      }
+      .start {
+        position: absolute;
+        left: 112mm;
+        top: 187mm;
+        width: 62mm;
+        height: 26mm;
+        background: #000;
+        color: #fff;
+        border-radius: 2mm;
+      }
+      .st1 {
+        position: absolute;
+        left: 4mm;
+        top: 3mm;
+        font:
+          700 18pt/1 "Times New Roman",
+          Times,
+          serif;
+        letter-spacing: 1pt;
+      }
+      .sta {
+        position: absolute;
+        left: 36mm;
+        top: 3.2mm;
+        width: 20mm;
+        height: 10mm;
+      }
+      .st2 {
+        position: absolute;
+        left: 4mm;
+        right: 4mm;
+        top: 13mm;
+        font:
+          6.6pt/3mm "Helvetica Neue",
+          Helvetica,
+          Arial,
+          sans-serif;
+      }
+      .glance {
+        position: absolute;
+        left: 10mm;
+        top: 178mm;
+        width: 190mm;
+        height: 62mm;
+        border: 0.4mm solid #000;
+        border-radius: 2mm;
+        padding: 4mm;
+        font-size: 8.2pt;
+        line-height: 10.4pt;
+      }
+      .glance h3 {
+        margin: 0 0 2mm;
+        font:
+          700 9pt/1 "Helvetica Neue",
+          Helvetica,
+          Arial,
+          sans-serif;
+      }
+      .glance p {
+        margin: 0 0 1.6mm;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="toolbar">
+      9 Cards of Horrors, print &amp; play. Print on <b>A4</b>, scale
+      <b>100%</b>, margins <b>none</b>, and turn on <b>Background graphics</b>.
+      <button onclick="window.print()">Print</button>
+    </div>
+    <section class="page">
+      <div class="ptitle">9 CARDS OF HORRORS</div>
+      <div class="psub">
+        A hidden-role chase for 2–5 players, about 15 minutes
+      </div>
+      <div class="prule"></div>
+      <div class="story">
+        <div class="sh">THE NIGHT SHIFT</div>
+        <p>
+          Nobody goes down the Hollow Mine unless they have to. You did. The
+          rent was late, the debts were older, and the company paid triple for
+          one night of ’clearing work’. The foreman gave each of you two
+          candles, locked the gate behind you and told you not to answer the
+          knocking. Now the old caretaker is awake in his room at the back of
+          the tunnels, and he is coming for you, one slow step at a time. The
+          only key to the gate is somewhere down here.
+        </p>
+        <p>
+          And one of you was paid extra, up front, to make sure that not
+          everyone comes back up.
+        </p>
+      </div>
+      <div class="rules">
+        <div class="cols">
+          <h2>The game</h2>
+          <p>
+            A killer is walking the tunnel from left to right. Find the
+            <b>Key</b>, reach the <b>Exit</b> and get out. But one of you may be
+            a <b>Betrayer</b> who wants someone to die.
+          </p>
+          <p>
+            <b>You need:</b> these 9 cards, the tokens (page 4), and a six-sided
+            die.
+          </p>
+
+          <h2>Setup</h2>
+          <ul>
+            <li>
+              Put the <b>Caretaker’s Room</b> (the Key card) <b>face-down</b> on
+              the far left and stand the <b>Killer</b> (normal side up) on it.
+              Put the <b>Exit</b> on the far right.
+            </li>
+            <li>
+              Shuffle the other 7 scene cards. Lay 3 in a row between the Key
+              card and the Exit. The other 4 form the <b>deck</b>.
+            </li>
+            <li>
+              Flip the first card of the row face-up. All pawns start on it,
+              front side up (ignore its text this once). Because the Killer sits
+              on the Key card, the Key can’t turn up in the row too early.
+            </li>
+            <li>Each player takes <b>2 candles</b>.</li>
+            <li>
+              <b>Pawns and roles:</b> the pawns look identical on the front; the
+              back shows the role. Take the <b>Betrayer</b> pawn plus 1
+              <b>Survivor</b> pawn for every other player, shuffle them
+              face-down, and everyone draws one and peeks at the back. Exactly
+              one Betrayer. With 2 players, use 2 Survivor pawns.
+            </li>
+          </ul>
+
+          <h2>A round</h2>
+          <p>
+            Players take turns. On your turn you get <b>2 actions</b> (you may
+            repeat one). When everyone has played, the Killer acts.
+          </p>
+          <ul>
+            <li>
+              <b>Move</b> 1 card left or right. If the card is face-down, flip
+              it and follow its text.
+            </li>
+            <li>
+              <b>Use</b> the ACTION printed on your card (search, peek...).
+            </li>
+            <li>
+              <b>Give</b> any number of tokens, and/or the Key, to one player on
+              your card (1 action), or <b>pick up</b> a dropped Key.
+            </li>
+            <li><b>Unlock</b> or <b>Escape</b> at the Exit (see Winning).</li>
+          </ul>
+          <p>
+            <b>Pooling:</b> players on the same card may combine tokens (any
+            mix) to pay one cost: searching, peeking, a dead end, Break Free,
+            Footsteps. Surviving a kill is personal: only the victim pays, so
+            give tokens first if you want to help.
+          </p>
+
+          <h2>The Killer (end of every round)</h2>
+          <ul>
+            <li>
+              If players share his card, he <b>kills one</b> of them and stays
+              put.
+            </li>
+            <li>
+              Otherwise he <b>moves 1 card right</b>. At the end of round 1 he
+              steps off the Key card onto the first card of the row. If players
+              are on the new card, he kills one at once.
+            </li>
+            <li>
+              The card he leaves is removed to a face-up pile. The exception is
+              the Key card: while its Key is untaken, shuffle it face-down into
+              the deck instead. A Key lying on a card he leaves moves onto the
+              Killer’s card.
+            </li>
+            <li>
+              <b>Who dies?</b> Everyone on the card rolls the die. The lowest
+              roll is the victim. On a tie, all tied players are victims. A lone
+              player is the victim automatically.
+            </li>
+            <li>
+              <b>Fight back:</b> a victim may spend <b>1 candle</b> to survive
+              this round, or <b>1 flashlight</b> to survive and <b>stun</b> the
+              Killer (flip him: he does nothing at the end of the next round,
+              then flips back).
+            </li>
+            <li>
+              A victim who doesn’t survive becomes a <b>ghost</b>: take your
+              pawn off the board and keep it face-down in front of you (your
+              role still counts), drop the Key (if carried) on that card and
+              discard all other tokens. Hand them over before it happens!
+            </li>
+          </ul>
+          <p>Run! If anyone is still on his card next round, he kills again.</p>
+
+          <h2>Candles and the lighter</h2>
+          <ul>
+            <li>
+              <b>Lighting:</b> every time you spend a candle, roll the die. On
+              <b>3+</b> it lights and the cost is paid. On <b>1–2</b> it
+              sputters: nothing happens, but you keep the candle. Flashlights
+              never need a roll.
+            </li>
+            <li>
+              <b>The lighter</b> (found on the Dead Miner): its holder’s candles
+              always light, no roll. Pass it on with Give.
+            </li>
+            <li>
+              <b>Burn the Killer:</b> the holder may spend 1 action and roll. On
+              <b>4+</b> the Killer is stunned, like with a flashlight. On a
+              <b>1</b> the lighter runs empty: flip it, it is useless from now
+              on.
+            </li>
+          </ul>
+
+          <h2>Finding the Key</h2>
+          <ul>
+            <li>
+              <b>Search:</b> in the Caretaker’s Room, spend 2 candles and/or
+              flashlights (any mix) to take the Key.
+            </li>
+            <li>
+              <b>Dead end:</b> if you stand on the last card before the Exit and
+              the Key card hasn’t been revealed, spend 1 candle or 1 flashlight
+              to add the top deck card to the row, face-down, just left of the
+              Exit.
+            </li>
+            <li><b>ONE USE</b> cards: turn them sideways once used.</li>
+          </ul>
+
+          <h2>Ghosts</h2>
+          <p>
+            A ghost keeps its secret role (it still counts) and stays in the
+            game. It cannot move, carry tokens or be killed again. On its turn
+            it may <b>whisper</b> advice to the group (<b>it may lie</b>). Once
+            per game it may secretly look at the top 2 cards of the deck and
+            swap them, or leave them.
+          </p>
+
+          <h2>Winning</h2>
+          <ul>
+            <li>
+              <b>Unlock:</b> a player on the Exit with the Key spends 1 action.
+              The door stays open: any player on the Exit may then spend 1
+              action to <b>escape</b>.
+            </li>
+            <li><b>Survivors</b> win if at least one Survivor escapes.</li>
+            <li>
+              The <b>Betrayer</b> wins if no Survivor escapes (even if he
+              escapes himself, or is dead).
+            </li>
+            <li>
+              If nobody escapes, the Killer and the Betrayer win. The game ends
+              when every player has escaped or become a ghost. Reveal the pawns.
+            </li>
+          </ul>
+          <p>
+            <b>Bluff freely.</b> You may say anything about your role, your
+            tokens or the cards you have peeked at.
+          </p>
+        </div>
+      </div>
+    </section>
+    <section class="page">
+      <i class="m" style="left: 12mm; top: 11mm; width: 0.25mm; height: 4mm"></i
+      ><i
+        class="m"
+        style="left: 12mm; top: 280.5mm; width: 0.25mm; height: 4mm"
+      ></i
+      ><i
+        class="m"
+        style="left: 7mm; top: 16.5mm; width: 4mm; height: 0.25mm"
+      ></i
+      ><i
+        class="m"
+        style="left: 199mm; top: 16.5mm; width: 4mm; height: 0.25mm"
+      ></i
+      ><i
+        class="m"
+        style="left: 74mm; top: 11mm; width: 0.25mm; height: 4mm"
+      ></i
+      ><i
+        class="m"
+        style="left: 74mm; top: 280.5mm; width: 0.25mm; height: 4mm"
+      ></i
+      ><i
+        class="m"
+        style="left: 7mm; top: 104.5mm; width: 4mm; height: 0.25mm"
+      ></i
+      ><i
+        class="m"
+        style="left: 199mm; top: 104.5mm; width: 4mm; height: 0.25mm"
+      ></i
+      ><i
+        class="m"
+        style="left: 136mm; top: 11mm; width: 0.25mm; height: 4mm"
+      ></i
+      ><i
+        class="m"
+        style="left: 136mm; top: 280.5mm; width: 0.25mm; height: 4mm"
+      ></i
+      ><i
+        class="m"
+        style="left: 7mm; top: 192.5mm; width: 4mm; height: 0.25mm"
+      ></i
+      ><i
+        class="m"
+        style="left: 199mm; top: 192.5mm; width: 4mm; height: 0.25mm"
+      ></i
+      ><i
+        class="m"
+        style="left: 198mm; top: 11mm; width: 0.25mm; height: 4mm"
+      ></i
+      ><i
+        class="m"
+        style="left: 198mm; top: 280.5mm; width: 0.25mm; height: 4mm"
+      ></i
+      ><i
+        class="m"
+        style="left: 7mm; top: 280.5mm; width: 4mm; height: 0.25mm"
+      ></i
+      ><i
+        class="m"
+        style="left: 199mm; top: 280.5mm; width: 4mm; height: 0.25mm"
+      ></i>
+      <div class="grid">
+        <div class="card">
+          <div class="banner">EXIT</div>
+          <div class="art">
+            <svg
+              viewBox="0 0 100 100"
+              overflow="visible"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M20 100V38C20 -4 80 -4 80 38V100Z" fill="#fff" />
+              <rect x="39" y="55" width="22" height="17" rx="2" fill="#000" />
+              <path
+                d="M43.5 55V45A6.5 6.5 0 0 1 56.5 45V55"
+                fill="none"
+                stroke="#000"
+                stroke-width="4"
+              />
+              <path d="M5 100H95" stroke="#fff" stroke-width="5" />
+            </svg>
+            <div class="flavor">Locked. Of course.</div>
+          </div>
+          <div class="txt">
+            <div class="lab">LOCKED</div>
+            <p class="b">
+              A player here with the Key spends 1 action to unlock the door.
+            </p>
+            <div class="lab">OPEN</div>
+            <p class="b">
+              Once unlocked, any player here may spend 1 action to escape.
+            </p>
+          </div>
+          <div class="foot">9 CARDS OF HORRORS</div>
+        </div>
+        <div class="card">
+          <div class="banner">CARETAKER’S ROOM</div>
+          <div class="art">
+            <svg
+              viewBox="0 0 100 100"
+              overflow="visible"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g transform="translate(50 50) rotate(-35)">
+                <circle cx="-30" cy="0" r="17" fill="#fff" />
+                <circle cx="-30" cy="0" r="7.5" fill="#000" />
+                <rect x="-14" y="-4" width="58" height="8" fill="#fff" />
+                <rect x="28" y="0" width="7" height="17" fill="#fff" />
+                <rect x="38" y="0" width="7" height="12" fill="#fff" />
+              </g>
+            </svg>
+            <div class="flavor">Keys rattle somewhere.</div>
+          </div>
+          <div class="txt">
+            <div class="lab">ACTION</div>
+            <p class="b">
+              Spend 2 candles and/or flashlights to search the room. Take the
+              Key.
+            </p>
+            <div class="lab">THE KEY CARD</div>
+            <p class="b">
+              Starts face-down under the Killer. When he leaves it, shuffle it
+              into the deck. If he passes it with the Key untaken, shuffle it
+              back in.
+            </p>
+          </div>
+          <div class="foot">9 CARDS OF HORRORS</div>
+        </div>
+        <div class="card">
+          <div class="banner">DARK PASSAGE</div>
+          <div class="art">
+            <svg
+              viewBox="0 0 100 100"
+              overflow="visible"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M4 50C30 16 70 16 96 50C70 84 30 84 4 50Z"
+                fill="none"
+                stroke="#fff"
+                stroke-width="6"
+                stroke-linejoin="round"
+              />
+              <circle cx="50" cy="50" r="16" fill="#fff" />
+              <circle cx="55" cy="44" r="4.5" fill="#000" />
+              <path
+                d="M69.3 22L80.9 6.2M50 14V-6M30.7 22L19.1 6.2"
+                stroke="#fff"
+                stroke-width="4.5"
+                stroke-linecap="round"
+                fill="none"
+              />
+            </svg>
+            <div class="flavor">Don’t look back.</div>
+          </div>
+          <div class="txt">
+            <div class="lab">ACTION</div>
+            <p class="b">
+              Spend 1 candle: peek at the next card to the right. Leave it, or
+              push it to the bottom of the deck and put the top deck card there
+              instead (face-down).
+            </p>
+          </div>
+          <div class="foot">9 CARDS OF HORRORS</div>
+        </div>
+        <div class="card">
+          <div class="banner">WRONG TURN</div>
+          <div class="art">
+            <svg
+              viewBox="0 0 100 100"
+              overflow="visible"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M50 95V52M50 52L20 22M50 52L80 22"
+                stroke="#fff"
+                stroke-width="8"
+                stroke-linecap="round"
+                fill="none"
+              />
+              <polygon points="8,8 6,30 30,10" fill="#fff" />
+              <polygon points="92,8 94,30 70,10" fill="#fff" />
+            </svg>
+            <div class="flavor">This isn’t where you came from.</div>
+          </div>
+          <div class="txt">
+            <div class="lab">ON ENTER</div>
+            <p class="b">
+              Add 2 cards from the deck to the tunnel, face-down, just left of
+              the Exit.
+            </p>
+            <div class="lab">DODGE</div>
+            <p class="b">Spend 1 flashlight to ignore this.</p>
+          </div>
+          <div class="foot">9 CARDS OF HORRORS</div>
+        </div>
+        <div class="card">
+          <div class="banner">COLD DRAFT</div>
+          <div class="art">
+            <svg
+              viewBox="0 0 100 100"
+              overflow="visible"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M5 35H62C82 35 82 12 66 14M15 56H80C97 56 97 78 82 78M5 76H44C58 76 58 92 46 92"
+                stroke="#fff"
+                stroke-width="6"
+                stroke-linecap="round"
+                fill="none"
+              />
+            </svg>
+            <div class="flavor">A wind from nowhere.</div>
+          </div>
+          <div class="txt">
+            <div class="lab">ON ENTER</div>
+            <p class="b">
+              A cold wind. Roll a die: 1–4 discard 1 candle, 5–6 discard 1
+              flashlight. If you have none, nothing happens.
+            </p>
+          </div>
+          <div class="foot">9 CARDS OF HORRORS</div>
+        </div>
+        <div class="card">
+          <div class="banner">ABANDONED CAMP</div>
+          <div class="art">
+            <svg
+              viewBox="0 0 100 100"
+              overflow="visible"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g transform="translate(28 55) scale(.85) translate(-50 -50)">
+                <rect x="20" y="91" width="60" height="9" rx="3" fill="#fff" />
+                <rect x="36" y="39" width="28" height="52" fill="#fff" />
+                <path
+                  d="M44 39V50M57 39V60"
+                  stroke="#000"
+                  stroke-width="3.5"
+                  stroke-linecap="round"
+                  fill="none"
+                />
+                <path d="M50 40V33" stroke="#fff" stroke-width="3" />
+                <path
+                  d="M50 0C70 20 65 33 50 33C35 33 30 20 50 0Z"
+                  fill="#fff"
+                />
+                <ellipse cx="50" cy="23" rx="4" ry="6" fill="#000" />
+              </g>
+              <g transform="translate(72 47) scale(.95) translate(-50 -50)">
+                <rect x="20" y="91" width="60" height="9" rx="3" fill="#fff" />
+                <rect x="36" y="39" width="28" height="52" fill="#fff" />
+                <path
+                  d="M44 39V50M57 39V60"
+                  stroke="#000"
+                  stroke-width="3.5"
+                  stroke-linecap="round"
+                  fill="none"
+                />
+                <path d="M50 40V33" stroke="#fff" stroke-width="3" />
+                <path
+                  d="M50 0C70 20 65 33 50 33C35 33 30 20 50 0Z"
+                  fill="#fff"
+                />
+                <ellipse cx="50" cy="23" rx="4" ry="6" fill="#000" />
+              </g>
+            </svg>
+            <div class="flavor">Someone left in a hurry.</div>
+          </div>
+          <div class="txt">
+            <div class="lab">ONE USE</div>
+            <p class="b">Take 2 candles. Then turn this card sideways.</p>
+          </div>
+          <div class="foot">9 CARDS OF HORRORS</div>
+        </div>
+        <div class="card">
+          <div class="banner">DEAD MINER</div>
+          <div class="art">
+            <svg
+              viewBox="0 0 100 100"
+              overflow="visible"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M14 62C14 10 86 10 86 62Z" fill="#fff" />
+              <rect x="0" y="60" width="100" height="12" rx="4" fill="#fff" />
+              <circle cx="50" cy="44" r="11" fill="#000" />
+              <circle cx="50" cy="44" r="6" fill="#fff" />
+              <path
+                d="M67.2 19.4L76.4 6.3M50 14V-2M32.8 19.4L23.6 6.3"
+                stroke="#fff"
+                stroke-width="4"
+                stroke-linecap="round"
+                fill="none"
+              />
+            </svg>
+            <div class="flavor">He won’t need them.</div>
+          </div>
+          <div class="txt">
+            <div class="lab">ONE USE</div>
+            <p class="b">
+              Search the body. Take the lighter and 1 flashlight. Then turn this
+              card sideways.
+            </p>
+          </div>
+          <div class="foot">9 CARDS OF HORRORS</div>
+        </div>
+        <div class="card">
+          <div class="banner">NARROW CRAWL</div>
+          <div class="art">
+            <svg
+              viewBox="0 0 100 100"
+              overflow="visible"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <polygon
+                points="0,95 40,95 33,72 43,50 34,28 42,5 0,5"
+                fill="#fff"
+              />
+              <polygon
+                points="100,95 60,95 67,72 57,50 66,28 58,5 100,5"
+                fill="#fff"
+              />
+              <path
+                d="M50 92V8"
+                stroke="#fff"
+                stroke-width="3.5"
+                stroke-dasharray="5 7"
+                fill="none"
+              />
+            </svg>
+            <div class="flavor">Too tight. Too slow.</div>
+          </div>
+          <div class="txt">
+            <div class="lab">ON ENTER</div>
+            <p class="b">You are stuck. You cannot move away from this card.</p>
+            <div class="lab">BREAK FREE</div>
+            <p class="b">
+              Spend 1 action to roll: 4+ frees you. Or spend 1 candle to free
+              yourself at once.
+            </p>
+          </div>
+          <div class="foot">9 CARDS OF HORRORS</div>
+        </div>
+        <div class="card">
+          <div class="banner">FOOTSTEPS</div>
+          <div class="art">
+            <svg
+              viewBox="0 0 100 100"
+              overflow="visible"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g transform="translate(32 92) rotate(-10)">
+                <ellipse cx="0" cy="-12" rx="7.5" ry="14" fill="#fff" />
+                <ellipse cx="0" cy="12" rx="5.5" ry="6" fill="#fff" />
+              </g>
+              <g transform="translate(66 64) rotate(8)">
+                <ellipse cx="0" cy="-12" rx="7.5" ry="14" fill="#fff" />
+                <ellipse cx="0" cy="12" rx="5.5" ry="6" fill="#fff" />
+              </g>
+              <g transform="translate(34 36) rotate(-10)">
+                <ellipse cx="0" cy="-12" rx="7.5" ry="14" fill="#fff" />
+                <ellipse cx="0" cy="12" rx="5.5" ry="6" fill="#fff" />
+              </g>
+            </svg>
+            <div class="flavor">Closer. Closer.</div>
+          </div>
+          <div class="txt">
+            <div class="lab">WHEN REVEALED</div>
+            <p class="b">
+              At the end of this round the Killer moves 2 spaces instead of 1.
+            </p>
+            <div class="lab">REPEL</div>
+            <p class="b">
+              Any player may spend 1 candle or 1 flashlight to cancel the extra
+              step.
+            </p>
+          </div>
+          <div class="foot">9 CARDS OF HORRORS</div>
+        </div>
+      </div>
+      <div class="cap">
+        Cards: 62 x 88 mm. Cut along the lines. Print page 3 on the back (flip
+        on the long edge), or sleeve the cards.
+      </div>
+    </section>
+    <section class="page">
+      <i class="m" style="left: 12mm; top: 11mm; width: 0.25mm; height: 4mm"></i
+      ><i
+        class="m"
+        style="left: 12mm; top: 280.5mm; width: 0.25mm; height: 4mm"
+      ></i
+      ><i
+        class="m"
+        style="left: 7mm; top: 16.5mm; width: 4mm; height: 0.25mm"
+      ></i
+      ><i
+        class="m"
+        style="left: 199mm; top: 16.5mm; width: 4mm; height: 0.25mm"
+      ></i
+      ><i
+        class="m"
+        style="left: 74mm; top: 11mm; width: 0.25mm; height: 4mm"
+      ></i
+      ><i
+        class="m"
+        style="left: 74mm; top: 280.5mm; width: 0.25mm; height: 4mm"
+      ></i
+      ><i
+        class="m"
+        style="left: 7mm; top: 104.5mm; width: 4mm; height: 0.25mm"
+      ></i
+      ><i
+        class="m"
+        style="left: 199mm; top: 104.5mm; width: 4mm; height: 0.25mm"
+      ></i
+      ><i
+        class="m"
+        style="left: 136mm; top: 11mm; width: 0.25mm; height: 4mm"
+      ></i
+      ><i
+        class="m"
+        style="left: 136mm; top: 280.5mm; width: 0.25mm; height: 4mm"
+      ></i
+      ><i
+        class="m"
+        style="left: 7mm; top: 192.5mm; width: 4mm; height: 0.25mm"
+      ></i
+      ><i
+        class="m"
+        style="left: 199mm; top: 192.5mm; width: 4mm; height: 0.25mm"
+      ></i
+      ><i
+        class="m"
+        style="left: 198mm; top: 11mm; width: 0.25mm; height: 4mm"
+      ></i
+      ><i
+        class="m"
+        style="left: 198mm; top: 280.5mm; width: 0.25mm; height: 4mm"
+      ></i
+      ><i
+        class="m"
+        style="left: 7mm; top: 280.5mm; width: 4mm; height: 0.25mm"
+      ></i
+      ><i
+        class="m"
+        style="left: 199mm; top: 280.5mm; width: 4mm; height: 0.25mm"
+      ></i>
+      <div class="grid">
+        <div class="card back">
+          <div class="bt1">9 CARDS</div>
+          <div class="bt2">OF HORRORS</div>
+          <svg
+            class="btun"
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4 100V46A46 46 0 0 1 96 46V100M17 100V49A33 33 0 0 1 83 49V100M30 100V52A20 20 0 0 1 70 52V100"
+              fill="none"
+              stroke="#fff"
+              stroke-width="5"
+            />
+            <path d="M-5 100H105" stroke="#fff" stroke-width="5" /></svg
+          ><svg
+            class="beye"
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4 50C30 16 70 16 96 50C70 84 30 84 4 50Z"
+              fill="none"
+              stroke="#fff"
+              stroke-width="6"
+              stroke-linejoin="round"
+            />
+            <circle cx="50" cy="50" r="16" fill="#fff" />
+            <circle cx="55" cy="44" r="4.5" fill="#000" />
+            <path
+              d="M69.3 22L80.9 6.2M50 14V-6M30.7 22L19.1 6.2"
+              stroke="#fff"
+              stroke-width="4.5"
+              stroke-linecap="round"
+              fill="none"
+            />
+          </svg>
+        </div>
+        <div class="card back">
+          <div class="bt1">9 CARDS</div>
+          <div class="bt2">OF HORRORS</div>
+          <svg
+            class="btun"
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4 100V46A46 46 0 0 1 96 46V100M17 100V49A33 33 0 0 1 83 49V100M30 100V52A20 20 0 0 1 70 52V100"
+              fill="none"
+              stroke="#fff"
+              stroke-width="5"
+            />
+            <path d="M-5 100H105" stroke="#fff" stroke-width="5" /></svg
+          ><svg
+            class="beye"
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4 50C30 16 70 16 96 50C70 84 30 84 4 50Z"
+              fill="none"
+              stroke="#fff"
+              stroke-width="6"
+              stroke-linejoin="round"
+            />
+            <circle cx="50" cy="50" r="16" fill="#fff" />
+            <circle cx="55" cy="44" r="4.5" fill="#000" />
+            <path
+              d="M69.3 22L80.9 6.2M50 14V-6M30.7 22L19.1 6.2"
+              stroke="#fff"
+              stroke-width="4.5"
+              stroke-linecap="round"
+              fill="none"
+            />
+          </svg>
+        </div>
+        <div class="card back">
+          <div class="bt1">9 CARDS</div>
+          <div class="bt2">OF HORRORS</div>
+          <svg
+            class="btun"
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4 100V46A46 46 0 0 1 96 46V100M17 100V49A33 33 0 0 1 83 49V100M30 100V52A20 20 0 0 1 70 52V100"
+              fill="none"
+              stroke="#fff"
+              stroke-width="5"
+            />
+            <path d="M-5 100H105" stroke="#fff" stroke-width="5" /></svg
+          ><svg
+            class="beye"
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4 50C30 16 70 16 96 50C70 84 30 84 4 50Z"
+              fill="none"
+              stroke="#fff"
+              stroke-width="6"
+              stroke-linejoin="round"
+            />
+            <circle cx="50" cy="50" r="16" fill="#fff" />
+            <circle cx="55" cy="44" r="4.5" fill="#000" />
+            <path
+              d="M69.3 22L80.9 6.2M50 14V-6M30.7 22L19.1 6.2"
+              stroke="#fff"
+              stroke-width="4.5"
+              stroke-linecap="round"
+              fill="none"
+            />
+          </svg>
+        </div>
+        <div class="card back">
+          <div class="bt1">9 CARDS</div>
+          <div class="bt2">OF HORRORS</div>
+          <svg
+            class="btun"
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4 100V46A46 46 0 0 1 96 46V100M17 100V49A33 33 0 0 1 83 49V100M30 100V52A20 20 0 0 1 70 52V100"
+              fill="none"
+              stroke="#fff"
+              stroke-width="5"
+            />
+            <path d="M-5 100H105" stroke="#fff" stroke-width="5" /></svg
+          ><svg
+            class="beye"
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4 50C30 16 70 16 96 50C70 84 30 84 4 50Z"
+              fill="none"
+              stroke="#fff"
+              stroke-width="6"
+              stroke-linejoin="round"
+            />
+            <circle cx="50" cy="50" r="16" fill="#fff" />
+            <circle cx="55" cy="44" r="4.5" fill="#000" />
+            <path
+              d="M69.3 22L80.9 6.2M50 14V-6M30.7 22L19.1 6.2"
+              stroke="#fff"
+              stroke-width="4.5"
+              stroke-linecap="round"
+              fill="none"
+            />
+          </svg>
+        </div>
+        <div class="card back">
+          <div class="bt1">9 CARDS</div>
+          <div class="bt2">OF HORRORS</div>
+          <svg
+            class="btun"
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4 100V46A46 46 0 0 1 96 46V100M17 100V49A33 33 0 0 1 83 49V100M30 100V52A20 20 0 0 1 70 52V100"
+              fill="none"
+              stroke="#fff"
+              stroke-width="5"
+            />
+            <path d="M-5 100H105" stroke="#fff" stroke-width="5" /></svg
+          ><svg
+            class="beye"
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4 50C30 16 70 16 96 50C70 84 30 84 4 50Z"
+              fill="none"
+              stroke="#fff"
+              stroke-width="6"
+              stroke-linejoin="round"
+            />
+            <circle cx="50" cy="50" r="16" fill="#fff" />
+            <circle cx="55" cy="44" r="4.5" fill="#000" />
+            <path
+              d="M69.3 22L80.9 6.2M50 14V-6M30.7 22L19.1 6.2"
+              stroke="#fff"
+              stroke-width="4.5"
+              stroke-linecap="round"
+              fill="none"
+            />
+          </svg>
+        </div>
+        <div class="card back">
+          <div class="bt1">9 CARDS</div>
+          <div class="bt2">OF HORRORS</div>
+          <svg
+            class="btun"
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4 100V46A46 46 0 0 1 96 46V100M17 100V49A33 33 0 0 1 83 49V100M30 100V52A20 20 0 0 1 70 52V100"
+              fill="none"
+              stroke="#fff"
+              stroke-width="5"
+            />
+            <path d="M-5 100H105" stroke="#fff" stroke-width="5" /></svg
+          ><svg
+            class="beye"
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4 50C30 16 70 16 96 50C70 84 30 84 4 50Z"
+              fill="none"
+              stroke="#fff"
+              stroke-width="6"
+              stroke-linejoin="round"
+            />
+            <circle cx="50" cy="50" r="16" fill="#fff" />
+            <circle cx="55" cy="44" r="4.5" fill="#000" />
+            <path
+              d="M69.3 22L80.9 6.2M50 14V-6M30.7 22L19.1 6.2"
+              stroke="#fff"
+              stroke-width="4.5"
+              stroke-linecap="round"
+              fill="none"
+            />
+          </svg>
+        </div>
+        <div class="card back">
+          <div class="bt1">9 CARDS</div>
+          <div class="bt2">OF HORRORS</div>
+          <svg
+            class="btun"
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4 100V46A46 46 0 0 1 96 46V100M17 100V49A33 33 0 0 1 83 49V100M30 100V52A20 20 0 0 1 70 52V100"
+              fill="none"
+              stroke="#fff"
+              stroke-width="5"
+            />
+            <path d="M-5 100H105" stroke="#fff" stroke-width="5" /></svg
+          ><svg
+            class="beye"
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4 50C30 16 70 16 96 50C70 84 30 84 4 50Z"
+              fill="none"
+              stroke="#fff"
+              stroke-width="6"
+              stroke-linejoin="round"
+            />
+            <circle cx="50" cy="50" r="16" fill="#fff" />
+            <circle cx="55" cy="44" r="4.5" fill="#000" />
+            <path
+              d="M69.3 22L80.9 6.2M50 14V-6M30.7 22L19.1 6.2"
+              stroke="#fff"
+              stroke-width="4.5"
+              stroke-linecap="round"
+              fill="none"
+            />
+          </svg>
+        </div>
+        <div class="card back">
+          <div class="bt1">9 CARDS</div>
+          <div class="bt2">OF HORRORS</div>
+          <svg
+            class="btun"
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4 100V46A46 46 0 0 1 96 46V100M17 100V49A33 33 0 0 1 83 49V100M30 100V52A20 20 0 0 1 70 52V100"
+              fill="none"
+              stroke="#fff"
+              stroke-width="5"
+            />
+            <path d="M-5 100H105" stroke="#fff" stroke-width="5" /></svg
+          ><svg
+            class="beye"
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4 50C30 16 70 16 96 50C70 84 30 84 4 50Z"
+              fill="none"
+              stroke="#fff"
+              stroke-width="6"
+              stroke-linejoin="round"
+            />
+            <circle cx="50" cy="50" r="16" fill="#fff" />
+            <circle cx="55" cy="44" r="4.5" fill="#000" />
+            <path
+              d="M69.3 22L80.9 6.2M50 14V-6M30.7 22L19.1 6.2"
+              stroke="#fff"
+              stroke-width="4.5"
+              stroke-linecap="round"
+              fill="none"
+            />
+          </svg>
+        </div>
+        <div class="card back">
+          <div class="bt1">9 CARDS</div>
+          <div class="bt2">OF HORRORS</div>
+          <svg
+            class="btun"
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4 100V46A46 46 0 0 1 96 46V100M17 100V49A33 33 0 0 1 83 49V100M30 100V52A20 20 0 0 1 70 52V100"
+              fill="none"
+              stroke="#fff"
+              stroke-width="5"
+            />
+            <path d="M-5 100H105" stroke="#fff" stroke-width="5" /></svg
+          ><svg
+            class="beye"
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4 50C30 16 70 16 96 50C70 84 30 84 4 50Z"
+              fill="none"
+              stroke="#fff"
+              stroke-width="6"
+              stroke-linejoin="round"
+            />
+            <circle cx="50" cy="50" r="16" fill="#fff" />
+            <circle cx="55" cy="44" r="4.5" fill="#000" />
+            <path
+              d="M69.3 22L80.9 6.2M50 14V-6M30.7 22L19.1 6.2"
+              stroke="#fff"
+              stroke-width="4.5"
+              stroke-linecap="round"
+              fill="none"
+            />
+          </svg>
+        </div>
+      </div>
+      <div class="cap">Card backs: all nine are identical.</div>
+    </section>
+    <section class="page">
+      <div class="ttitle">TOKENS</div>
+      <div class="tsub">
+        Cut out along the circles. Glue the paired discs back to back (pawns,
+        Killer, lighter), or slide them into coin sleeves.
+      </div>
+      <div class="tl" style="top: 24mm">CANDLES x27</div>
+      <div class="row" style="top: 28mm">
+        <span class="tok tc"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect x="20" y="91" width="60" height="9" rx="3" fill="#000" />
+            <rect x="36" y="39" width="28" height="52" fill="#000" />
+            <path
+              d="M44 39V50M57 39V60"
+              stroke="#fff"
+              stroke-width="3.5"
+              stroke-linecap="round"
+              fill="none"
+            />
+            <path d="M50 40V33" stroke="#000" stroke-width="3" />
+            <path d="M50 0C70 20 65 33 50 33C35 33 30 20 50 0Z" fill="#000" />
+            <ellipse cx="50" cy="23" rx="4" ry="6" fill="#fff" /></svg></span
+        ><span class="tok tc"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect x="20" y="91" width="60" height="9" rx="3" fill="#000" />
+            <rect x="36" y="39" width="28" height="52" fill="#000" />
+            <path
+              d="M44 39V50M57 39V60"
+              stroke="#fff"
+              stroke-width="3.5"
+              stroke-linecap="round"
+              fill="none"
+            />
+            <path d="M50 40V33" stroke="#000" stroke-width="3" />
+            <path d="M50 0C70 20 65 33 50 33C35 33 30 20 50 0Z" fill="#000" />
+            <ellipse cx="50" cy="23" rx="4" ry="6" fill="#fff" /></svg></span
+        ><span class="tok tc"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect x="20" y="91" width="60" height="9" rx="3" fill="#000" />
+            <rect x="36" y="39" width="28" height="52" fill="#000" />
+            <path
+              d="M44 39V50M57 39V60"
+              stroke="#fff"
+              stroke-width="3.5"
+              stroke-linecap="round"
+              fill="none"
+            />
+            <path d="M50 40V33" stroke="#000" stroke-width="3" />
+            <path d="M50 0C70 20 65 33 50 33C35 33 30 20 50 0Z" fill="#000" />
+            <ellipse cx="50" cy="23" rx="4" ry="6" fill="#fff" /></svg></span
+        ><span class="tok tc"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect x="20" y="91" width="60" height="9" rx="3" fill="#000" />
+            <rect x="36" y="39" width="28" height="52" fill="#000" />
+            <path
+              d="M44 39V50M57 39V60"
+              stroke="#fff"
+              stroke-width="3.5"
+              stroke-linecap="round"
+              fill="none"
+            />
+            <path d="M50 40V33" stroke="#000" stroke-width="3" />
+            <path d="M50 0C70 20 65 33 50 33C35 33 30 20 50 0Z" fill="#000" />
+            <ellipse cx="50" cy="23" rx="4" ry="6" fill="#fff" /></svg></span
+        ><span class="tok tc"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect x="20" y="91" width="60" height="9" rx="3" fill="#000" />
+            <rect x="36" y="39" width="28" height="52" fill="#000" />
+            <path
+              d="M44 39V50M57 39V60"
+              stroke="#fff"
+              stroke-width="3.5"
+              stroke-linecap="round"
+              fill="none"
+            />
+            <path d="M50 40V33" stroke="#000" stroke-width="3" />
+            <path d="M50 0C70 20 65 33 50 33C35 33 30 20 50 0Z" fill="#000" />
+            <ellipse cx="50" cy="23" rx="4" ry="6" fill="#fff" /></svg></span
+        ><span class="tok tc"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect x="20" y="91" width="60" height="9" rx="3" fill="#000" />
+            <rect x="36" y="39" width="28" height="52" fill="#000" />
+            <path
+              d="M44 39V50M57 39V60"
+              stroke="#fff"
+              stroke-width="3.5"
+              stroke-linecap="round"
+              fill="none"
+            />
+            <path d="M50 40V33" stroke="#000" stroke-width="3" />
+            <path d="M50 0C70 20 65 33 50 33C35 33 30 20 50 0Z" fill="#000" />
+            <ellipse cx="50" cy="23" rx="4" ry="6" fill="#fff" /></svg></span
+        ><span class="tok tc"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect x="20" y="91" width="60" height="9" rx="3" fill="#000" />
+            <rect x="36" y="39" width="28" height="52" fill="#000" />
+            <path
+              d="M44 39V50M57 39V60"
+              stroke="#fff"
+              stroke-width="3.5"
+              stroke-linecap="round"
+              fill="none"
+            />
+            <path d="M50 40V33" stroke="#000" stroke-width="3" />
+            <path d="M50 0C70 20 65 33 50 33C35 33 30 20 50 0Z" fill="#000" />
+            <ellipse cx="50" cy="23" rx="4" ry="6" fill="#fff" /></svg></span
+        ><span class="tok tc"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect x="20" y="91" width="60" height="9" rx="3" fill="#000" />
+            <rect x="36" y="39" width="28" height="52" fill="#000" />
+            <path
+              d="M44 39V50M57 39V60"
+              stroke="#fff"
+              stroke-width="3.5"
+              stroke-linecap="round"
+              fill="none"
+            />
+            <path d="M50 40V33" stroke="#000" stroke-width="3" />
+            <path d="M50 0C70 20 65 33 50 33C35 33 30 20 50 0Z" fill="#000" />
+            <ellipse cx="50" cy="23" rx="4" ry="6" fill="#fff" /></svg></span
+        ><span class="tok tc"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect x="20" y="91" width="60" height="9" rx="3" fill="#000" />
+            <rect x="36" y="39" width="28" height="52" fill="#000" />
+            <path
+              d="M44 39V50M57 39V60"
+              stroke="#fff"
+              stroke-width="3.5"
+              stroke-linecap="round"
+              fill="none"
+            />
+            <path d="M50 40V33" stroke="#000" stroke-width="3" />
+            <path d="M50 0C70 20 65 33 50 33C35 33 30 20 50 0Z" fill="#000" />
+            <ellipse cx="50" cy="23" rx="4" ry="6" fill="#fff" /></svg></span
+        ><span class="tok tc"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect x="20" y="91" width="60" height="9" rx="3" fill="#000" />
+            <rect x="36" y="39" width="28" height="52" fill="#000" />
+            <path
+              d="M44 39V50M57 39V60"
+              stroke="#fff"
+              stroke-width="3.5"
+              stroke-linecap="round"
+              fill="none"
+            />
+            <path d="M50 40V33" stroke="#000" stroke-width="3" />
+            <path d="M50 0C70 20 65 33 50 33C35 33 30 20 50 0Z" fill="#000" />
+            <ellipse cx="50" cy="23" rx="4" ry="6" fill="#fff" /></svg></span
+        ><span class="tok tc"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect x="20" y="91" width="60" height="9" rx="3" fill="#000" />
+            <rect x="36" y="39" width="28" height="52" fill="#000" />
+            <path
+              d="M44 39V50M57 39V60"
+              stroke="#fff"
+              stroke-width="3.5"
+              stroke-linecap="round"
+              fill="none"
+            />
+            <path d="M50 40V33" stroke="#000" stroke-width="3" />
+            <path d="M50 0C70 20 65 33 50 33C35 33 30 20 50 0Z" fill="#000" />
+            <ellipse cx="50" cy="23" rx="4" ry="6" fill="#fff" /></svg></span
+        ><span class="tok tc"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect x="20" y="91" width="60" height="9" rx="3" fill="#000" />
+            <rect x="36" y="39" width="28" height="52" fill="#000" />
+            <path
+              d="M44 39V50M57 39V60"
+              stroke="#fff"
+              stroke-width="3.5"
+              stroke-linecap="round"
+              fill="none"
+            />
+            <path d="M50 40V33" stroke="#000" stroke-width="3" />
+            <path d="M50 0C70 20 65 33 50 33C35 33 30 20 50 0Z" fill="#000" />
+            <ellipse cx="50" cy="23" rx="4" ry="6" fill="#fff" /></svg></span
+        ><span class="tok tc"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect x="20" y="91" width="60" height="9" rx="3" fill="#000" />
+            <rect x="36" y="39" width="28" height="52" fill="#000" />
+            <path
+              d="M44 39V50M57 39V60"
+              stroke="#fff"
+              stroke-width="3.5"
+              stroke-linecap="round"
+              fill="none"
+            />
+            <path d="M50 40V33" stroke="#000" stroke-width="3" />
+            <path d="M50 0C70 20 65 33 50 33C35 33 30 20 50 0Z" fill="#000" />
+            <ellipse cx="50" cy="23" rx="4" ry="6" fill="#fff" /></svg></span
+        ><span class="tok tc"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect x="20" y="91" width="60" height="9" rx="3" fill="#000" />
+            <rect x="36" y="39" width="28" height="52" fill="#000" />
+            <path
+              d="M44 39V50M57 39V60"
+              stroke="#fff"
+              stroke-width="3.5"
+              stroke-linecap="round"
+              fill="none"
+            />
+            <path d="M50 40V33" stroke="#000" stroke-width="3" />
+            <path d="M50 0C70 20 65 33 50 33C35 33 30 20 50 0Z" fill="#000" />
+            <ellipse cx="50" cy="23" rx="4" ry="6" fill="#fff" /></svg></span
+        ><span class="tok tc"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect x="20" y="91" width="60" height="9" rx="3" fill="#000" />
+            <rect x="36" y="39" width="28" height="52" fill="#000" />
+            <path
+              d="M44 39V50M57 39V60"
+              stroke="#fff"
+              stroke-width="3.5"
+              stroke-linecap="round"
+              fill="none"
+            />
+            <path d="M50 40V33" stroke="#000" stroke-width="3" />
+            <path d="M50 0C70 20 65 33 50 33C35 33 30 20 50 0Z" fill="#000" />
+            <ellipse cx="50" cy="23" rx="4" ry="6" fill="#fff" /></svg></span
+        ><span class="tok tc"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect x="20" y="91" width="60" height="9" rx="3" fill="#000" />
+            <rect x="36" y="39" width="28" height="52" fill="#000" />
+            <path
+              d="M44 39V50M57 39V60"
+              stroke="#fff"
+              stroke-width="3.5"
+              stroke-linecap="round"
+              fill="none"
+            />
+            <path d="M50 40V33" stroke="#000" stroke-width="3" />
+            <path d="M50 0C70 20 65 33 50 33C35 33 30 20 50 0Z" fill="#000" />
+            <ellipse cx="50" cy="23" rx="4" ry="6" fill="#fff" /></svg></span
+        ><span class="tok tc"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect x="20" y="91" width="60" height="9" rx="3" fill="#000" />
+            <rect x="36" y="39" width="28" height="52" fill="#000" />
+            <path
+              d="M44 39V50M57 39V60"
+              stroke="#fff"
+              stroke-width="3.5"
+              stroke-linecap="round"
+              fill="none"
+            />
+            <path d="M50 40V33" stroke="#000" stroke-width="3" />
+            <path d="M50 0C70 20 65 33 50 33C35 33 30 20 50 0Z" fill="#000" />
+            <ellipse cx="50" cy="23" rx="4" ry="6" fill="#fff" /></svg></span
+        ><span class="tok tc"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect x="20" y="91" width="60" height="9" rx="3" fill="#000" />
+            <rect x="36" y="39" width="28" height="52" fill="#000" />
+            <path
+              d="M44 39V50M57 39V60"
+              stroke="#fff"
+              stroke-width="3.5"
+              stroke-linecap="round"
+              fill="none"
+            />
+            <path d="M50 40V33" stroke="#000" stroke-width="3" />
+            <path d="M50 0C70 20 65 33 50 33C35 33 30 20 50 0Z" fill="#000" />
+            <ellipse cx="50" cy="23" rx="4" ry="6" fill="#fff" /></svg></span
+        ><span class="tok tc"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect x="20" y="91" width="60" height="9" rx="3" fill="#000" />
+            <rect x="36" y="39" width="28" height="52" fill="#000" />
+            <path
+              d="M44 39V50M57 39V60"
+              stroke="#fff"
+              stroke-width="3.5"
+              stroke-linecap="round"
+              fill="none"
+            />
+            <path d="M50 40V33" stroke="#000" stroke-width="3" />
+            <path d="M50 0C70 20 65 33 50 33C35 33 30 20 50 0Z" fill="#000" />
+            <ellipse cx="50" cy="23" rx="4" ry="6" fill="#fff" /></svg></span
+        ><span class="tok tc"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect x="20" y="91" width="60" height="9" rx="3" fill="#000" />
+            <rect x="36" y="39" width="28" height="52" fill="#000" />
+            <path
+              d="M44 39V50M57 39V60"
+              stroke="#fff"
+              stroke-width="3.5"
+              stroke-linecap="round"
+              fill="none"
+            />
+            <path d="M50 40V33" stroke="#000" stroke-width="3" />
+            <path d="M50 0C70 20 65 33 50 33C35 33 30 20 50 0Z" fill="#000" />
+            <ellipse cx="50" cy="23" rx="4" ry="6" fill="#fff" /></svg></span
+        ><span class="tok tc"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect x="20" y="91" width="60" height="9" rx="3" fill="#000" />
+            <rect x="36" y="39" width="28" height="52" fill="#000" />
+            <path
+              d="M44 39V50M57 39V60"
+              stroke="#fff"
+              stroke-width="3.5"
+              stroke-linecap="round"
+              fill="none"
+            />
+            <path d="M50 40V33" stroke="#000" stroke-width="3" />
+            <path d="M50 0C70 20 65 33 50 33C35 33 30 20 50 0Z" fill="#000" />
+            <ellipse cx="50" cy="23" rx="4" ry="6" fill="#fff" /></svg></span
+        ><span class="tok tc"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect x="20" y="91" width="60" height="9" rx="3" fill="#000" />
+            <rect x="36" y="39" width="28" height="52" fill="#000" />
+            <path
+              d="M44 39V50M57 39V60"
+              stroke="#fff"
+              stroke-width="3.5"
+              stroke-linecap="round"
+              fill="none"
+            />
+            <path d="M50 40V33" stroke="#000" stroke-width="3" />
+            <path d="M50 0C70 20 65 33 50 33C35 33 30 20 50 0Z" fill="#000" />
+            <ellipse cx="50" cy="23" rx="4" ry="6" fill="#fff" /></svg></span
+        ><span class="tok tc"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect x="20" y="91" width="60" height="9" rx="3" fill="#000" />
+            <rect x="36" y="39" width="28" height="52" fill="#000" />
+            <path
+              d="M44 39V50M57 39V60"
+              stroke="#fff"
+              stroke-width="3.5"
+              stroke-linecap="round"
+              fill="none"
+            />
+            <path d="M50 40V33" stroke="#000" stroke-width="3" />
+            <path d="M50 0C70 20 65 33 50 33C35 33 30 20 50 0Z" fill="#000" />
+            <ellipse cx="50" cy="23" rx="4" ry="6" fill="#fff" /></svg></span
+        ><span class="tok tc"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect x="20" y="91" width="60" height="9" rx="3" fill="#000" />
+            <rect x="36" y="39" width="28" height="52" fill="#000" />
+            <path
+              d="M44 39V50M57 39V60"
+              stroke="#fff"
+              stroke-width="3.5"
+              stroke-linecap="round"
+              fill="none"
+            />
+            <path d="M50 40V33" stroke="#000" stroke-width="3" />
+            <path d="M50 0C70 20 65 33 50 33C35 33 30 20 50 0Z" fill="#000" />
+            <ellipse cx="50" cy="23" rx="4" ry="6" fill="#fff" /></svg></span
+        ><span class="tok tc"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect x="20" y="91" width="60" height="9" rx="3" fill="#000" />
+            <rect x="36" y="39" width="28" height="52" fill="#000" />
+            <path
+              d="M44 39V50M57 39V60"
+              stroke="#fff"
+              stroke-width="3.5"
+              stroke-linecap="round"
+              fill="none"
+            />
+            <path d="M50 40V33" stroke="#000" stroke-width="3" />
+            <path d="M50 0C70 20 65 33 50 33C35 33 30 20 50 0Z" fill="#000" />
+            <ellipse cx="50" cy="23" rx="4" ry="6" fill="#fff" /></svg></span
+        ><span class="tok tc"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect x="20" y="91" width="60" height="9" rx="3" fill="#000" />
+            <rect x="36" y="39" width="28" height="52" fill="#000" />
+            <path
+              d="M44 39V50M57 39V60"
+              stroke="#fff"
+              stroke-width="3.5"
+              stroke-linecap="round"
+              fill="none"
+            />
+            <path d="M50 40V33" stroke="#000" stroke-width="3" />
+            <path d="M50 0C70 20 65 33 50 33C35 33 30 20 50 0Z" fill="#000" />
+            <ellipse cx="50" cy="23" rx="4" ry="6" fill="#fff" /></svg></span
+        ><span class="tok tc"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect x="20" y="91" width="60" height="9" rx="3" fill="#000" />
+            <rect x="36" y="39" width="28" height="52" fill="#000" />
+            <path
+              d="M44 39V50M57 39V60"
+              stroke="#fff"
+              stroke-width="3.5"
+              stroke-linecap="round"
+              fill="none"
+            />
+            <path d="M50 40V33" stroke="#000" stroke-width="3" />
+            <path d="M50 0C70 20 65 33 50 33C35 33 30 20 50 0Z" fill="#000" />
+            <ellipse cx="50" cy="23" rx="4" ry="6" fill="#fff" /></svg
+        ></span>
+      </div>
+      <div class="tl" style="top: 93mm">FLASHLIGHTS x9</div>
+      <div class="row" style="top: 97mm">
+        <span class="tok tf"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g transform="translate(50 50) rotate(-30)">
+              <rect x="-46" y="-10" width="50" height="20" rx="4" fill="#fff" />
+              <polygon points="4,10 24,19 24,-19 4,-10" fill="#fff" />
+              <rect x="-30" y="-3" width="10" height="6" rx="2" fill="#000" />
+              <ellipse cx="23" cy="0" rx="4" ry="14" fill="#000" />
+              <path
+                d="M36 0H58M34 -12L54 -26M34 12L54 26"
+                stroke="#fff"
+                stroke-width="4"
+                stroke-linecap="round"
+                fill="none"
+              />
+            </g></svg></span
+        ><span class="tok tf"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g transform="translate(50 50) rotate(-30)">
+              <rect x="-46" y="-10" width="50" height="20" rx="4" fill="#fff" />
+              <polygon points="4,10 24,19 24,-19 4,-10" fill="#fff" />
+              <rect x="-30" y="-3" width="10" height="6" rx="2" fill="#000" />
+              <ellipse cx="23" cy="0" rx="4" ry="14" fill="#000" />
+              <path
+                d="M36 0H58M34 -12L54 -26M34 12L54 26"
+                stroke="#fff"
+                stroke-width="4"
+                stroke-linecap="round"
+                fill="none"
+              />
+            </g></svg></span
+        ><span class="tok tf"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g transform="translate(50 50) rotate(-30)">
+              <rect x="-46" y="-10" width="50" height="20" rx="4" fill="#fff" />
+              <polygon points="4,10 24,19 24,-19 4,-10" fill="#fff" />
+              <rect x="-30" y="-3" width="10" height="6" rx="2" fill="#000" />
+              <ellipse cx="23" cy="0" rx="4" ry="14" fill="#000" />
+              <path
+                d="M36 0H58M34 -12L54 -26M34 12L54 26"
+                stroke="#fff"
+                stroke-width="4"
+                stroke-linecap="round"
+                fill="none"
+              />
+            </g></svg></span
+        ><span class="tok tf"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g transform="translate(50 50) rotate(-30)">
+              <rect x="-46" y="-10" width="50" height="20" rx="4" fill="#fff" />
+              <polygon points="4,10 24,19 24,-19 4,-10" fill="#fff" />
+              <rect x="-30" y="-3" width="10" height="6" rx="2" fill="#000" />
+              <ellipse cx="23" cy="0" rx="4" ry="14" fill="#000" />
+              <path
+                d="M36 0H58M34 -12L54 -26M34 12L54 26"
+                stroke="#fff"
+                stroke-width="4"
+                stroke-linecap="round"
+                fill="none"
+              />
+            </g></svg></span
+        ><span class="tok tf"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g transform="translate(50 50) rotate(-30)">
+              <rect x="-46" y="-10" width="50" height="20" rx="4" fill="#fff" />
+              <polygon points="4,10 24,19 24,-19 4,-10" fill="#fff" />
+              <rect x="-30" y="-3" width="10" height="6" rx="2" fill="#000" />
+              <ellipse cx="23" cy="0" rx="4" ry="14" fill="#000" />
+              <path
+                d="M36 0H58M34 -12L54 -26M34 12L54 26"
+                stroke="#fff"
+                stroke-width="4"
+                stroke-linecap="round"
+                fill="none"
+              />
+            </g></svg></span
+        ><span class="tok tf"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g transform="translate(50 50) rotate(-30)">
+              <rect x="-46" y="-10" width="50" height="20" rx="4" fill="#fff" />
+              <polygon points="4,10 24,19 24,-19 4,-10" fill="#fff" />
+              <rect x="-30" y="-3" width="10" height="6" rx="2" fill="#000" />
+              <ellipse cx="23" cy="0" rx="4" ry="14" fill="#000" />
+              <path
+                d="M36 0H58M34 -12L54 -26M34 12L54 26"
+                stroke="#fff"
+                stroke-width="4"
+                stroke-linecap="round"
+                fill="none"
+              />
+            </g></svg></span
+        ><span class="tok tf"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g transform="translate(50 50) rotate(-30)">
+              <rect x="-46" y="-10" width="50" height="20" rx="4" fill="#fff" />
+              <polygon points="4,10 24,19 24,-19 4,-10" fill="#fff" />
+              <rect x="-30" y="-3" width="10" height="6" rx="2" fill="#000" />
+              <ellipse cx="23" cy="0" rx="4" ry="14" fill="#000" />
+              <path
+                d="M36 0H58M34 -12L54 -26M34 12L54 26"
+                stroke="#fff"
+                stroke-width="4"
+                stroke-linecap="round"
+                fill="none"
+              />
+            </g></svg></span
+        ><span class="tok tf"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g transform="translate(50 50) rotate(-30)">
+              <rect x="-46" y="-10" width="50" height="20" rx="4" fill="#fff" />
+              <polygon points="4,10 24,19 24,-19 4,-10" fill="#fff" />
+              <rect x="-30" y="-3" width="10" height="6" rx="2" fill="#000" />
+              <ellipse cx="23" cy="0" rx="4" ry="14" fill="#000" />
+              <path
+                d="M36 0H58M34 -12L54 -26M34 12L54 26"
+                stroke="#fff"
+                stroke-width="4"
+                stroke-linecap="round"
+                fill="none"
+              />
+            </g></svg></span
+        ><span class="tok tf"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g transform="translate(50 50) rotate(-30)">
+              <rect x="-46" y="-10" width="50" height="20" rx="4" fill="#fff" />
+              <polygon points="4,10 24,19 24,-19 4,-10" fill="#fff" />
+              <rect x="-30" y="-3" width="10" height="6" rx="2" fill="#000" />
+              <ellipse cx="23" cy="0" rx="4" ry="14" fill="#000" />
+              <path
+                d="M36 0H58M34 -12L54 -26M34 12L54 26"
+                stroke="#fff"
+                stroke-width="4"
+                stroke-linecap="round"
+                fill="none"
+              />
+            </g></svg
+        ></span>
+      </div>
+      <div class="tl" style="top: 120mm">
+        PAWN FRONTS x5 (identical), THE KILLER (2 sides), THE KEY, THE LIGHTER
+        (2 sides)
+      </div>
+      <div class="row" style="top: 124mm">
+        <span class="tok tp"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle cx="50" cy="30" r="15" fill="#fff" />
+            <path d="M20 90C20 56 80 56 80 90Z" fill="#fff" /></svg></span
+        ><span class="tok tp"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle cx="50" cy="30" r="15" fill="#fff" />
+            <path d="M20 90C20 56 80 56 80 90Z" fill="#fff" /></svg></span
+        ><span class="tok tp"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle cx="50" cy="30" r="15" fill="#fff" />
+            <path d="M20 90C20 56 80 56 80 90Z" fill="#fff" /></svg></span
+        ><span class="tok tp"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle cx="50" cy="30" r="15" fill="#fff" />
+            <path d="M20 90C20 56 80 56 80 90Z" fill="#fff" /></svg></span
+        ><span class="tok tp"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle cx="50" cy="30" r="15" fill="#fff" />
+            <path d="M20 90C20 56 80 56 80 90Z" fill="#fff" /></svg></span
+        ><span class="kt"
+          ><svg
+            viewBox="-100 -100 200 200"
+            width="18mm"
+            height="18mm"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle r="99" fill="#000" />
+            <circle r="89" fill="none" stroke="#fff" stroke-width="4" />
+            <polygon
+              points="-55.8,-30 -10.8,-12 -16.2,7.8 -52.2,-7.5"
+              fill="#fff"
+            />
+            <polygon
+              points="55.8,-30 10.8,-12 16.2,7.8 52.2,-7.5"
+              fill="#fff"
+            />
+            <path
+              d="M-50 50L-33 38L-17 52L0 38L17 52L33 38L50 50"
+              fill="none"
+              stroke="#fff"
+              stroke-width="6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <text
+              x="0"
+              y="-57"
+              text-anchor="middle"
+              font-family="Arial,Helvetica,sans-serif"
+              font-weight="700"
+              font-size="17"
+              fill="#fff"
+            >
+              KILLER
+            </text>
+          </svg></span
+        ><span class="kt"
+          ><svg
+            viewBox="-100 -100 200 200"
+            width="18mm"
+            height="18mm"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle r="98" fill="#fff" stroke="#000" stroke-width="3" />
+            <circle
+              r="89"
+              fill="none"
+              stroke="#000"
+              stroke-width="4"
+              stroke-dasharray="10 7"
+            />
+            <path
+              d="M-52 -28L-20 4M-52 4L-20 -28M20 -28L52 4M20 4L52 -28"
+              stroke="#000"
+              stroke-width="9"
+              stroke-linecap="round"
+            />
+            <path
+              d="M-30 42H30"
+              stroke="#000"
+              stroke-width="8"
+              stroke-linecap="round"
+            />
+            <text
+              x="0"
+              y="-57"
+              text-anchor="middle"
+              font-family="Arial,Helvetica,sans-serif"
+              font-weight="700"
+              font-size="17"
+              fill="#000"
+            >
+              STUNNED
+            </text>
+          </svg></span
+        ><span class="tok tk"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g transform="translate(50 50) rotate(-35)">
+              <circle cx="-30" cy="0" r="17" fill="#000" />
+              <circle cx="-30" cy="0" r="7.5" fill="#fff" />
+              <rect x="-14" y="-4" width="58" height="8" fill="#000" />
+              <rect x="28" y="0" width="7" height="17" fill="#000" />
+              <rect x="38" y="0" width="7" height="12" fill="#000" />
+            </g></svg></span
+        ><span class="tok tl2"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M50 -2C63 14 61 27 50 31C39 27 37 14 50 -2Z" fill="#000" />
+            <ellipse cx="50" cy="20" rx="3" ry="5" fill="#fff" />
+            <rect x="30" y="34" width="40" height="14" rx="3" fill="#000" />
+            <rect x="30" y="50" width="40" height="46" rx="4" fill="#000" />
+            <path d="M30 49H70" stroke="#fff" stroke-width="2.5" />
+            <circle cx="40" cy="41" r="3.5" fill="#fff" /></svg
+          ><i>LIGHTER</i></span
+        >
+      </div>
+      <div class="tl" style="top: 147mm">
+        PAWN BACKS (4 Survivor, 1 Betrayer): glue each behind a front, then
+        shuffle. The empty lighter goes behind the lighter.
+      </div>
+      <div class="row" style="top: 151mm">
+        <span class="tok tr"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M20 100V38C20 -4 80 -4 80 38V100Z" fill="#000" />
+            <rect x="39" y="55" width="22" height="17" rx="2" fill="#fff" />
+            <path
+              d="M43.5 55V45A6.5 6.5 0 0 1 56.5 45V55"
+              fill="none"
+              stroke="#fff"
+              stroke-width="4"
+            />
+            <path d="M5 100H95" stroke="#000" stroke-width="5" /></svg
+          ><i>SURVIVOR</i></span
+        ><span class="tok tr"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M20 100V38C20 -4 80 -4 80 38V100Z" fill="#000" />
+            <rect x="39" y="55" width="22" height="17" rx="2" fill="#fff" />
+            <path
+              d="M43.5 55V45A6.5 6.5 0 0 1 56.5 45V55"
+              fill="none"
+              stroke="#fff"
+              stroke-width="4"
+            />
+            <path d="M5 100H95" stroke="#000" stroke-width="5" /></svg
+          ><i>SURVIVOR</i></span
+        ><span class="tok tr"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M20 100V38C20 -4 80 -4 80 38V100Z" fill="#000" />
+            <rect x="39" y="55" width="22" height="17" rx="2" fill="#fff" />
+            <path
+              d="M43.5 55V45A6.5 6.5 0 0 1 56.5 45V55"
+              fill="none"
+              stroke="#fff"
+              stroke-width="4"
+            />
+            <path d="M5 100H95" stroke="#000" stroke-width="5" /></svg
+          ><i>SURVIVOR</i></span
+        ><span class="tok tr"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M20 100V38C20 -4 80 -4 80 38V100Z" fill="#000" />
+            <rect x="39" y="55" width="22" height="17" rx="2" fill="#fff" />
+            <path
+              d="M43.5 55V45A6.5 6.5 0 0 1 56.5 45V55"
+              fill="none"
+              stroke="#fff"
+              stroke-width="4"
+            />
+            <path d="M5 100H95" stroke="#000" stroke-width="5" /></svg
+          ><i>SURVIVOR</i></span
+        ><span class="tok tr"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <polygon points="50,0 60,52 40,52" fill="#000" />
+            <rect x="26" y="52" width="48" height="8" rx="3" fill="#000" />
+            <rect x="45" y="60" width="10" height="26" fill="#000" />
+            <circle cx="50" cy="90" r="7" fill="#000" /></svg
+          ><i>BETRAYER</i></span
+        ><span class="tok tk tl2"
+          ><svg
+            viewBox="0 0 100 100"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M50 28C45 20 55 14 50 6"
+              fill="none"
+              stroke="#000"
+              stroke-width="2.5"
+              stroke-dasharray="3 3"
+            />
+            <rect x="30" y="34" width="40" height="14" rx="3" fill="#000" />
+            <rect x="30" y="50" width="40" height="46" rx="4" fill="#000" />
+            <path d="M30 49H70" stroke="#fff" stroke-width="2.5" />
+            <circle cx="40" cy="41" r="3.5" fill="#fff" /></svg
+          ><i>EMPTY</i></span
+        >
+      </div>
+      <div class="glance">
+        <h3>TOKENS AT A GLANCE</h3>
+        <p>
+          <b>Candle:</b> survive a kill for one round. Peek (Dark Passage).
+          Break free (Narrow Crawl). Roll 3+ to light it (no roll for the
+          lighter’s holder).
+        </p>
+        <p>
+          <b>Flashlight:</b> survive a kill <i>and</i> stun the Killer. Ignore
+          Wrong Turn.
+        </p>
+        <p>
+          <b>Candle or flashlight:</b> search the Caretaker’s Room (2 of them).
+          Add a card at a dead end (1). Cancel the Footsteps extra step (1).
+        </p>
+        <p>
+          <b>Key:</b> found in the Caretaker’s Room. Carry it to the Exit. If
+          its carrier dies it drops on that space. If the Killer passes it, it
+          moves onto his space.
+        </p>
+        <p>
+          <b>Lighter:</b> found on the Dead Miner. Its holder’s candles always
+          light. Burn the Killer: 1 action, roll 4+ to stun him; on a 1 it is
+          empty.
+        </p>
+        <p>
+          <b>Pooling:</b> players on the same card can chip in tokens together
+          to pay one cost. A victim pays alone to survive a kill.
+        </p>
+        <p>
+          <b>Stun:</b> flip the Killer to his stunned side. At the end of the
+          next round he does nothing (no move, no kill), then flips back.
+        </p>
+        <p>
+          <b>Start:</b> every player has 2 candles, no flashlights, no lighter,
+          no Key.
+        </p>
+      </div>
+    </section>
+  </body>
+</html>

@@ -43,12 +43,25 @@
     "title":"9 Cards Deadline Fortean",
     "tagline":"A print-and-play micro game.",
     "thumbnail":"",
-    "playerCount":"1-5 Players",
+    "playerCount":"2-5 Players",
     "playTime":"15 mins",
     "tags":["PnP","9-Card"],
     "downloads":{
       "printAndPlayCards":"https://raw.githubusercontent.com/kaiwanyawit-chawankul/my-pnp-game-hub/master/games/9CardsDeadlineFortean/Pnp.pdf"
     },
     "playableInBrowser":false
+  },
+  {
+    "id": "9cardsHorror",
+    "title": "9 Cards of Horror",
+    "tagline": "A print-and-play micro game.",
+    "thumbnail": "",
+    "playerCount": "2-5 Players",
+    "playTime": "15 mins",
+    "tags": ["PnP", "9-Card"],
+    "downloads": {
+      "printAndPlayCards": "https://raw.githubusercontent.com/kaiwanyawit-chawankul/my-pnp-game-hub/master/games/9cardsHorror/9 Cards of Horrors - Print & Play.pdf"
+    },
+    "playableInBrowser": false
   }
 ]
