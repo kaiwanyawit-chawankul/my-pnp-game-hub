@@ -38,5 +38,17 @@
       "printAndPlayCards": "https://raw.githubusercontent.com/kaiwanyawit-chawankul/my-pnp-game-hub/master/games/9cardsKissTheFrog/Kiss%20the%20Frog%20v2%20-%204-Page%20A4%20Print%20&%20Play.pdf"
     },
     "playableInBrowser": false
+  },
+  {"id":"9CardsDeadlineFortean",
+    "title":"9 Cards Deadline Fortean",
+    "tagline":"A print-and-play micro game.",
+    "thumbnail":"",
+    "playerCount":"1-5 Players",
+    "playTime":"15 mins",
+    "tags":["PnP","9-Card"],
+    "downloads":{
+      "printAndPlayCards":"https://raw.githubusercontent.com/kaiwanyawit-chawankul/my-pnp-game-hub/master/games/9CardsDeadlineFortean/Pnp.pdf"
+    },
+    "playableInBrowser":false
   }
 ]

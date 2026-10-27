@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEADLINE: FORTEAN - Print & Play Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Special+Elite&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        tabloid: ['"Special Elite"', 'cursive'],
+                        mono: ['"Courier Prime"', 'monospace'],
+                    },
+                    colors: {
+                        paranormal: {
+                            900: '#0c0f12',
+                            800: '#161b22',
+                            700: '#212833',
+                            accent: '#38bdf8',
+                            mystic: '#a855f7',
+                            danger: '#ef4444',
+                            paper: '#fcfbf7',
+                            ink: '#111827'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* CSS Custom Rules & Print Styles */
+        .tabloid-border {
+            border: 2px dashed #38bdf8;
+        }
+        
+        /* Poker Card Dimensions aspect ratio approx 2.5 x 3.5 inches */
+        .pnp-card {
+            width: 2.5in;
+            height: 3.5in;
+            box-sizing: border-box;
+            page-break-inside: avoid;
+        }
+
+        .token-chip {
+            width: 1.1in;
+            height: 1.1in;
+            box-sizing: border-box;
+            page-break-inside: avoid;
+        }
+
+        .vp-chip {
+            width: 0.9in;
+            height: 0.9in;
+            box-sizing: border-box;
+            page-break-inside: avoid;
+        }
+
+        @media print {
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-only {
+                display: block !important;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .pnp-card, .token-chip, .vp-chip {
+                border: 1px solid #000 !important;
+                box-shadow: none !important;
+                background-color: white !important;
+                color: black !important;
+            }
+            .pnp-card * {
+                color: black !important;
+            }
+            .pnp-card .bg-dark {
+                background-color: #f3f4f6 !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-paranormal-900 text-slate-100 font-sans min-h-screen flex flex-col">
+
+    <!-- Header Navigation (No Print) -->
+    <header class="no-print bg-paranormal-800 border-b border-slate-700 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center space-x-3">
+                <span class="text-3xl">📷</span>
+                <div>
+                    <h1 class="font-tabloid text-2xl tracking-wider text-paranormal-accent uppercase">DEADLINE: FORTEAN</h1>
+                    <p class="text-xs text-slate-400 font-mono">Micro Euro Cryptid Journalism Game • 9 Location Cards</p>
+                </div>
+            </div>
+
+            <!-- Tab Switcher & Actions -->
+            <div class="flex items-center gap-2 flex-wrap">
+                <button onclick="switchTab('rules')" id="tab-btn-rules" class="px-3 py-1.5 rounded-lg text-sm font-semibold transition bg-paranormal-accent text-slate-900">
+                    📖 Rules & Setup
+                </button>
+                <button onclick="switchTab('gallery')" id="tab-btn-gallery" class="px-3 py-1.5 rounded-lg text-sm font-semibold transition bg-paranormal-700 hover:bg-slate-700 text-slate-200">
+                    🎴 Card & Role Deck
+                </button>
+                <button onclick="switchTab('calc')" id="tab-btn-calc" class="px-3 py-1.5 rounded-lg text-sm font-semibold transition bg-paranormal-700 hover:bg-slate-700 text-slate-200">
+                    🧮 Interactive Calculator
+                </button>
+                <button onclick="switchTab('pnp')" id="tab-btn-pnp" class="px-3 py-1.5 rounded-lg text-sm font-semibold transition bg-paranormal-mystic text-white">
+                    🖨️ Print Sheet (PnP)
+                </button>
+                <button onclick="window.print()" class="px-3 py-1.5 rounded-lg text-sm font-semibold bg-emerald-600 hover:bg-emerald-500 text-white flex items-center gap-1">
+                    <span>🖨️ Print Now</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 md:p-6">
+
+        <!-- TAB 1: RULES & SETUP -->
+        <section id="tab-rules" class="tab-content space-y-6">
+            <!-- Game Banner -->
+            <div class="bg-gradient-to-r from-paranormal-800 to-slate-900 border border-slate-700 rounded-xl p-6 shadow-xl">
+                <div class="max-w-3xl">
+                    <span class="bg-paranormal-mystic/20 text-paranormal-mystic text-xs font-mono px-2.5 py-1 rounded-full uppercase tracking-widest border border-paranormal-mystic/30">Official Field Guide</span>
+                    <h2 class="font-tabloid text-3xl md:text-4xl text-amber-400 mt-2 mb-3">GET THE SCOOP. DON'T BUST THE MYTH.</h2>
+                    <p class="text-slate-300 leading-relaxed text-sm md:text-base">
+                        You are a field journalist working for competing paranormal tabloids. Across the country, bizarre occurrences are being reported! Your job is to rush to locations, adjust your lens exposure, and publish sensational articles. But beware: <strong>over-expose or zoom in too heavily with powerful Shot Tokens, and you'll reveal the mundane reality</strong> (a tree trunk, a weather balloon, a feral dog). If you bust the myth, nobody gets the news!
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Overview & Components -->
+                <div class="bg-paranormal-800 border border-slate-700 rounded-xl p-5 space-y-4">
+                    <h3 class="font-tabloid text-xl text-paranormal-accent border-b border-slate-700 pb-2">📦 Components</h3>
+                    <ul class="text-sm space-y-2 text-slate-300 font-mono">
+                        <li class="flex justify-between"><span class="text-slate-400">• Location Cards:</span> <span class="text-amber-400 font-bold">9 Cards</span></li>
+                        <li class="flex justify-between"><span class="text-slate-400">• Tabloid Roles:</span> <span class="text-amber-400 font-bold">6 Cards</span></li>
+                        <li class="flex justify-between"><span class="text-slate-400">• Shot Tokens:</span> <span class="text-amber-400 font-bold">5 per player (1, 2, 3, 4, 5)</span></li>
+                        <li class="flex justify-between"><span class="text-slate-400">• Prestige VP Tokens:</span> <span class="text-amber-400 font-bold">1-pt & 3-pt Tokens</span></li>
+                        <li class="flex justify-between"><span class="text-slate-400">• Players Supported:</span> <span class="text-slate-200">2 - 4 Tabloids</span></li>
+                        <li class="flex justify-between"><span class="text-slate-400">• Game Duration:</span> <span class="text-slate-200">15 - 20 Mins</span></li>
+                    </ul>
+                    <div class="bg-slate-900/80 p-3 rounded-lg border border-slate-700/50 text-xs text-slate-400">
+                        <strong>Printing Tip:</strong> Print the PnP tab on heavy cardstock (250gsm+). Use sleeves for the smooth Euro-game feel!
+                    </div>
+                </div>
+
+                <!-- Core Rules -->
+                <div class="md:col-span-2 bg-paranormal-800 border border-slate-700 rounded-xl p-5 space-y-4">
+                    <h3 class="font-tabloid text-xl text-paranormal-accent border-b border-slate-700 pb-2">🎮 How To Play</h3>
+                    
+                    <div class="space-y-4 text-sm text-slate-300">
+                        <div>
+                            <h4 class="font-bold text-white flex items-center gap-2">
+                                <span class="bg-paranormal-accent text-slate-900 rounded-full w-5 h-5 inline-flex items-center justify-center text-xs">1</span> 
+                                Setup Assignment
+                            </h4>
+                            <p class="pl-7 text-slate-400">Shuffle the 9 Location Cards. Reveal 3 active locations in the center of the table. Each player picks 1 Role Card and takes a set of 5 Camera Shot Tokens (numbered 1 through 5 in their tabloid color).</p>
+                        </div>
+
+                        <div>
+                            <h4 class="font-bold text-white flex items-center gap-2">
+                                <span class="bg-paranormal-accent text-slate-900 rounded-full w-5 h-5 inline-flex items-center justify-center text-xs">2</span> 
+                                Secret Investigation (Taking Shots)
+                            </h4>
+                            <p class="pl-7 text-slate-400">Taking turns, players place one Camera Shot Token face-down under any of the 3 active locations. Continue until each player has committed 3 Shot Tokens total.</p>
+                        </div>
+
+                        <div>
+                            <h4 class="font-bold text-white flex items-center gap-2">
+                                <span class="bg-paranormal-accent text-slate-900 rounded-full w-5 h-5 inline-flex items-center justify-center text-xs">3</span> 
+                                Reveal & Resolution
+                            </h4>
+                            <p class="pl-7 text-slate-400">Flip all placed Shot Tokens at each location and sum the total zoom/exposure numbers:</p>
+                            <ul class="pl-12 list-disc space-y-1 mt-1 text-xs text-slate-300">
+                                <li class="text-amber-300"><strong class="text-white">Below Min Requirement:</strong> Image too blurry or dark. No story published!</li>
+                                <li class="text-emerald-400"><strong class="text-white">Sweet Spot (Min to Bust Limit - 1):</strong> SCOOP PUBLISHED! Player with the highest single Shot Token wins 1st Place Prestige Points; 2nd highest gets 2nd Place.</li>
+                                <li class="text-rose-400"><strong class="text-white">At or Above Bust Limit:</strong> MYTH BUSTED! The image is too clear, proving it's mundane (e.g. tree trunk). The player who contributed the highest Shot Token loses 2 Prestige Points!</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h4 class="font-bold text-white flex items-center gap-2">
+                                <span class="bg-paranormal-accent text-slate-900 rounded-full w-5 h-5 inline-flex items-center justify-center text-xs">4</span> 
+                                Game End
+                            </h4>
+                            <p class="pl-7 text-slate-400">Repeat for 3 full rounds (investigating all 9 locations). Collect Prestige Point Tokens. The tabloid journalist with the most Prestige wins!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Roles Summary -->
+            <div class="bg-paranormal-800 border border-slate-700 rounded-xl p-5">
+                <h3 class="font-tabloid text-xl text-amber-400 mb-4">🕵️ Asymmetric Tabloid Roles</h3>
+                <div id="rules-roles-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Populated dynamically via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: CARD & ROLE GALLERY -->
+        <section id="tab-gallery" class="tab-content hidden space-y-6">
+            <div class="flex flex-wrap items-center justify-between gap-4 bg-paranormal-800 p-4 rounded-xl border border-slate-700">
+                <div>
+                    <h2 class="font-tabloid text-2xl text-amber-400">Location Cards & Cryptid Files</h2>
+                    <p class="text-xs text-slate-400 font-mono">Interactive preview of all 9 location cards showing mechanics & myth stories.</p>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="renderGallery('all')" class="px-3 py-1 text-xs rounded bg-slate-700 text-white hover:bg-slate-600">All (9)</button>
+                    <button onclick="renderGallery('low')" class="px-3 py-1 text-xs rounded bg-slate-700 text-white hover:bg-slate-600">Low Bust Limit (5-6)</button>
+                    <button onclick="renderGallery('high')" class="px-3 py-1 text-xs rounded bg-slate-700 text-white hover:bg-slate-600">High Bust Limit (8-10)</button>
+                </div>
+            </div>
+
+            <div id="gallery-card-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Rendered dynamically -->
+            </div>
+        </section>
+
+        <!-- TAB 3: INTERACTIVE CALCULATOR / SIMULATOR -->
+        <section id="tab-calc" class="tab-content hidden space-y-6">
+            <div class="bg-paranormal-800 border border-slate-700 rounded-xl p-6 max-w-2xl mx-auto space-y-5">
+                <div>
+                    <h2 class="font-tabloid text-2xl text-paranormal-accent mb-1">🧮 Fast Myth Resolution Calculator</h2>
+                    <p class="text-xs text-slate-400">Use this during game play to quickly evaluate if a location was Busted or Scored!</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-mono text-slate-300 mb-1">Select Active Location Card:</label>
+                        <select id="calc-location-select" onchange="updateCalcLocation()" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-amber-300 font-mono focus:outline-none focus:border-paranormal-accent">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+
+                    <!-- Selected Location Info Box -->
+                    <div id="calc-loc-info" class="p-4 bg-slate-900/80 rounded-lg border border-slate-700 flex justify-between items-center text-sm font-mono">
+                        <!-- Populated dynamically -->
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-mono text-slate-300 mb-1">Select Played Shot Tokens (Click to toggle):</label>
+                        <div id="calc-tokens-container" class="grid grid-cols-5 gap-2">
+                            <!-- Interactive tokens inserted via JS -->
+                        </div>
+                    </div>
+
+                    <div id="calc-result" class="p-4 rounded-xl border text-center transition-all">
+                        <span class="text-sm text-slate-400">Select location and tokens above to calculate result.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: PRINT & PLAY (PNP) SHEET -->
+        <section id="tab-pnp" class="tab-content hidden space-y-8">
+            <div class="no-print bg-amber-900/30 border border-amber-600/50 p-4 rounded-xl flex items-center justify-between">
+                <div>
+                    <h3 class="font-bold text-amber-300 text-sm">🖨️ Complete Print-and-Play Kit</h3>
+                    <p class="text-xs text-slate-300">Click 'Print Page Now' or hit Ctrl+P / Cmd+P. Cut along solid black outlines.</p>
+                </div>
+                <button onclick="window.print()" class="px-4 py-2 bg-emerald-600 text-white font-bold rounded-lg text-xs hover:bg-emerald-500">
+                    Print Page Now
+                </button>
+            </div>
+
+            <!-- Printable Rulebook Sheet -->
+            <div>
+                <h3 class="font-tabloid text-xl text-slate-200 mb-4 no-print">Section 1: Official Printable Rulebook</h3>
+                <div id="pnp-rulebook" class="pnp-card bg-white text-black p-4 rounded border-2 border-black w-full max-w-4xl mx-auto space-y-3 font-sans shadow-sm">
+                    <!-- Rulebook Content -->
+                    <div class="border-b-2 border-black pb-2 flex justify-between items-end">
+                        <div>
+                            <h2 class="font-tabloid font-bold text-2xl uppercase tracking-tight">DEADLINE: FORTEAN</h2>
+                            <p class="font-mono text-[10px] uppercase font-bold text-gray-700">Official Field Manual & Rules Sheet</p>
+                        </div>
+                        <div class="text-right font-mono text-[9px]">
+                            <span>2–4 PLAYERS</span> • <span>15–20 MINS</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-[10px] leading-tight">
+                        <div class="space-y-2">
+                            <div class="border border-black p-2 rounded bg-gray-50">
+                                <h4 class="font-tabloid font-bold text-xs uppercase border-b border-gray-400 pb-0.5 mb-1">Concept & Objective</h4>
+                                <p>You are competing tabloid photojournalists searching for paranormal scoops. Investigate cryptic locations using <strong>Camera Shot Tokens (1–5)</strong>. Gather enough exposure to score prestige, but do not over-expose the shot—looking too closely debunks the myth as a mundane object!</p>
+                            </div>
+
+                            <div class="border border-black p-2 rounded">
+                                <h4 class="font-tabloid font-bold text-xs uppercase border-b border-gray-400 pb-0.5 mb-1">Game Setup</h4>
+                                <ol class="list-decimal pl-3 space-y-0.5 font-mono">
+                                    <li>Shuffle the 9 Location Cards. Reveal 3 active locations side-by-side.</li>
+                                    <li>Each player selects 1 Role Card and takes 5 Camera Shot Tokens (1, 2, 3, 4, 5) of their tabloid brand.</li>
+                                    <li>Place Prestige Point Tokens (1-pt & 3-pt) nearby.</li>
+                                </ol>
+                            </div>
+
+                            <div class="border border-black p-2 rounded">
+                                <h4 class="font-tabloid font-bold text-xs uppercase border-b border-gray-400 pb-0.5 mb-1">Round Structure (3 Rounds Total)</h4>
+                                <p class="mb-1">Each round consists of two phases:</p>
+                                <ul class="list-disc pl-3 space-y-0.5">
+                                    <li><strong>Phase 1: Taking Shots:</strong> Players secretly place 1 Shot Token face-down under any active location. Repeat until all players have assigned 3 Shot Tokens.</li>
+                                    <li><strong>Phase 2: Reveal & Resolve:</strong> Flip all tokens at each location and sum the total shot values.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <div class="border border-black p-2 rounded bg-gray-50">
+                                <h4 class="font-tabloid font-bold text-xs uppercase border-b border-gray-400 pb-0.5 mb-1">Location Resolution Rules</h4>
+                                <ul class="list-disc pl-3 space-y-1">
+                                    <li><strong class="uppercase font-mono">Below Min Requirement:</strong> Not enough evidence or blurry photo. No story published!</li>
+                                    <li><strong class="uppercase font-mono text-emerald-800">Sweet Spot (Min to Bust Limit - 1):</strong> SUCCESS! 
+                                        <br>• Highest single Shot Token takes <strong>1st Place Scoop Points</strong>.
+                                        <br>• 2nd highest single Shot Token takes <strong>2nd Place Points</strong>.
+                                    </li>
+                                    <li><strong class="uppercase font-mono text-rose-800">At or Above Bust Limit:</strong> MYTH BUSTED! You over-investigated and proved it was a log, owl, or draft. 
+                                        <br>• The player who contributed the single highest Shot Token loses <strong>-2 Prestige Points</strong>!
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="border border-black p-2 rounded">
+                                <h4 class="font-tabloid font-bold text-xs uppercase border-b border-gray-400 pb-0.5 mb-1">Tie-Breakers & Winning</h4>
+                                <p class="mb-1">If tied for highest token at a location, the player who placed their token earliest gets priority (unless modified by Role abilities).</p>
+                                <p>After 3 rounds (resolving all 9 locations), player with the highest total <strong>Prestige Victory Points</strong> wins!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-black pt-1 text-center font-mono text-[8px] text-gray-600">
+                        DEADLINE: FORTEAN • Print & Play Rulebook Sheet
+                    </div>
+                </div>
+            </div>
+
+            <!-- Printable Cards Grid -->
+            <div class="page-break">
+                <h3 class="font-tabloid text-xl text-slate-200 mb-4 no-print">Section 2: 9 Location Cards (2.5" x 3.5")</h3>
+                <div id="pnp-location-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 justify-items-center">
+                    <!-- Cards dynamically rendered -->
+                </div>
+            </div>
+
+            <!-- Printable Roles Grid -->
+            <div class="page-break">
+                <h3 class="font-tabloid text-xl text-slate-200 my-4 no-print">Section 3: 6 Tabloid Roles</h3>
+                <div id="pnp-roles-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 justify-items-center">
+                    <!-- Roles dynamically rendered -->
+                </div>
+            </div>
+
+            <!-- Printable Shot Tokens Grid -->
+            <div class="page-break">
+                <h3 class="font-tabloid text-xl text-slate-200 my-4 no-print">Section 4: Camera Shot Tokens (4 Player Sets)</h3>
+                <div id="pnp-tokens-grid" class="space-y-6">
+                    <!-- Tokens dynamically rendered -->
+                </div>
+            </div>
+
+            <!-- Printable VP Tokens Grid -->
+            <div class="page-break">
+                <h3 class="font-tabloid text-xl text-slate-200 my-4 no-print">Section 5: Prestige / Victory Point Tokens</h3>
+                <div id="pnp-vp-grid" class="border border-gray-300 p-4 rounded bg-slate-900/40">
+                    <!-- VP Tokens dynamically rendered -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="no-print bg-paranormal-800 border-t border-slate-700 py-4 text-center text-xs text-slate-500 font-mono">
+        DEADLINE: FORTEAN • Print & Play Edition • Designed for Tabletop Enthusiasts
+    </footer>
+
+    <!-- JavaScript Data & Logic -->
+    <script>
+        // DATA OBJECTS
+        const LOCATION_CARDS = [
+            {
+                id: 1,
+                title: "Misty Lake",
+                myth: "The Serpent of the Deeps",
+                reality: "A mossy, submerged tree trunk swaying with underwater currents.",
+                minReq: 4,
+                bustLimit: 8,
+                scoop1st: 3,
+                scoop2nd: 1,
+                tagline: "Locals report a shadowy rhythmic hum below the water surface..."
+            },
+            {
+                id: 2,
+                title: "Blackwood Forest",
+                myth: "The Winged Cryptid",
+                reality: "A giant screech owl roosting in an abandoned weather-beaten barn.",
+                minReq: 3,
+                bustLimit: 7,
+                scoop1st: 3,
+                scoop2nd: 1,
+                tagline: "Glowing yellow eyes stalk nighttime hikers from high branches..."
+            },
+            {
+                id: 3,
+                title: "Abandoned Asylum",
+                myth: "Poltergeist of Ward 4",
+                reality: "A loose canvas tarpaulin flapping violently against a broken window.",
+                minReq: 5,
+                bustLimit: 9,
+                scoop1st: 4,
+                scoop2nd: 2,
+                tagline: "Eerie howling and banging reverberates every midnight..."
+            },
+            {
+                id: 4,
+                title: "Old Grain Silo",
+                myth: "Alien Crop Circle Marker",
+                reality: "High-voltage searchlights reflected off a low dense foggy cloud layer.",
+                minReq: 3,
+                bustLimit: 6,
+                scoop1st: 2,
+                scoop2nd: 1,
+                tagline: "Pillar of radiant green light seen beaming straight into space..."
+            },
+            {
+                id: 5,
+                title: "Desert Highway",
+                myth: "The Stray Chupacabra",
+                reality: "A feral stray dog afflicted with severe mange roaming for food.",
+                minReq: 4,
+                bustLimit: 7,
+                scoop1st: 3,
+                scoop2nd: 1,
+                tagline: "Ranchers report livestock drained of blood under full moon..."
+            },
+            {
+                id: 6,
+                title: "Foggy Pier",
+                myth: "Ghost Ship Captain",
+                reality: "An old rusted bell buoy clanging rhythmically in heavy tide.",
+                minReq: 2,
+                bustLimit: 5,
+                scoop1st: 2,
+                scoop2nd: 1,
+                tagline: "Spectres seen pacing the wooden docks when fog rolls in..."
+            },
+            {
+                id: 7,
+                title: "Pine Barrens",
+                myth: "Devil's Hoofprints",
+                reality: "Melting snow patterns over active underground mole tunnels.",
+                minReq: 5,
+                bustLimit: 8,
+                scoop1st: 4,
+                scoop2nd: 1,
+                tagline: "Unbroken line of cloven tracks across virgin snowfall..."
+            },
+            {
+                id: 8,
+                title: "Suburban Attic",
+                myth: "Whispering Shadow",
+                reality: "A dusty vibrating motor in an ancient unmaintained air filter.",
+                minReq: 2,
+                bustLimit: 6,
+                scoop1st: 2,
+                scoop2nd: 1,
+                tagline: "Homeowners hear faint voices repeating phrases at night..."
+            },
+            {
+                id: 9,
+                title: "Radio Tower",
+                myth: "Secret Frequency Signal",
+                reality: "Intermittent static bleed-through from an outdated ham radio setup.",
+                minReq: 6,
+                bustLimit: 10,
+                scoop1st: 5,
+                scoop2nd: 2,
+                tagline: "Mysterious numbers station broadcasting cryptic coded messages..."
+            }
+        ];
+
+        const ROLES = [
+            {
+                title: "Tabloid Rookie",
+                subtitle: "Eager to make front page",
+                ability: "Bust Buffer: When evaluating a location where you played a Shot Token, the Myth Bust Limit is increased by +1 for everyone.",
+                badge: "Passive"
+            },
+            {
+                title: "Fortean Intern",
+                subtitle: "Observant & cautious",
+                ability: "Retract Shot: Once per round, after tokens are revealed, you may swap your played Shot Token with a 1 from your hand.",
+                badge: "Active"
+            },
+            {
+                title: "Veteran Photojournalist",
+                subtitle: "Has seen it all",
+                ability: "Macro Lens: You score +1 bonus Prestige point whenever a location you contributed to successfully scores.",
+                badge: "Passive"
+            },
+            {
+                title: "Sensationalist Editor",
+                subtitle: "Loves drama",
+                ability: "Headline Spin: If a location is MYTH BUSTED and you played a Shot Token there, you lose 0 points instead of 2.",
+                badge: "Passive"
+            },
+            {
+                title: "Chief Investigator",
+                subtitle: "Leads the expedition",
+                ability: "Press Badge: You win tie-breakers for 1st Place Scoop priority.",
+                badge: "Passive"
+            },
+            {
+                title: "Cryptid Researcher",
+                subtitle: "Deep lore expert",
+                ability: "Field Notes: Once per game, peek at one secret face-down Shot Token before placing your own.",
+                badge: "Single Use"
+            }
+        ];
+
+        const TABLOID_BRANDS = [
+            { name: "The Unexplained Times", color: "border-sky-500 text-sky-400 bg-sky-950/40" },
+            { name: "Fortean Gazette", color: "border-purple-500 text-purple-400 bg-purple-950/40" },
+            { name: "Paranormal Weekly", color: "border-amber-500 text-amber-400 bg-amber-950/40" },
+            { name: "Midnight Scoop", color: "border-emerald-500 text-emerald-400 bg-emerald-950/40" }
+        ];
+
+        // RENDER FUNCTIONS
+        function renderRulesRoles() {
+            const container = document.getElementById('rules-roles-grid');
+            container.innerHTML = ROLES.map(role => `
+                <div class="bg-slate-900/90 border border-slate-700 p-4 rounded-lg space-y-2">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h4 class="font-tabloid text-amber-400 text-lg">${role.title}</h4>
+                            <p class="text-xs text-slate-400 italic">${role.subtitle}</p>
+                        </div>
+                        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-paranormal-700 text-paranormal-accent border border-paranormal-accent/30">${role.badge}</span>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">${role.ability}</p>
+                </div>
+            `).join('');
+        }
+
+        function renderGallery(filter = 'all') {
+            const container = document.getElementById('gallery-card-grid');
+            let filtered = LOCATION_CARDS;
+            if (filter === 'low') filtered = LOCATION_CARDS.filter(c => c.bustLimit <= 6);
+            if (filter === 'high') filtered = LOCATION_CARDS.filter(c => c.bustLimit >= 8);
+
+            container.innerHTML = filtered.map(card => `
+                <div class="bg-paranormal-800 border border-slate-700 rounded-xl overflow-hidden shadow-lg flex flex-col justify-between">
+                    <!-- Top Header -->
+                    <div class="bg-slate-900 p-3 border-b border-slate-700 flex justify-between items-center">
+                        <span class="font-mono text-xs text-slate-500">CARD #${card.id}</span>
+                        <h3 class="font-tabloid text-amber-400 font-bold text-lg">${card.title}</h3>
+                    </div>
+                    
+                    <!-- Split Body -->
+                    <div class="p-4 grid grid-cols-2 gap-3 text-xs flex-grow">
+                        <!-- Left Mechanics -->
+                        <div class="bg-slate-900/80 p-3 rounded-lg border border-slate-700/60 flex flex-col justify-between space-y-2">
+                            <div>
+                                <span class="text-[10px] uppercase font-mono text-slate-400 block mb-1">Mechanics</span>
+                                <div class="space-y-1">
+                                    <div class="flex justify-between font-mono">
+                                        <span class="text-slate-400">Min Req:</span>
+                                        <span class="text-amber-300 font-bold">${card.minReq}</span>
+                                    </div>
+                                    <div class="flex justify-between font-mono">
+                                        <span class="text-slate-400">Bust Limit:</span>
+                                        <span class="text-rose-400 font-bold">≥ ${card.bustLimit}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="border-t border-slate-700/60 pt-2">
+                                <span class="text-[10px] uppercase font-mono text-slate-400 block mb-1">Scoop Points</span>
+                                <div class="text-emerald-400 font-mono font-bold flex justify-between">
+                                    <span>🥇 1st: ${card.scoop1st}pt</span>
+                                    <span>🥈 2nd: ${card.scoop2nd}pt</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Narrative -->
+                        <div class="space-y-2 flex flex-col justify-between">
+                            <div>
+                                <span class="text-[10px] uppercase font-mono text-slate-400 block">Alleged Myth</span>
+                                <p class="font-tabloid text-slate-100 text-sm leading-tight text-paranormal-accent">${card.myth}</p>
+                                <p class="text-[11px] text-slate-400 italic mt-1 font-serif">"${card.tagline}"</p>
+                            </div>
+                            <div class="bg-rose-950/30 p-2 rounded border border-rose-900/40">
+                                <span class="text-[10px] uppercase font-mono text-rose-400 block">Bust Reality</span>
+                                <p class="text-[11px] text-slate-300">${card.reality}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // CALCULATOR STATE & LOGIC
+        let selectedTokens = [];
+
+        function initCalc() {
+            const select = document.getElementById('calc-location-select');
+            select.innerHTML = LOCATION_CARDS.map(c => `
+                <option value="${c.id}">${c.title} (Min: ${c.minReq} | Bust: ${c.bustLimit})</option>
+            `).join('');
+
+            const tokensContainer = document.getElementById('calc-tokens-container');
+            tokensContainer.innerHTML = [1, 2, 3, 4, 5, 1, 2, 3, 4, 5].map((val, idx) => `
+                <button onclick="toggleCalcToken(${idx}, ${val})" id="calc-tok-${idx}" class="py-2 rounded font-mono font-bold border border-slate-700 bg-slate-900 text-slate-400 hover:border-paranormal-accent">
+                    +${val}
+                </button>
+            `).join('');
+
+            updateCalcLocation();
+        }
+
+        function updateCalcLocation() {
+            const locId = parseInt(document.getElementById('calc-location-select').value);
+            const card = LOCATION_CARDS.find(c => c.id === locId);
+            
+            const infoBox = document.getElementById('calc-loc-info');
+            infoBox.innerHTML = `
+                <div>
+                    <span class="text-amber-400 font-bold block">${card.title}</span>
+                    <span class="text-xs text-slate-400">Myth: ${card.myth}</span>
+                </div>
+                <div class="text-right">
+                    <span class="text-xs text-slate-300">Min: <strong class="text-amber-300">${card.minReq}</strong> | Bust Limit: <strong class="text-rose-400">≥ ${card.bustLimit}</strong></span>
+                </div>
+            `;
+            calculateResult();
+        }
+
+        function toggleCalcToken(idx, val) {
+            const btn = document.getElementById(`calc-tok-${idx}`);
+            const existingIndex = selectedTokens.findIndex(t => t.idx === idx);
+
+            if (existingIndex > -1) {
+                selectedTokens.splice(existingIndex, 1);
+                btn.classList.remove('bg-paranormal-accent', 'text-slate-900', 'border-sky-300');
+                btn.classList.add('bg-slate-900', 'text-slate-400');
+            } else {
+                selectedTokens.push({ idx, val });
+                btn.classList.add('bg-paranormal-accent', 'text-slate-900', 'border-sky-300');
+                btn.classList.remove('bg-slate-900', 'text-slate-400');
+            }
+            calculateResult();
+        }
+
+        function calculateResult() {
+            const locId = parseInt(document.getElementById('calc-location-select').value);
+            const card = LOCATION_CARDS.find(c => c.id === locId);
+            const total = selectedTokens.reduce((sum, t) => sum + t.val, 0);
+            const resBox = document.getElementById('calc-result');
+
+            if (selectedTokens.length === 0) {
+                resBox.className = "p-4 rounded-xl border border-slate-700 bg-slate-900/50 text-center";
+                resBox.innerHTML = `<span class="text-xs font-mono text-slate-400">Select Shot Tokens above to simulate camera exposure.</span>`;
+                return;
+            }
+
+            if (total < card.minReq) {
+                resBox.className = "p-4 rounded-xl border border-amber-600/50 bg-amber-950/30 text-center space-y-1";
+                resBox.innerHTML = `
+                    <div class="text-amber-400 font-bold font-mono">⚠️ BLURRY PHOTO (Total Exposure: ${total})</div>
+                    <div class="text-xs text-slate-300">Minimum required is ${card.minReq}. No story published!</div>
+                `;
+            } else if (total >= card.bustLimit) {
+                resBox.className = "p-4 rounded-xl border border-rose-600/50 bg-rose-950/40 text-center space-y-1";
+                resBox.innerHTML = `
+                    <div class="text-rose-400 font-bold font-mono">💥 MYTH BUSTED! (Total Exposure: ${total})</div>
+                    <div class="text-xs text-slate-300">Exceeded bust limit of ${card.bustLimit}! Mundane truth revealed: "<em>${card.reality}</em>". Highest contributor loses 2 VP!</div>
+                `;
+            } else {
+                resBox.className = "p-4 rounded-xl border border-emerald-600/50 bg-emerald-950/40 text-center space-y-1";
+                resBox.innerHTML = `
+                    <div class="text-emerald-400 font-bold font-mono">📸 FRONT PAGE SCOOP! (Total Exposure: ${total})</div>
+                    <div class="text-xs text-slate-300">Success! 🥇 1st Place gets <strong>${card.scoop1st} VP</strong> | 🥈 2nd Place gets <strong>${card.scoop2nd} VP</strong></div>
+                `;
+            }
+        }
+
+        // PRINTABLE PNP GENERATOR
+        function renderPnP() {
+            // Render Cards
+            const locGrid = document.getElementById('pnp-location-grid');
+            locGrid.innerHTML = LOCATION_CARDS.map(card => `
+                <div class="pnp-card bg-white text-black p-3 rounded border-2 border-black flex flex-col justify-between shadow-sm">
+                    <div class="border-b border-black pb-1 flex justify-between items-center">
+                        <span class="font-mono text-[9px] font-bold">DEADLINE: FORTEAN</span>
+                        <span class="font-tabloid font-bold text-xs uppercase">${card.title}</span>
+                    </div>
+                    
+                    <div class="my-1 space-y-1 text-left flex-grow">
+                        <div class="bg-slate-100 p-1.5 border border-black rounded text-[10px]">
+                            <div class="font-bold uppercase text-[9px]">Mechanics:</div>
+                            <div class="flex justify-between font-mono"><span>MIN REQ:</span> <strong>${card.minReq}</strong></div>
+                            <div class="flex justify-between font-mono"><span>BUST LIMIT:</span> <strong>≥ ${card.bustLimit}</strong></div>
+                            <div class="flex justify-between font-mono"><span>SCOOP:</span> <span>1st:${card.scoop1st}p | 2nd:${card.scoop2nd}p</span></div>
+                        </div>
+
+                        <div class="text-[10px]">
+                            <span class="font-bold text-[9px] uppercase block">Myth Scoop:</span>
+                            <p class="font-serif italic text-[10px] leading-tight">${card.myth}</p>
+                        </div>
+
+                        <div class="text-[9px] border-t border-dashed border-gray-400 pt-1">
+                            <span class="font-bold uppercase block text-[8px]">Reality (If Busted):</span>
+                            <p class="text-[9px] leading-tight text-gray-700">${card.reality}</p>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-black pt-0.5 text-center font-mono text-[8px]">
+                        CARD #${card.id} / 9
+                    </div>
+                </div>
+            `).join('');
+
+            // Render Roles
+            const rolesGrid = document.getElementById('pnp-roles-grid');
+            rolesGrid.innerHTML = ROLES.map((role, i) => `
+                <div class="pnp-card bg-white text-black p-3 rounded border-2 border-black flex flex-col justify-between shadow-sm">
+                    <div class="border-b border-black pb-1 text-center">
+                        <span class="font-mono text-[8px] block">TABLOID ROLE</span>
+                        <h4 class="font-tabloid font-bold text-sm uppercase">${role.title}</h4>
+                    </div>
+                    
+                    <div class="my-2 space-y-2 text-left flex-grow">
+                        <p class="text-[10px] italic text-center font-serif">${role.subtitle}</p>
+                        <div class="bg-gray-100 p-2 border border-black rounded text-[10px]">
+                            <span class="font-bold text-[9px] uppercase block mb-1">Special Ability [${role.badge}]:</span>
+                            <p class="leading-tight text-[10px]">${role.ability}</p>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-black pt-0.5 text-center font-mono text-[8px]">
+                        ROLE CARD ${i+1}
+                    </div>
+                </div>
+            `).join('');
+
+            // Render Shot Tokens
+            const tokensGrid = document.getElementById('pnp-tokens-grid');
+            tokensGrid.innerHTML = TABLOID_BRANDS.map(brand => `
+                <div class="border border-gray-300 p-3 rounded">
+                    <h4 class="font-mono text-xs font-bold mb-2 text-slate-800 no-print">${brand.name} (5 Camera Shot Tokens)</h4>
+                    <div class="flex flex-wrap gap-3">
+                        ${[1, 2, 3, 4, 5].map(val => `
+                            <div class="token-chip bg-white border-2 border-black rounded-full flex flex-col items-center justify-center p-1 text-center shadow-sm">
+                                <span class="font-mono text-[6px] leading-tight font-bold uppercase">${brand.name}</span>
+                                <span class="font-tabloid text-2xl font-bold leading-none my-0.5">${val}</span>
+                                <span class="font-mono text-[6px] uppercase font-bold">SHOT TOKEN</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+
+            // Render VP Tokens
+            const vpGrid = document.getElementById('pnp-vp-grid');
+            const vp1s = Array(12).fill(1);
+            const vp3s = Array(8).fill(3);
+
+            vpGrid.innerHTML = `
+                <div class="space-y-4">
+                    <div>
+                        <h4 class="font-mono text-xs font-bold mb-2 text-slate-800 no-print">1-Point Scoop Tokens (Film Rolls)</h4>
+                        <div class="flex flex-wrap gap-2">
+                            ${vp1s.map(() => `
+                                <div class="vp-chip bg-white border-2 border-black rounded-lg flex flex-col items-center justify-center p-1 text-center shadow-sm">
+                                    <span class="text-xs">🎞️</span>
+                                    <span class="font-tabloid text-base font-bold leading-none">1 VP</span>
+                                    <span class="font-mono text-[6px] uppercase font-bold">SCOOP</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-mono text-xs font-bold mb-2 text-slate-800 no-print">3-Point Front Page Tokens (Headline Stamp)</h4>
+                        <div class="flex flex-wrap gap-2">
+                            ${vp3s.map(() => `
+                                <div class="vp-chip bg-white border-2 border-black rounded-lg flex flex-col items-center justify-center p-1 text-center shadow-sm">
+                                    <span class="text-xs">📰</span>
+                                    <span class="font-tabloid text-base font-bold leading-none">3 VP</span>
+                                    <span class="font-mono text-[6px] uppercase font-bold">HEADLINE</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // TAB NAVIGATION
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+            // Button Highlight
+            const btns = ['rules', 'gallery', 'calc', 'pnp'];
+            btns.forEach(b => {
+                const btn = document.getElementById(`tab-btn-${b}`);
+                if (b === tabId) {
+                    btn.className = "px-3 py-1.5 rounded-lg text-sm font-semibold transition bg-paranormal-accent text-slate-900";
+                } else {
+                    btn.className = "px-3 py-1.5 rounded-lg text-sm font-semibold transition bg-paranormal-700 hover:bg-slate-700 text-slate-200";
+                }
+            });
+        }
+
+        // INITIALIZATION
+        window.onload = function() {
+            renderRulesRoles();
+            renderGallery();
+            initCalc();
+            renderPnP();
+        };
+    </script>
+</body>
+</html>
