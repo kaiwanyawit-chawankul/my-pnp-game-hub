@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>9 Cards Lake Fishing - Rulebook</title>
+<style>
+@page { size: A4; margin: 0; }
+* { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body { margin: 0; font: 9.6pt/1.42 "Helvetica Neue", Arial, "Noto Sans", sans-serif; color: #1c2a3a; }
+.pg { width: 210mm; height: 297mm; position: relative; overflow: hidden; page-break-after: always; padding: 20mm 16mm 16mm; background: #f6efdc; }
+.pg::before { content: ""; position: absolute; inset: 6mm; border: .4mm solid #b8963e; border-radius: 3mm; pointer-events: none; }
+.hd { position: absolute; top: 10mm; left: 16mm; right: 16mm; display: flex; justify-content: space-between; font-size: 7pt; letter-spacing: 1.5px; font-weight: 700; color: #8a6d1f; }
+.ft { position: absolute; bottom: 9mm; left: 0; right: 0; text-align: center; font-size: 8pt; color: #8a6d1f; font-weight: 700; }
+h2 { font: 900 17pt/1.15 Georgia, "Noto Serif", serif; color: #0f2a43; margin: 0 0 3mm; display: flex; align-items: center; gap: 3mm; }
+h3 { font: 800 10.5pt Georgia, serif; color: #0f2a43; margin: 5mm 0 2mm; border-bottom: .3mm solid #b8963e; padding-bottom: 1mm; letter-spacing: .3px; }
+h4 { margin: 0 0 1.2mm; font-size: 10.5pt; color: #0f2a43; }
+h5 { margin: 0 0 1mm; font-size: 9pt; color: #8a6d1f; }
+p { margin: 0 0 2.5mm; }
+.lead { font-size: 11pt; }
+.pg h2:not(:first-child) { margin-top: 7mm; }
+.ph { display: inline-flex; width: 9mm; height: 9mm; border-radius: 50%; background: #0f2a43; color: #f6efdc; align-items: center; justify-content: center; font: 900 13pt Arial; }
+.ph.k { background: #b8963e; }
+.goal, .tip, .note { background: #fff; border-left: 1.2mm solid #b8963e; border-radius: 1.5mm; padding: 2.5mm 3.5mm; margin: 3mm 0; }
+.goal b { display: block; color: #8a6d1f; font-size: 8pt; letter-spacing: 1px; text-transform: uppercase; }
+.note { border-color: #0f2a43; font-size: 9pt; }
+.box { background: #fff; border: .3mm solid #d9c88f; border-radius: 2.5mm; padding: 3mm 3.5mm; }
+.box p { margin: 0 0 1.5mm; }
+.box em { font-size: 20pt; font-style: normal; display: block; margin-bottom: 1mm; }
+.box.g { border-color: #3f8f5a; background: #f0f8f2; }
+.box.r { border-color: #c2413b; background: #fcf1f0; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm; margin: 2mm 0 3mm; }
+.tri { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3mm; }
+.comp { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2.5mm; }
+.comp div { background: #fff; border: .3mm solid #d9c88f; border-radius: 2.5mm; padding: 2.5mm; font-size: 8.2pt; line-height: 1.3; }
+.comp b { display: block; font-size: 9pt; color: #0f2a43; }
+.comp em { font-style: normal; font-size: 17pt; display: block; height: 8mm; }
+.dot { display: inline-block; width: 4mm; height: 4mm; border-radius: 50%; margin-right: 1mm; }
+.dot.r { background: #ef4444; }
+.dot.bl { background: #3b82f6; }
+.dot.g { background: #22c55e; }
+.anat { display: grid; grid-template-columns: 56mm 56mm 1fr; gap: 5mm; align-items: start; }
+.face { position: relative; width: 56mm; height: 79.5mm; border-radius: 3mm; overflow: hidden; box-shadow: 0 1mm 3mm rgba(0,0,0,.3); background: #ddd; }
+.face span { position: absolute; font-weight: 800; color: #fff; }
+.vp { top: 4mm; right: 4mm; width: 8mm; height: 8mm; border-radius: 50%; background: #f59e0b; border: .3mm solid #b45309; text-align: center; line-height: 8mm; font-size: 11pt; }
+.bt { bottom: 4mm; left: 4mm; background: #ef4444; border-radius: 3mm; padding: .4mm 2.2mm; font-size: 6pt; }
+.pw { bottom: 4mm; right: 4mm; background: #0f1f33; color: #38bdf8 !important; border-radius: 1.5mm; padding: .3mm 1.8mm; font-size: 8pt; }
+.pl { bottom: 5mm; left: 50%; transform: translateX(-50%); background: rgba(15,23,42,.8); border: .3mm solid #c9a961; border-radius: 1.5mm; padding: .6mm 3mm; text-align: center; font-size: 5pt; color: #c9a961 !important; line-height: 1.2; }
+.pl b { font-size: 8pt; color: #fff; }
+.face u { position: absolute; width: 4.6mm; height: 4.6mm; border-radius: 50%; background: #c2413b; color: #fff; text-decoration: none; font: 800 8pt/4.6mm Arial; text-align: center; border: .3mm solid #fff; }
+.leg { list-style: none; margin: 0; padding: 0; counter-reset: l; font-size: 8.6pt; }
+.leg li { counter-increment: l; margin-bottom: 2.6mm; padding-left: 6.5mm; position: relative; }
+.leg li::before { content: counter(l); position: absolute; left: 0; top: 0; width: 4.6mm; height: 4.6mm; border-radius: 50%; background: #c2413b; color: #fff; font: 800 8pt/4.6mm Arial; text-align: center; }
+.steps { list-style: none; padding: 0; margin: 0; }
+.steps li { display: flex; gap: 3mm; margin-bottom: 2.2mm; align-items: flex-start; }
+.steps li > span, .build span { flex: none; width: 7mm; height: 7mm; border-radius: 50%; background: #0f2a43; color: #f6efdc; font: 800 10pt/7mm Arial; text-align: center; }
+.build { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2.5mm; }
+.build div { background: #fff; border: .3mm solid #d9c88f; border-radius: 2.5mm; padding: 2.5mm; font-size: 8.8pt; }
+.build span { display: block; margin-bottom: 1.5mm; background: #b8963e; }
+.lake { margin-top: 4mm; background: #fff; border: .3mm solid #d9c88f; border-radius: 3mm; padding: 4mm; }
+.stk { display: grid; grid-template-columns: repeat(8, 1fr); gap: 1.6mm; }
+.mc { position: relative; aspect-ratio: 62/88; border-radius: 1.5mm; overflow: hidden; border: .5mm solid; }
+.mc b { position: absolute; inset: auto 0 2mm; text-align: center; color: #fff; font: 900 14pt Arial; text-shadow: 0 0 2mm #000; }
+.mc.sh { border-color: #38bdf8; }
+.mc.dp { border-color: #0f2a43; }
+.br { display: grid; grid-template-columns: 1fr 1fr; gap: 1.6mm; margin-top: 1.5mm; font-size: 7.6pt; font-weight: 800; text-align: center; }
+.br span { border-radius: 1mm; padding: 1mm; }
+.br .bs { background: #dff3fc; color: #0369a1; }
+.br .bd { background: #0f2a43; color: #f6efdc; }
+.rng { margin-top: 2.5mm; font-size: 9pt; }
+.rng i { display: inline-block; width: 8mm; height: 3mm; background: #b8963e; border-radius: 1.5mm; margin-right: 2mm; vertical-align: middle; }
+.t { width: 100%; border-collapse: collapse; background: #fff; font-size: 9pt; }
+.t th { background: #0f2a43; color: #f6efdc; text-align: left; padding: 1.6mm 2.5mm; font-size: 8pt; letter-spacing: .5px; }
+.t td { padding: 1.8mm 2.5mm; border-bottom: .25mm solid #e5dcc0; }
+.ok { color: #15803d; font-weight: 800; }
+.no { color: #b91c1c; font-weight: 800; }
+.flow { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4mm; }
+.flow div { position: relative; background: #0f2a43; color: #f6efdc; border-radius: 2.5mm; padding: 3mm 2mm; text-align: center; font-weight: 700; font-size: 9pt; }
+.flow div:not(:last-child)::after { content: "▶"; position: absolute; right: -3.6mm; top: 50%; transform: translateY(-50%); color: #b8963e; font-size: 8pt; }
+.flow b { display: block; font: 900 15pt Georgia; color: #e3c26a; }
+.flow .k { background: #b8963e; color: #0f2a43; }
+.flow .k b { color: #0f2a43; }
+.flow small { display: block; font-weight: 600; font-size: 7pt; }
+.eq { display: inline-block; background: #0f2a43; color: #f6efdc; border-radius: 1.5mm; padding: 1.3mm 3.5mm; font-weight: 800; margin: 1mm 0; }
+.eq.wide { display: block; text-align: center; font-size: 11pt; padding: 3mm; }
+.num { margin: 0 0 3mm; padding-left: 5mm; }
+.num li { margin-bottom: 1.6mm; }
+.ex { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm; margin-bottom: 2mm; }
+.ex div { background: #fff; border: .3mm dashed #b8963e; border-radius: 2.5mm; padding: 2.5mm 3mm; font-size: 9pt; }
+.d { display: inline-block; width: 5.2mm; height: 5.2mm; border: .35mm solid #0f2a43; border-radius: 1.2mm; background: #fff; text-align: center; font: 800 8.5pt/4.7mm Arial; font-style: normal; margin: 0 .5mm; vertical-align: middle; color: #0f2a43; }
+.big { font-size: 11pt; text-align: center; margin: 3mm 0; }
+.qr { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2.5mm; }
+.qr div { background: #0f2a43; color: #f6efdc; border-radius: 2.5mm; padding: 2.5mm; font-size: 8.4pt; line-height: 1.3; }
+.qr b { display: block; color: #e3c26a; font-size: 8.6pt; }
+.cover { background: radial-gradient(circle at 50% 30%, #1d4a6e 0%, #0f2a43 55%, #08182a 100%); color: #f6efdc; padding: 0; }
+.cover::before { inset: 8mm; border-color: #b8963e; }
+.c-art { position: absolute; top: 30mm; left: 0; right: 0; height: 130mm; display: flex; justify-content: center; gap: 10mm; }
+.c-art .card-placeholder { width: 64mm; height: 91mm; border-radius: 3.5mm; box-shadow: 0 3mm 8mm rgba(0,0,0,.55); border: .5mm solid #b8963e; background: #222; display: flex; align-items: center; justify-content: center; color: #888; font-weight: bold; }
+.c-art .b { transform: rotate(-9deg); }
+.c-art .f { transform: rotate(7deg); width: 72mm; height: 104mm; }
+.c-t { position: absolute; top: 158mm; left: 0; right: 0; text-align: center; }
+.kick { letter-spacing: 4px; font-size: 8.5pt; color: #e3c26a; font-weight: 700; }
+.c-t h1 { font: 900 40pt/1.05 Georgia, serif; margin: 4mm 0 1mm; }
+.jp { font-size: 16pt; color: #e3c26a; letter-spacing: 6px; }
+.tag { margin-top: 6mm; font-size: 11pt; font-style: italic; color: #d8cfb4; }
+.chips { position: absolute; bottom: 22mm; left: 22mm; right: 22mm; display: grid; grid-template-columns: repeat(3, 1fr); gap: 4mm; }
+.chips div { border: .3mm solid #b8963e; border-radius: 3mm; padding: 3mm; text-align: center; font-size: 9pt; }
+.chips b { display: block; font-size: 7.5pt; letter-spacing: 2px; color: #e3c26a; text-transform: uppercase; }
+.in { width: 100%; }
+.scene { display: grid; grid-template-columns: 38mm 52mm 1fr; gap: 5mm; align-items: start; }
+.cap { font-size: 8pt; text-align: center; color: #5a6a7a; margin: 2mm 0 0; }
+.face.sm { width: 38mm; height: 54mm; }
+.face.sm span { transform: scale(.7); transform-origin: bottom right; }
+.face.sm .vp { transform-origin: top right; }
+.face.sm .bt { transform-origin: bottom left; }
+.pile { position: relative; width: 34mm; height: 114mm; margin: 0 auto 0 7mm; }
+.pc { position: absolute; left: 0; width: 34mm; height: 48mm; border-radius: 2.5mm; overflow: hidden; border: .5mm solid #0f2a43; background: #ccc; display: flex; align-items: center; justify-content: center; font-size: 8pt; }
+.pc em { position: absolute; top: 1mm; left: 2mm; font: 800 7pt Arial; color: #fff; font-style: normal; text-shadow: 0 0 2mm #000; }
+.pc.king { border-color: #c2413b; box-shadow: 0 0 0 .4mm #c2413b; }
+.pc.king em { color: #ffb4ae; }
+.dn { position: absolute; left: 38mm; width: 6mm; height: 6mm; border-radius: 50%; background: #e5dcc0; color: #7a6a3a; font: 800 9pt/6mm Arial; text-align: center; z-index: 20; }
+.dn.in6 { background: #b8963e; color: #fff; }
+.arr { position: absolute; left: 46mm; top: 6mm; bottom: 2mm; width: 5mm; }
+.arr i { position: absolute; left: 2.2mm; top: 0; bottom: 0; border-left: .5mm solid #0f2a43; }
+.arr i::before { content: ""; position: absolute; left: -1.6mm; top: 0; border: 1.7mm solid transparent; border-bottom: 3mm solid #0f2a43; border-top: 0; }
+.arr span { position: absolute; left: 5mm; top: 50%; transform: rotate(90deg); transform-origin: left top; font-size: 7pt; font-weight: 700; color: #0f2a43; letter-spacing: 1px; }
+.tkr { background: #fff; border: .4mm solid #b8963e; border-radius: 3mm; padding: 3mm; }
+.tr { margin-bottom: 3mm; }
+.tr b { display: block; font-size: 7.5pt; letter-spacing: .5px; color: #0f2a43; margin-bottom: 1mm; }
+.tr small { font-weight: 600; color: #8a6d1f; letter-spacing: 0; }
+.row5, .row11 { display: grid; gap: .8mm; margin-bottom: .8mm; }
+.row5 { grid-template-columns: repeat(5, 1fr); }
+.row11 { grid-template-columns: repeat(11, 1fr); }
+.tc { border: .3mm solid #0f2a43; border-radius: .9mm; background: #fbf7ea; text-align: center; font: 800 8pt/6mm Arial; font-style: normal; color: #0f2a43; height: 6mm; }
+.row11 .tc { font-size: 6pt; height: 4.6mm; line-height: 4.4mm; }
+.tc.mk { background: #f59e0b; color: #fff; border-color: #b45309; }
+.kz { position: absolute; left: -3.5mm; top: 0; height: 34mm; width: 2mm; border: .5mm solid #c2413b; border-right: 0; border-radius: 1mm 0 0 1mm; }
+.kz span { position: absolute; left: -4mm; top: 50%; transform: translate(-50%, -50%) rotate(-90deg); white-space: nowrap; font: 800 6pt Arial; color: #c2413b; letter-spacing: .8px; }
+.grp { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4mm; margin-bottom: 2mm; }
+.gl { border-radius: 2mm; padding: 1.2mm; text-align: center; font-weight: 800; font-size: 7.5pt; letter-spacing: .8px; }
+.gl.sim { grid-column: span 3; background: #dff3fc; color: #0369a1; }
+.gl.one { grid-column: span 2; background: #f6e6b8; color: #7a5a10; }
+@media screen {
+  body { background: #7d828c; padding: 0 0 8mm; }
+  .pg { margin: 8mm auto 0; box-shadow: 0 2mm 8mm rgba(0,0,0,.4); }
+  .bar { display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 50; background: #0f2a43; color: #f6efdc; padding: 3mm 6mm; font: 600 10pt Arial; }
+  .bar button { background: #e3c26a; border: 0; border-radius: 2mm; padding: 2mm 4mm; font-weight: 800; cursor: pointer; }
+}
+@media print {
+  .bar { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <span>9 Cards Lake Fishing · Rulebook (A4, 7 pages)</span>
+  <button onclick="window.print()">Print / Save as PDF</button>
+</div>
+
+<!-- PAGE 1: COVER -->
+<section class="pg cover">
+  <div class="c-art">
+    <div class="card-placeholder b">Back</div>
+    <div class="card-placeholder f">Fish</div>
+  </div>
+  <div class="c-t">
+    <div class="kick">OFFICIAL GAME RULEBOOK</div>
+    <h1>9 Cards<br>Lake Fishing</h1>
+    <div class="jp">湖釣り</div>
+    <p class="tag">Read the lake. Spend your power wisely. Land the Kingfish.</p>
+  </div>
+  <div class="chips">
+    <div><b>Goal</b>Most Victory Points</div>
+    <div><b>Ends</b>When the Kingfish is landed</div>
+    <div><b>Shared</b>One pool of 7 dice</div>
+  </div>
+</section>
+
+<!-- PAGE 2 -->
+<section class="pg">
+  <div class="hd"><span>9 CARDS LAKE FISHING</span><span>THE GAME</span></div>
+  <div class="in" style="zoom:1.080">
+    <h2>Welcome to the lake</h2>
+    <p class="lead">You are an elite angler competing on a shared lake. Manage your <b>bait</b>, judge the <b>distance</b>, and spend <b>power</b> to roll dice from one shared pool. Reel in fish from the shallows and the deep, then face the legendary <b>Kingfish</b>.</p>
+    <div class="goal"><b>How to win</b> Collect the most Victory Points (VP). The game ends the instant someone lands the Kingfish.</div>
+    <h3>What's in the box</h3>
+    <div class="comp">
+      <div><em>🗂️</em><b>1 Tracking Card</b>The board: Power Levels (1–5) and Kingfish HP</div>
+      <div><em>🐟</em><b>7 Regular Fish</b>The regular catches of the lake</div>
+      <div><em>👑</em><b>1 Kingfish</b>The apex trophy fish. Landing it ends the game</div>
+      <div><em>🎲</em><b>7 Dice</b>One shared pool for every roll</div>
+      <div><em>🏅</em><b>2 Score Tokens</b>Track each angler's VP</div>
+      <div><em>💪</em><b>2 Strength Tokens</b>Track each angler's Power Level</div>
+      <div><em>🎯</em><b>1 Kingfish Token</b>Tracks remaining Kingfish HP</div>
+      <div><em><span class="dot r"></span><span class="dot bl"></span><span class="dot g"></span></em><b>6 Bait Tokens</b>3 per angler: 1 Red, 1 Blue, 1 Green</div>
+    </div>
+    <h3>Reading a fish card</h3>
+    <div class="anat">
+      <div class="face">
+        <span class="vp">5</span>
+        <span class="bt">RED BAIT</span>
+        <span class="pw">10 PWR</span>
+        <u style="top:3mm;right:12mm">1</u>
+        <u style="bottom:3mm;left:23mm">2</u>
+        <u style="bottom:3mm;right:19mm">3</u>
+      </div>
+      <div class="face">
+        <span class="pl">SIZE<br><b>LARGE</b></span>
+        <u style="bottom:6mm;right:5mm">4</u>
+      </div>
+      <ol class="leg">
+        <li><b>Victory Points.</b> Points you score for landing this fish.</li>
+        <li><b>Bait Type.</b> Red, Blue or Green. Matching it gives you an edge.</li>
+        <li><b>Power Value.</b> Your dice total must <i>beat</i> this number.</li>
+        <li><b>Size (back).</b> Visible in the face-down pile. Use it to guess a card's worth, or to bluff.</li>
+      </ol>
+    </div>
+  </div>
+  <div class="ft">2</div>
+</section>
+
+<!-- PAGE 3 -->
+<section class="pg">
+  <div class="hd"><span>9 CARDS LAKE FISHING</span><span>SETUP</span></div>
+  <div class="in" style="zoom:1.183">
+    <h2>Setup</h2>
+    <ol class="steps">
+      <li><span>1</span><div><b>Place the Tracking Card</b> beside the play area, within reach of both anglers. It has a Power row for each angler and the Kingfish HP row.</div></li>
+      <li><span>2</span><div><b>Power:</b> put each angler’s Strength Token on space <b>3</b> of their row.</div></li>
+      <li><span>3</span><div><b>Kingfish HP:</b> put the Kingfish Token at <b>15</b> (standard) or <b>20</b> (2-Player Balanced Variant).</div></li>
+      <li><span>4</span><div><b>Supplies:</b> each angler takes 1 Red, 1 Blue and 1 Green Bait Token plus 1 Score Token.</div></li>
+      <li><span>5</span><div><b>Build the Lake:</b> shuffle the 7 regular fish. Deal <b>4</b> face-down as the top layer (positions 1–4). Shuffle the other <b>3 with the Kingfish</b> and put them underneath (positions 5–8). Fan the pile so every card’s back shows. The card nearest you is <b>distance 1</b>.</div></li>
+    </ol>
+    <h3>The table</h3>
+    <div class="scene">
+      <div>
+        <div class="face sm">
+          <span class="vp">5</span>
+          <span class="bt">RED BAIT</span>
+          <span class="pw">10 PWR</span>
+        </div>
+        <p class="cap">Fish card (front)<br>bait, points and power</p>
+      </div>
+      <div>
+        <div class="pile">
+          <div class="pc" style="top:0.0mm;z-index:0"><em>fish</em></div><div class="dn" style="top:1.2mm">8</div>
+          <div class="pc" style="top:8.5mm;z-index:1"><em>fish</em></div><div class="dn" style="top:9.7mm">7</div>
+          <div class="pc" style="top:17.0mm;z-index:2"><em>fish</em></div><div class="dn in6" style="top:18.2mm">6</div>
+          <div class="pc" style="top:25.5mm;z-index:3"><em>fish</em></div><div class="dn in6" style="top:26.7mm">5</div>
+          <div class="pc" style="top:34.0mm;z-index:4"><em>fish</em></div><div class="dn in6" style="top:35.2mm">4</div>
+          <div class="pc" style="top:42.5mm;z-index:5"><em>fish</em></div><div class="dn in6" style="top:43.7mm">3</div>
+          <div class="pc" style="top:51.0mm;z-index:6"><em>fish</em></div><div class="dn in6" style="top:52.2mm">2</div>
+          <div class="pc" style="top:59.5mm;z-index:7"><em>fish</em></div><div class="dn in6" style="top:60.7mm">1</div>
+          <div class="kz"><span>KINGFISH ZONE</span></div>
+          <div class="arr"><i></i><span>distance</span></div>
+        </div>
+        <p class="cap">The Lake pile (backs showing)<br>Targets: distance <b>1–6</b></p>
+      </div>
+      <div>
+        <div class="tkr">
+          <div class="tr"><b>PLAYER 1 · POWER</b><div class="row5"><i class="tc">1</i><i class="tc">2</i><i class="tc mk">3</i><i class="tc">4</i><i class="tc">5</i></div></div>
+          <div class="tr"><b>PLAYER 2 · POWER</b><div class="row5"><i class="tc">1</i><i class="tc">2</i><i class="tc mk">3</i><i class="tc">4</i><i class="tc">5</i></div></div>
+          <div class="tr"><b>KINGFISH HP <small>15 standard · 20 two-player</small></b>
+            <div class="row11"><i class="tc">0</i><i class="tc">1</i><i class="tc">2</i><i class="tc">3</i><i class="tc">4</i><i class="tc">5</i><i class="tc">6</i><i class="tc">7</i><i class="tc">8</i><i class="tc">9</i><i class="tc">10</i></div>
+            <div class="row11"><i class="tc">11</i><i class="tc">12</i><i class="tc">13</i><i class="tc">14</i><i class="tc mk">15</i><i class="tc">16</i><i class="tc">17</i><i class="tc">18</i><i class="tc">19</i><i class="tc">20</i></div>
+          </div>
+        </div>
+        <p class="cap">Tracking Card</p>
+      </div>
+    </div>
+    <div class="tip"><b>Tip:</b> the visible card backs show each fish’s <b>size</b>. The Kingfish is never in the first 4 cards, but distance 5 and 6 can reach it.</div>
+  </div>
+  <div class="ft">3</div>
+</section>
+
+<!-- PAGE 4 -->
+<section class="pg">
+  <div class="hd"><span>9 CARDS LAKE FISHING</span><span>CORE IDEAS</span></div>
+  <div class="in" style="zoom:1.316">
+    <h2>Three ideas run the whole game</h2>
+    <div class="tri">
+      <div class="box"><em>🎲</em><h4>Shared Dice Pool</h4><p>All 7 dice are shared. Every distance roll, spot roll-off and catch roll uses dice from this one pool.</p><p>Dice go back to the pool as soon as the catch is resolved or the trackers are updated.</p></div>
+      <div class="box"><em>💪</em><h4>Power Level</h4><p>Your Strength Token on the 1–5 scale. It starts on 3.</p><p><b>Spend 1 ↓</b> = +1 extra die on any roll-off or catch roll.</p><p><b>Bank ↑</b> unused dice = +1 each, up to 5.</p></div>
+      <div class="box"><em>🎣</em><h4>Bait</h4><p>You place Red, Blue and Green tokens on cards in the Lake Deck.</p><p><b>Catch it:</b> bait returns free.</p><p><b>Anything else:</b> pay 1 Power to get it back.</p></div>
+    </div>
+    <h3>Getting bait back</h3>
+    <table class="t">
+      <tr><th>Situation</th><th>Cost</th></tr>
+      <tr><td>You land the fish</td><td><span class="ok">Free (0 Power)</span></td></tr>
+      <tr><td>The catch fails</td><td><span class="no">Spend 1 Power</span></td></tr>
+      <tr><td>The fish flees to the bottom of the deck</td><td><span class="no">Spend 1 Power</span></td></tr>
+      <tr><td>You pull your bait back on purpose</td><td><span class="no">Spend 1 Power</span></td></tr>
+    </table>
+    <h3>A round at a glance</h3>
+    <div class="grp"><div class="gl sim">ALL ANGLERS AT THE SAME TIME</div><div class="gl one">ONE BY ONE</div></div>
+    <div class="flow">
+      <div><b>1</b>Roll &amp; Distance</div>
+      <div><b>2</b>Place Bait</div>
+      <div><b>3</b>Spot Priority</div>
+      <div><b>4</b>Catch</div>
+      <div class="k"><b>5</b>Kingfish<small>only if revealed</small></div>
+    </div>
+    <p class="note">Everyone rolls and places bait <b>together</b>. Then anglers <b>catch one at a time</b>. When all catches are done the dice return to the pool and a new round begins. Kingfish at 0 HP ends the game.</p>
+  </div>
+  <div class="ft">4</div>
+</section>
+
+<!-- PAGE 5 -->
+<section class="pg">
+  <div class="hd"><span>9 CARDS LAKE FISHING</span><span>TURN: PHASES 1–3</span></div>
+  <div class="in" style="zoom:1.256">
+    <h2><span class="ph">1</span>Roll &amp; Distance</h2>
+    <ol class="num">
+      <li>Every angler rolls <b>1 die</b> from the pool, <b>all at the same time</b>.</li>
+      <li>Pick a target card <b>1 to 6</b> positions down the Lake Deck.</li>
+      <li><div class="eq">Roll − Distance = Power Dice</div> That is how many dice you can roll this turn.</li>
+      <li><b>Banking:</b> you may roll fewer dice and bank the rest: <b>+1 Power Level per banked die</b> (max 5).</li>
+    </ol>
+    <div class="ex">
+      <div><h5>Example A · Roll and bank</h5>Roll <i class="d">6</i>, target distance 1: 6 − 1 = <b>5 dice</b>. Roll 3 for the catch, bank 2: Power <b>+2</b>.</div>
+      <div><h5>Example B · Short roll</h5>Roll <i class="d">1</i>, distance 1: 1 − 1 = <b>0 dice</b>. Spend 1 Power (3 → 2) to draw <b>1 extra die</b> for the catch.</div>
+    </div>
+    <h2><span class="ph">2</span>Place Bait</h2>
+    <p><b>All anglers place bait at the same time.</b> Decide first, then put your tokens down together so nobody can copy. Pick tokens from your supply and put them on your target card. Spread your 3 baits over <b>3 spots</b>, or <b>stack up to 3</b> on one spot to go all-in on a valuable fish.</p>
+    <h2><span class="ph">3</span>Spot Competition</h2>
+    <p>Look at what everyone placed. If bait from several anglers sits on the <b>same card</b>, one angler gets priority to catch it:</p>
+    <div class="two">
+      <div class="box"><h4>① Bait match</h4>Bait that matches the fish wins over non-matching bait. No roll needed.</div>
+      <div class="box"><h4>② Roll-off</h4>Both match or both miss? Each rolls dice from the pool. The <b>higher total</b> wins.</div>
+    </div>
+    <div class="tip"><b>Power option:</b> any competitor may spend 1 Power (↓ 1 space) to add <b>+1 die</b> to their roll-off.</div>
+    <div class="tip"><b>Losing a spot:</b> you make no catch this round. Bank your unused power dice and take your bait back (1 Power per token).<br><b>Different cards?</b> Everyone still catches, <b>one at a time</b>. A spot winner goes first; otherwise the order alternates each round (whoever caught second last round goes first).</div>
+  </div>
+  <div class="ft">5</div>
+</section>
+
+<!-- PAGE 6 -->
+<section class="pg">
+  <div class="hd"><span>9 CARDS LAKE FISHING</span><span>TURN: PHASES 4–5</span></div>
+  <div class="in" style="zoom:1.185">
+    <h2><span class="ph">4</span>Catch</h2>
+    <div class="goal"><b>One by one</b>Anglers now catch <strong>one at a time</strong> in catch order (a spot winner goes first). Each reveals their card, then rolls their power dice.</div>
+    <div class="two">
+      <div class="box g"><h4>Bait matches</h4><div class="eq">Target = Fish Power</div></div>
+      <div class="box r"><h4>Bait does not match</h4><div class="eq">Target = Fish Power + 1</div></div>
+    </div>
+    <p class="big">Your dice total must be <b>strictly more</b> than the target.</p>
+    <div class="two">
+      <div class="box g"><h4>✔ Success</h4>Keep the card. Your bait returns <b>free</b>. Banked dice raise your Power Level; the rest return to the pool.</div>
+      <div class="box r"><h4>✘ Failure</h4>The fish <b>flees face-down to the bottom</b> of the Lake Deck. Spend <b>1 Power</b> to recover your bait.</div>
+    </div>
+    <h3>Worked examples</h3>
+    <table class="t">
+      <tr><th></th><th>Fish Power</th><th>Bait</th><th>Target</th><th>Your roll</th><th>Result</th></tr>
+      <tr><td>A</td><td>10</td><td>Match</td><td>10</td><td><i class="d">5</i><i class="d">6</i> = 11</td><td><span class="ok">Success</span></td></tr>
+      <tr><td>B</td><td>10</td><td>Match</td><td>10</td><td><i class="d">3</i><i class="d">6</i> = 9</td><td><span class="no">Fail, pay 1 Power</span></td></tr>
+      <tr><td>C</td><td>6</td><td>No match</td><td>7</td><td><i class="d">6</i> = 6</td><td><span class="no">Fail (needs more than 7)</span></td></tr>
+      <tr><td>D</td><td>6</td><td>No match</td><td>7</td><td><i class="d">4</i><i class="d">4</i> = 8</td><td><span class="ok">Success</span></td></tr>
+    </table>
+    <h2><span class="ph k">5</span>Kingfish Encounter</h2>
+    <p>When the Kingfish is revealed it is too strong to land in one roll. Use the same target as above (matching bait: its Power; otherwise Power + 1).</p>
+    <div class="two">
+      <div class="box"><h4>Damage</h4><div class="eq">Damage = Dice Total − Target</div>Roll beats the target? Move the Kingfish Token <b>down</b> by the damage.</div>
+      <div class="box"><h4>Landing it</h4>At <b>0 HP</b> you claim the Kingfish and the <b>game ends at once</b>. Above 0, it stays face up at the bottom and play passes on.</div>
+    </div>
+  </div>
+  <div class="ft">6</div>
+</section>
+
+<!-- PAGE 7 -->
+<section class="pg">
+  <div class="hd"><span>9 CARDS LAKE FISHING</span><span>END &amp; SCORING</span></div>
+  <div class="in" style="zoom:1.321">
+    <h2>Two-player balance</h2>
+    <table class="t">
+      <tr><th>Rule</th><th>Standard (3+ players)</th><th>2-Player Variant</th></tr>
+      <tr><td>Kingfish starting HP</td><td>15</td><td><b>20</b></td></tr>
+      <tr><td>Kingfish VP bonus</td><td>None (card VP only)</td><td><b>+5 VP</b> to the final catcher</td></tr>
+    </table>
+    <h2>Game end &amp; scoring</h2>
+    <p>The game ends <b>immediately</b> in Phase 5 when someone drops the Kingfish to 0 HP and lands it.</p>
+    <div class="eq wide">Total Score = Regular Fish VP + Kingfish Card VP + 2-Player Bonus</div>
+    <div class="two">
+      <div class="box"><h4>Count</h4><p>① VP of your regular fish<br>② VP on the Kingfish card (if yours)<br>③ +5 VP if you landed it in a 2-player game</p></div>
+      <div class="box"><h4>Winner</h4><p>The highest total is <b>Master Angler</b>.<br>Tie? The angler who <b>landed the Kingfish</b> wins.</p></div>
+    </div>
+    <div class="goal"><b>Round rhythm</b>Roll and place bait <strong>together</strong>. Catch fish <strong>one by one</strong>.</div>
+    <h3>Quick reference</h3>
+    <div class="qr">
+      <div><b>Power dice</b>Roll − Distance</div>
+      <div><b>Target</b>Fish Power (+1 if bait does not match)</div>
+      <div><b>Land it</b>Dice Total &gt; Target</div>
+      <div><b>Kingfish damage</b>Dice Total − Target</div>
+      <div><b>Power ↓</b>Spend 1 = +1 die</div>
+      <div><b>Power ↑</b>Bank 1 die = +1 (max 5)</div>
+      <div><b>Bait back</b>Free on success, else 1 Power</div>
+      <div><b>Failed fish</b>Flees to the bottom</div>
+    </div>
+  </div>
+  <div class="ft">7</div>
+</section>
+
+</body>
+</html>

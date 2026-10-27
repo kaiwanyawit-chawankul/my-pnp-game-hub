@@ -1,0 +1,5 @@
+- **Subject:** Biwako-Oonamazu ビワコオオナマズ (Giant Catfish) jumping out of water, only fish and lake, fishing game style, minimal, focus on fish
+- **Action:** Splashing and jumping mid-air out of a serene lake.
+- **Art Style:** Clean, stylized digital illustration with a painted/watercolor texture reminiscent of classic fishing games or nature artwork.
+- **Composition:** Close-up of the fish leaping dynamically in the foreground with ripple effects and water droplets.
+- **Environment:** Minimalist or atmospheric natural lake background with distant mountains, trees, and soft lighting.

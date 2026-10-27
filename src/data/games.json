@@ -63,5 +63,19 @@
       "printAndPlayCards": "https://raw.githubusercontent.com/kaiwanyawit-chawankul/my-pnp-game-hub/master/games/9cardsHorror/9 Cards of Horrors - Print & Play.pdf"
     },
     "playableInBrowser": false
+  },
+  {
+    "id": "9CardsFishing",
+    "title": "9 Cards of Lake Fishing",
+    "tagline": "A print-and-play micro game.",
+    "thumbnail": "",
+    "playerCount": "2 Players",
+    "playTime": "15 mins",
+    "tags": ["PnP", "9-Card"],
+    "downloads": {
+      "gameRules": "https://raw.githubusercontent.com/kaiwanyawit-chawankul/my-pnp-game-hub/master/games/9CardsFishing/rules-color.pdf",
+      "printAndPlayCards": "https://raw.githubusercontent.com/kaiwanyawit-chawankul/my-pnp-game-hub/master/games/9CardsFishing/cards-color.pdf"
+    },
+    "playableInBrowser": false
   }
 ]

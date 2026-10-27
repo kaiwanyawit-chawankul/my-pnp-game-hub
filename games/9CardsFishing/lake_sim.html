@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>9 Cards Lake Fishing - Strategy Simulator</title>
+<style>
+:root{--bg:#f6efdc;--ink:#1c2a3a;--navy:#0f2a43;--gold:#b8963e;--card:#fff;--line:#d9c88f}
+@media(prefers-color-scheme:dark){:root{--bg:#0b1d30;--ink:#e8e2cf;--navy:#e3c26a;--card:#12304a;--line:#35566f}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 "Helvetica Neue",Arial,sans-serif}
+main{max-width:980px;margin:0 auto;padding:18px 14px 40px}h1{font:900 26px Georgia,serif;margin:0 0 4px;color:var(--navy)}
+h2{font:800 17px Georgia,serif;margin:0 0 8px;color:var(--navy)}.sub{margin:0 0 14px;opacity:.8}
+.box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:14px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:end}label{display:flex;flex-direction:column;font-size:12px;font-weight:700;gap:3px}
+select,input{font:inherit;padding:7px 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);min-width:0}input{width:88px}
+button{font:700 14px inherit;padding:9px 14px;border:0;border-radius:8px;background:#0f2a43;color:#f6efdc;cursor:pointer}button.alt{background:var(--gold);color:#0f2a43}
+@media(prefers-color-scheme:dark){button{background:#e3c26a;color:#0b1d30}}
+table{border-collapse:collapse;width:100%;font-size:13px}th,td{padding:6px 8px;text-align:center;border-bottom:1px solid var(--line)}th:first-child,td:first-child{text-align:left}
+.bar{height:16px;border-radius:8px;overflow:hidden;display:flex;background:#c2413b33;margin:6px 0}.bar i{background:#3f8f5a}
+.stat{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-top:8px}.stat div{border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-size:12px}.stat b{display:block;font-size:16px}
+#log{font:12px/1.5 ui-monospace,Menlo,monospace;max-height:340px;overflow:auto;white-space:pre-wrap}#log .c{color:#b45309}#log .k{color:#c2413b;font-weight:700}#log .w{color:#15803d}
+details{font-size:13px}summary{cursor:pointer;font-weight:700}ul{margin:6px 0 0;padding-left:18px}.note{font-size:12px;opacity:.75}
+</style></head><body><main>
+<h1>9 Cards Lake Fishing · Strategy Simulator</h1>
+<p class="sub">Two anglers roll and place bait <b>at the same time</b>, then catch fish <b>one by one</b>. Pick strategies, tweak the Kingfish, and run thousands of games.</p>
+
+<div class="box"><h2>Setup</h2><div class="row">
+<label>Angler A<select id="a"></select></label><label>Angler B<select id="b"></select></label>
+<label>Games<input id="n" type="number" value="2000" min="10" max="50000"></label>
+<label>Kingfish Power<input id="kp" type="number" value="12" min="1" max="30"></label>
+<label>Kingfish HP<input id="hp" type="number" value="20" min="1" max="60"></label>
+<label>2P bonus VP<input id="bo" type="number" value="5" min="0" max="20"></label>
+<label>Seed<input id="seed" type="number" value="7"></label></div>
+<div class="row" style="margin-top:10px"><button id="go">Run head-to-head</button><button id="tour" class="alt">Run tournament (all 5)</button><button id="one" class="alt">Watch one game</button></div></div>
+
+<div class="box" id="h2h" hidden><h2>Head-to-head</h2><div id="h2hbody"></div></div>
+<div class="box" id="tb" hidden><h2>Tournament</h2><div id="tbody"></div></div>
+<div class="box" id="lg" hidden><h2>Game log</h2><div id="log"></div></div>
+
+<div class="box"><details><summary>Strategies and rule assumptions</summary><ul id="desc"></ul>
+<p class="note">Assumptions (the rulebook is silent on these): the second-placed angler is not visible, so choices are made blind. Same card chosen by both = spot contest: a bait match wins, otherwise each rolls 1 die + 1 die per Power spent, ties go to the angler first in catch order. The loser makes no catch, banks unused dice and pays 1 Power per bait token to retrieve. Otherwise catches are one by one and the order alternates each round. Failure or retrieval costs 1 Power per token (floor 1; unpaid tokens stay stuck). Players see only the 3 card-back sizes (S/M/L: Ayu+Bass, Herabuna+Magoi, Large = Biwamasu, Namazu, Ito, Kingfish). The Kingfish accepts any bait.</p></details></div>
+</main>
+<script>
+const CARDS={Ayu:[2,6,'B','S'],Bass:[2,6,'R','S'],Hera:[3,7,'G','M'],Magoi:[3,8,'G','M'],Biwa:[5,10,'R','L'],Namazu:[5,10,'B','L'],Ito:[6,12,'R','L'],King:[8,null,'*','L']};
+const CFG={KP:12,HP:20,BONUS:5,MAXR:200},NAMES=['risk','easy','score','compete','steal'];
+const LABEL={risk:'Risk taker',easy:'Easy first',score:'Score / Kingfish',compete:'Compete for spot',steal:'Stealer'};
+const DESC={risk:'Chases the highest-value cards, spends Power freely, never banks dice.',easy:'Takes the likeliest catch first (small fish), banks Power when odds are poor, avoids the Kingfish.',score:'Hunts large-back cards to find the Kingfish, banks to Power 4+, then goes all-in on it.',compete:'Always aims at the top card (the spot everyone wants) with all three baits stacked, and buys roll-off dice.',steal:'Patient: banks Power, takes known or likely catches, and only attacks the Kingfish when it can finish it.'};
+const PASS={risk:.05,easy:.40,score:.25,compete:.20,steal:.35},WANT={risk:1,easy:.80,score:.85,compete:.85,steal:.80},BUYLIM={risk:9,easy:1,score:2,compete:1,steal:1},KBUY={risk:9,easy:1,score:9,compete:2,steal:9},RO={risk:2,easy:0,score:1,compete:2,steal:1};
+const pw=c=>c==='King'?CFG.KP:CARDS[c][1],KV=()=>8+CFG.BONUS;
+const DM=[[1]],PM=new Map(),EM=new Map();
+function dist(n){while(DM.length<=n){const d=DM[DM.length-1],nd=Array(d.length+6).fill(0);d.forEach((p,s)=>{for(let f=1;f<=6;f++)nd[s+f]+=p/6});DM.push(nd)}return DM[n]}
+function pGt(n,T){const k=n*1000+T;if(PM.has(k))return PM.get(k);let r=0;dist(n).forEach((p,s)=>{if(s>T)r+=p});PM.set(k,r);return r}
+function expD(n,T){const k=n*1000+T;if(EM.has(k))return EM.get(k);let r=0;dist(n).forEach((p,s)=>{if(s>T)r+=(s-T)*p});EM.set(k,r);return r}
+const match=(t,c)=>t.length>0&&(c==='King'||t.includes(CARDS[c][2]));
+function combos(a,k){if(k===0)return[[]];const r=[];a.forEach((x,i)=>combos(a.slice(i+1),k-1).forEach(c=>r.push([x,...c])));return r}
+function mulberry(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function cands(ctx,pos){const c=ctx.pile[pos-1];if(ctx.known.has(c))return[c];const t=CARDS[c][3];return ctx.pile.filter(x=>!ctx.known.has(x)&&CARDS[x][3]===t)}
+function posEval(ctx,pos,k,buy){const me=ctx.me,cs=cands(ctx,pos),sup=[...new Set(me.baits)].sort();k=Math.max(1,Math.min(k,sup.length));
+ let best=null,bs=-1;combos(sup,k).forEach(col=>{const s=cs.filter(c=>match(col,c)).length;if(s>bs){bs=s;best=col}});
+ const a=Math.max(0,ctx.roll-pos),n=Math.min(7,a+buy);let ev=0,ps=0,nom=0;
+ cs.forEach(c=>{const T=pw(c)+(match(best,c)?0:1);let pc,v;if(c==='King'){pc=Math.min(1,expD(n,T)/ctx.hp);v=KV()*pc;nom+=KV()}else{pc=pGt(n,T);v=CARDS[c][0]*pc;nom+=CARDS[c][0]}ev+=v;ps+=pc});
+ const L=cs.length;return{ev:ev/L,ps:ps/L,nom:nom/L,pk:cs.includes('King')?1/L:0,colors:best,a}}
+function choose(n,ctx){const me=ctx.me,pile=ctx.pile,known=ctx.known;if(!me.baits.length||!pile.length)return null;
+ const poss=[];for(let i=1;i<=Math.min(6,pile.length);i++)poss.push(i);
+ const buy=n==='risk'?me.power-1:(me.power>=3?1:0),kpos=pile.includes('King')&&known.has('King')?pile.indexOf('King')+1:null;
+ const kfor=q=>{const c=pile[q-1];if(n==='score')return CARDS[c][3]==='L'&&!known.has(c)?2:1;return n==='compete'?3:1};
+ const ev={};poss.forEach(q=>ev[q]=posEval(ctx,q,kfor(q),buy));
+ const best=(f,arr=poss)=>arr.reduce((a,b)=>f(b)>f(a)?b:a);let ch;
+ if(n==='risk')ch=best(q=>ev[q].nom*.7+ev[q].ev*.3);
+ else if(n==='easy')ch=best(q=>ev[q].ps*10+ev[q].ev*.1);
+ else if(n==='score'){if(kpos&&kpos<=6){if(me.power>=4||pile.length===1)ch=kpos;else return null}else ch=best(q=>ev[q].ev+2.5*ev[q].pk)}
+ else if(n==='compete')ch=1;
+ else{const ok=q=>{if(pile[q-1]==='King'&&known.has('King')){const a=Math.max(0,ctx.roll-q),nn=Math.min(7,a+me.power-1);return pile.length===1||ctx.hp<=8||pGt(nn,CFG.KP+ctx.hp-1)>=.35}return true};
+  const pl=poss.filter(ok);ch=best(q=>ev[q].ev*(known.has(pile[q-1])?1.4:1),pl.length?pl:poss)}
+ if(ev[ch].ps<PASS[n]&&me.power<5)return null;
+ return{pos:ch,card:pile[ch-1],colors:ev[ch].colors.slice(0,kfor(ch))}}
+function dice(n,c,T,a,power){const mb=a<7?Math.max(0,Math.min(power-1,7-a)):0;if(c==='King')return Math.min(7,a+Math.min(mb,KBUY[n]));
+ const lim=Math.min(mb,BUYLIM[n]),want=WANT[n];for(let t=0;t<=a;t++)if(pGt(t,T)>=want)return t;for(let t=a+1;t<=a+lim;t++)if(pGt(t,T)>=want)return t;return n==='risk'?Math.min(7,a+lim):a+lim}
+function play(names,rnd,verbose){
+ const pl=names.map(n=>({n,power:3,baits:['R','B','G'],stuck:[],vp:0,fish:0})),d6=()=>1+Math.floor(rnd()*6);
+ const shuf=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+ const reg=shuf(['Ayu','Bass','Hera','Magoi','Biwa','Namazu','Ito']),deep=shuf([...reg.slice(4),'King']),pile=[...reg.slice(0,4),...deep];
+ const known=new Set(),log=[],L=(m,c)=>{if(verbose)log.push([m,c])};let hp=CFG.HP,first=Math.floor(rnd()*2),rounds=0,over=false,king=null,contests=0;const passes=[0,0];
+ const pay=(p,toks)=>toks.forEach(t=>{if(p.power>1){p.power--;p.baits.push(t)}else p.stuck.push(t)});
+ while(rounds<CFG.MAXR&&pile.length&&!over){rounds++;const order=[first,1-first];first=1-first;
+  pl.forEach(p=>{while(p.stuck.length&&p.power>1){p.power--;p.baits.push(p.stuck.pop())}});
+  const rolls=[d6(),d6()],plans=[null,null];
+  [0,1].forEach(i=>{plans[i]=choose(pl[i].n,{me:pl[i],pile,known,roll:rolls[i],hp})});
+  [0,1].forEach(i=>{const p=pl[i],ch=plans[i];
+   if(!ch){const b=Math.max(0,rolls[i]-1);p.power=Math.min(5,p.power+b);passes[i]++;plans[i]=null;L(`R${rounds} ${LABEL[p.n]}: rolls ${rolls[i]}, passes (banks ${b}, Power ${p.power})`);return}
+   ch.colors.forEach(t=>p.baits.splice(p.baits.indexOf(t),1));ch.tokens=ch.colors;ch.a=Math.max(0,rolls[i]-ch.pos);
+   L(`R${rounds} ${LABEL[p.n]}: rolls ${rolls[i]}, bait ${ch.tokens.join('')} on position ${ch.pos}`)});
+  const act=order.filter(i=>plans[i]);let att=act;
+  if(act.length===2&&plans[0].card===plans[1].card){contests++;const c=plans[0].card,m=[0,1].map(i=>match(plans[i].tokens,c));let w,how;
+   if(m[0]!==m[1]){w=m[0]?0:1;how='bait match'}else{const tot=[0,1].map(i=>{const ex=Math.max(0,Math.min(RO[pl[i].n],pl[i].power-1));pl[i].power-=ex;let s=0;for(let k=0;k<=ex;k++)s+=d6();return s});w=tot[0]===tot[1]?order[0]:(tot[0]>tot[1]?0:1);how=`roll-off ${tot[0]}-${tot[1]}`}
+   const lo=1-w,lp=pl[lo];lp.power=Math.min(5,lp.power+plans[lo].a);pay(lp,plans[lo].tokens);L(`   contest for ${c}: ${LABEL[pl[w].n]} wins by ${how}`,'c');att=[w]}
+  for(const i of att){const p=pl[i],pn=plans[i],c=pn.card,toks=pn.tokens,a=pn.a;if(!pile.includes(c)){p.baits.push(...toks);continue}
+   known.add(c);const T=pw(c)+(match(toks,c)?0:1),nt=dice(p.n,c,T,a,p.power);if(nt>a)p.power-=nt-a;else p.power=Math.min(5,p.power+a-nt);
+   let s=0;for(let k=0;k<nt;k++)s+=d6();const nm=LABEL[p.n];
+   if(c==='King'){const dmg=Math.max(0,s-T);if(dmg>0){hp-=dmg;p.baits.push(...toks);if(hp<=0){p.vp+=KV();king=i;over=true;L(`   ${nm} rolls ${nt} dice = ${s} vs ${T}: KINGFISH LANDED! (+${KV()})`,'k');break}L(`   ${nm} hits the Kingfish for ${dmg} (HP ${hp})`,'k')}else{pay(p,toks);L(`   ${nm} rolls ${nt} dice = ${s} vs ${T}: Kingfish shrugs it off`,'k')}pile.splice(pile.indexOf('King'),1);pile.push('King')}
+   else if(s>T){p.vp+=CARDS[c][0];p.fish++;pile.splice(pile.indexOf(c),1);p.baits.push(...toks);L(`   ${nm} rolls ${nt} dice = ${s} vs ${T}: lands ${c} (+${CARDS[c][0]})`,'w')}
+   else{pile.splice(pile.indexOf(c),1);pile.push(c);pay(p,toks);L(`   ${nm} rolls ${nt} dice = ${s} vs ${T}: ${c} flees`)}}}
+ const v=[pl[0].vp,pl[1].vp];let w=null;if(v[0]!==v[1])w=v[0]>v[1]?0:1;else if(king!==null)w=king;
+ return{w,vp:v,rounds,fish:[pl[0].fish,pl[1].fish],king,contests,passes,log}}
+function readCfg(){CFG.KP=+$('#kp').value;CFG.HP=+$('#hp').value;CFG.BONUS=+$('#bo').value}
+const $=s=>document.querySelector(s),tick=()=>new Promise(r=>setTimeout(r));
+function h2h(a,b,N,rnd){const o={w:0,va:0,vb:0,fa:0,fb:0,ka:0,kb:0,r:0,c:0,pa:0,pb:0};
+ for(let g=0;g<N;g++){const sw=g%2,nm=sw?[b,a]:[a,b],r=play(nm,rnd),ia=sw?1:0,ib=1-ia;
+  o.w+=r.w===null?.5:(r.w===ia?1:0);o.va+=r.vp[ia];o.vb+=r.vp[ib];o.fa+=r.fish[ia];o.fb+=r.fish[ib];o.ka+=r.king===ia;o.kb+=r.king===ib;o.r+=r.rounds;o.c+=r.contests;o.pa+=r.passes[ia];o.pb+=r.passes[ib]}return o}
+const f1=x=>x.toFixed(1);
+$('#go').onclick=async()=>{readCfg();const a=$('#a').value,b=$('#b').value,N=+$('#n').value,rnd=mulberry(+$('#seed').value);$('#go').disabled=true;await tick();
+ const o=h2h(a,b,N,rnd),wa=o.w/N*100;$('#h2h').hidden=false;
+ $('#h2hbody').innerHTML=`<b>${LABEL[a]}</b> vs <b>${LABEL[b]}</b> · ${N} games<div class="bar"><i style="width:${wa}%"></i></div><div style="display:flex;justify-content:space-between"><span>${LABEL[a]} ${f1(wa)}%</span><span>${f1(100-wa)}% ${LABEL[b]}</span></div>
+ <table><tr><th></th><th>${LABEL[a]}</th><th>${LABEL[b]}</th></tr><tr><td>Avg VP</td><td>${f1(o.va/N)}</td><td>${f1(o.vb/N)}</td></tr><tr><td>Avg fish caught</td><td>${f1(o.fa/N)}</td><td>${f1(o.fb/N)}</td></tr><tr><td>Lands the Kingfish</td><td>${f1(o.ka/N*100)}%</td><td>${f1(o.kb/N*100)}%</td></tr><tr><td>Passes per game</td><td>${f1(o.pa/N)}</td><td>${f1(o.pb/N)}</td></tr></table>
+ <div class="stat"><div>Avg rounds<b>${f1(o.r/N)}</b></div><div>Spot contests / game<b>${f1(o.c/N)}</b></div></div>`;$('#go').disabled=false};
+$('#tour').onclick=async()=>{readCfg();const N=Math.max(10,Math.round(+$('#n').value/2)),rnd=mulberry(+$('#seed').value);$('#tour').disabled=true;$('#tb').hidden=false;$('#tbody').textContent='Running…';
+ const M={},tot={};NAMES.forEach(n=>tot[n]=[0,0]);
+ for(let i=0;i<5;i++)for(let j=i+1;j<5;j++){const a=NAMES[i],b=NAMES[j];await tick();const o=h2h(a,b,N,rnd);M[a+b]=o.w/N;M[b+a]=1-o.w/N;tot[a][0]+=o.w;tot[a][1]+=N;tot[b][0]+=N-o.w;tot[b][1]+=N}
+ const dk=matchMedia('(prefers-color-scheme:dark)').matches,col=v=>`background:hsl(${v*120},55%,${dk?30:78}%)`;
+ let t='<table><tr><th>Row beats column</th>'+NAMES.map(n=>`<th>${LABEL[n]}</th>`).join('')+'<th>Overall</th></tr>';
+ NAMES.slice().sort((x,y)=>tot[y][0]/tot[y][1]-tot[x][0]/tot[x][1]).forEach(a=>{t+=`<tr><td><b>${LABEL[a]}</b></td>`+NAMES.map(b=>a===b?'<td>–</td>':`<td style="${col(M[a+b])}">${f1(M[a+b]*100)}%</td>`).join('')+`<td><b>${f1(tot[a][0]/tot[a][1]*100)}%</b></td></tr>`});
+ $('#tbody').innerHTML=t+`</table><p class="note">${N} games per pairing, seats alternated. Overall = average win rate against the four others.</p>`;$('#tour').disabled=false};
+$('#one').onclick=()=>{readCfg();const rnd=mulberry(Date.now()%1e9),r=play([$('#a').value,$('#b').value],rnd,true);$('#lg').hidden=false;
+ const A=LABEL[$('#a').value],B=LABEL[$('#b').value],s=r.w===null?'Draw':LABEL[[$('#a').value,$('#b').value][r.w]]+' wins';
+ $('#log').innerHTML=`<b>Seat 1: ${A} · Seat 2: ${B}</b>\n`+r.log.map(([m,c])=>`<span class="${c||''}">${m.replace(/</g,'&lt;')}</span>`).join('\n')+`\n<b>Final: ${r.vp[0]} – ${r.vp[1]} · ${s} · ${r.rounds} rounds</b>`};
+NAMES.forEach(n=>{['a','b'].forEach(id=>$('#'+id).add(new Option(LABEL[n],n)));$('#desc').insertAdjacentHTML('beforeend',`<li><b>${LABEL[n]}:</b> ${DESC[n]}</li>`)});$('#b').value='steal';
+</script></body></html>

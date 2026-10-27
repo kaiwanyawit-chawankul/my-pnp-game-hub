@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>9 Cards Lake Fishing - A4 Printable Card Sheet (Japan Theme)</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 10mm;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    body {
+      font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", MeiRyo, sans-serif;
+      background-color: #f1f5f9;
+      margin: 0;
+      padding: 0;
+      color: #0f172a;
+    }
+
+    .no-print-bar {
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    }
+
+    .btn-print {
+      background: #38bdf8;
+      color: #0f172a;
+      font-weight: bold;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .btn-print:hover {
+      background: #0284c7;
+      color: #fff;
+    }
+
+    /* A4 Page Container */
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      padding: 8mm;
+      margin: 10mm auto;
+      background: white;
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+      page-break-after: always;
+    }
+
+    .page-title {
+      font-size: 14px;
+      font-weight: bold;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6mm;
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 4px;
+    }
+
+    /* 3x3 Grid for 9 Cards */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 62mm);
+      grid-template-rows: repeat(3, 88mm);
+      gap: 3mm;
+      justify-content: center;
+    }
+
+    /* Single Card Base Frame */
+    .card {
+      width: 62mm;
+      height: 88mm;
+      border: 1.5px dashed #cbd5e1;
+      border-radius: 6mm;
+      position: relative;
+      overflow: hidden;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      padding: 3.5mm;
+    }
+
+    /* Card Front Styling */
+    .card-front {
+      border: 2px solid #1e293b;
+      height: 100%;
+      border-radius: 4.5mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2mm 2.5mm 1mm;
+    }
+
+    .card-title-en {
+      font-size: 9.5pt;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.1;
+    }
+
+    .card-title-ja {
+      font-size: 7.5pt;
+      color: #64748b;
+      font-weight: bold;
+    }
+
+    .vp-badge {
+      background: #f59e0b;
+      color: #ffffff;
+      font-weight: 900;
+      font-size: 10pt;
+      width: 7mm;
+      height: 7mm;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+      border: 1px solid #d97706;
+    }
+
+    .illustration-box {
+      flex: 1;
+      margin: 1.5mm 2.5mm;
+      border-radius: 3mm;
+      background: #e2e8f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      border: 1px solid #cbd5e1;
+      overflow: hidden;
+    }
+
+    .art-icon {
+      font-size: 24pt;
+      margin-bottom: 2px;
+    }
+
+    .bait-tag {
+      position: absolute;
+      bottom: 2mm;
+      left: 2mm;
+      padding: 1px 6px;
+      border-radius: 3mm;
+      font-size: 6.5pt;
+      font-weight: bold;
+      color: white;
+      text-transform: uppercase;
+    }
+
+    .bait-red { background: #ef4444; }
+    .bait-blue { background: #3b82f6; }
+    .bait-green { background: #22c55e; }
+    .bait-any { background: #8b5cf6; }
+
+    .power-badge {
+      position: absolute;
+      bottom: 1.5mm;
+      right: 2mm;
+      background: #0f172a;
+      color: #38bdf8;
+      font-weight: 900;
+      font-size: 8.5pt;
+      padding: 1px 5px;
+      border-radius: 2mm;
+    }
+
+    .card-body {
+      padding: 1.5mm 2.5mm 2.5mm;
+    }
+
+    .card-desc {
+      font-size: 6pt;
+      color: #334155;
+      line-height: 1.25;
+      height: 11mm;
+      overflow: hidden;
+    }
+
+    .card-type-tag {
+      font-size: 5.5pt;
+      font-weight: bold;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 1mm;
+    }
+
+    /* Card Back Styling */
+    .card-back {
+      border: 2px solid #0f172a;
+      height: 100%;
+      border-radius: 4.5mm;
+      background: #0f172a;
+      color: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 4mm 3mm;
+      text-align: center;
+      position: relative;
+    }
+
+    .back-pattern {
+      position: absolute;
+      inset: 2mm;
+      border: 1px solid #334155;
+      border-radius: 3mm;
+      pointer-events: none;
+    }
+
+    .back-header {
+      font-size: 7pt;
+      letter-spacing: 1.5px;
+      color: #38bdf8;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+
+    .back-icon {
+      font-size: 28pt;
+      margin: 2mm 0;
+    }
+
+    .size-label {
+      font-size: 6.5pt;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .size-value {
+      font-size: 13pt;
+      font-weight: 900;
+      color: #f8fafc;
+      text-transform: uppercase;
+      margin-top: 0.5mm;
+    }
+
+    .boss-card-front {
+      background: linear-gradient(180deg, #fef3c7 0%, #fde68a 100%);
+      border-color: #b45309;
+    }
+
+    .ref-card-front {
+      background: linear-gradient(180deg, #f0fdf4 0%, #dcfce7 100%);
+      border-color: #15803d;
+    }
+
+
+    /* ---------- Artwork cards (image-based) ---------- */
+    .card.has-art {
+      padding: 0;
+      border-radius: 3mm;
+      border-style: solid;
+      border-color: #cbd5e1;
+      border-width: 0.3mm;
+      background: #0f172a;
+    }
+
+    .card-art {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    .card-art img {
+      position: absolute;
+      max-width: none;
+      display: block;
+    }
+
+    /* Stat overlays on top of front artwork */
+    .art-vp {
+      position: absolute;
+      top: 5.5mm;
+      right: 5.5mm;
+      width: 8mm;
+      height: 8mm;
+      border-radius: 50%;
+      background: #f59e0b;
+      color: #fff;
+      border: 1px solid #b45309;
+      font-weight: 900;
+      font-size: 11pt;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.35);
+    }
+
+    .art-bait {
+      position: absolute;
+      left: 5.5mm;
+      bottom: 5.5mm;
+      padding: 1px 7px;
+      border-radius: 3mm;
+      font-size: 6.5pt;
+      font-weight: bold;
+      color: #fff;
+      text-transform: uppercase;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.35);
+    }
+
+    .art-power {
+      position: absolute;
+      right: 5.5mm;
+      bottom: 5.5mm;
+      background: rgba(15,23,42,0.92);
+      color: #38bdf8;
+      font-weight: 900;
+      font-size: 8.5pt;
+      padding: 1px 6px;
+      border-radius: 2mm;
+    }
+
+    /* Size-tier plaque on the card back (set SHOW_SIZE_ON_BACK=false in JS to hide) */
+    .back-size-plaque {
+      position: absolute;
+      left: 50%;
+      bottom: 6mm;
+      transform: translateX(-50%);
+      min-width: 24mm;
+      padding: 1mm 3mm;
+      text-align: center;
+      background: rgba(15,23,42,0.78);
+      border: 0.3mm solid #c9a961;
+      border-radius: 2mm;
+      color: #f8fafc;
+    }
+    .back-size-plaque .size-label { font-size: 5pt; color: #c9a961; }
+    .back-size-plaque .size-value { font-size: 9pt; margin-top: 0; }
+
+
+    /* ---------- Player guide card (card 9, both sides) ---------- */
+    .card.guide-card {
+      padding: 2mm;
+      border-radius: 3mm;
+      border: 0.3mm solid #cbd5e1;
+      background: #f4ecd8;
+    }
+    .gface {
+      flex: 1;
+      min-height: 0;
+      border: 0.35mm solid #b8963e;
+      border-radius: 2mm;
+      padding: 2mm 2.2mm 1.6mm;
+      display: flex;
+      flex-direction: column;
+      color: #1e293b;
+      font-size: 5.6pt;
+      line-height: 1.22;
+      background: linear-gradient(180deg, #faf4e4 0%, #f1e7cc 100%);
+    }
+    .g-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      border-bottom: 0.35mm solid #b8963e;
+      padding-bottom: 0.8mm;
+      margin-bottom: 0.8mm;
+      color: #0b2f4a;
+    }
+    .g-title b { font-size: 8pt; letter-spacing: 0.6px; font-weight: 900; }
+    .g-title .jp { font-size: 6pt; font-weight: bold; color: #8a6d1f; }
+    .g-sec {
+      font-size: 6.2pt;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      color: #0b2f4a;
+      margin: 1.3mm 0 0.5mm;
+      text-transform: uppercase;
+    }
+    .g-sec small {
+      font-size: 4.6pt;
+      font-weight: bold;
+      letter-spacing: 0;
+      color: #8a6d1f;
+      text-transform: none;
+      margin-left: 1mm;
+    }
+    .g-track { display: grid; gap: 0.5mm; }
+    .g-track.power { grid-template-columns: repeat(5, 1fr); }
+    .g-track.hp { grid-template-columns: repeat(11, 1fr); }
+    .g-cell {
+      border: 0.3mm solid #0b2f4a;
+      border-radius: 0.8mm;
+      background: rgba(255,255,255,0.65);
+      text-align: center;
+      font-weight: 800;
+      color: #0b2f4a;
+    }
+    .g-track.power .g-cell { height: 4.2mm; font-size: 7pt; line-height: 4mm; }
+    .g-prow { display: flex; align-items: center; gap: 1mm; margin-bottom: 0.6mm; }
+    .g-prow b { width: 4.5mm; font-size: 5.4pt; color: #0b2f4a; }
+    .g-prow .g-track { flex: 1; }
+    .g-track.hp .g-cell { height: 4mm; font-size: 5pt; line-height: 3.8mm; }
+    .g-cell.mark { background: #f59e0b; border-color: #b45309; color: #fff; }
+    .g-cell.mark2 { background: #38bdf8; border-color: #0369a1; color: #0f172a; }
+    .g-legend { font-size: 4.4pt; color: #64748b; margin-top: 0.4mm; }
+    .g-steps { list-style: none; margin: 0; padding: 0; counter-reset: s; }
+    .g-steps li {
+      counter-increment: s;
+      position: relative;
+      padding-left: 3.6mm;
+      margin-bottom: 0.9mm;
+    }
+    .g-steps li::before {
+      content: counter(s);
+      position: absolute;
+      left: 0; top: 0.1mm;
+      width: 2.6mm; height: 2.6mm;
+      border-radius: 50%;
+      background: #0b2f4a;
+      color: #f4ecd8;
+      font-size: 4.6pt;
+      font-weight: 900;
+      text-align: center;
+      line-height: 2.6mm;
+    }
+    .gface p { margin: 0 0 0.6mm; }
+    .gface b { color: #0b2f4a; }
+    .g-win { color: #15803d; font-weight: 900; }
+    .g-fail { color: #b91c1c; font-weight: 900; }
+    .g-eq {
+      background: #0b2f4a;
+      color: #f4ecd8;
+      border-radius: 1mm;
+      padding: 0.7mm 1.6mm;
+      font-weight: 800;
+      margin: 0.4mm 0 0.8mm;
+      text-align: center;
+    }
+    .g-foot {
+      margin-top: auto;
+      padding-top: 0.6mm;
+      border-top: 0.25mm solid #b8963e;
+      font-size: 4.4pt;
+      color: #8a6d1f;
+      display: flex;
+      justify-content: space-between;
+      font-weight: bold;
+    }
+
+    @media print {
+      .no-print-bar { display: none !important; }
+      body { background: white; }
+      .page {
+        margin: 0;
+        box-shadow: none;
+        padding: 5mm;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="no-print-bar">
+  <div>
+    <strong>9 Cards Lake Fishing</strong> — Printable A4 Card Deck (Japan Edition)
+  </div>
+  <button class="btn-print" onclick="window.print()">🖨️ Print to A4 (2 Pages)</button>
+</div>
+
+<!-- PAGE 1: FRONT FACES -->
+<div class="page">
+  <div class="page-title">
+    <span>Page 1 of 2 — Card Fronts</span>
+    <span>62mm × 88mm Cut Size</span>
+  </div>
+  <div class="card-grid" id="frontGrid"></div>
+</div>
+
+<!-- PAGE 2: BACK FACES -->
+<div class="page">
+  <div class="page-title">
+    <span>Page 2 of 2 — Card Backs (Aligned for Double-Sided Printing)</span>
+    <span>Lake Stack Size Indicators</span>
+  </div>
+  <div class="card-grid" id="backGrid"></div>
+</div>
+
+<script>
+// ---- Artwork (files sit next to cards.html) ----
+const IMG_NATURAL = { w: 896, h: 1200 };   // size of the generated PNGs
+
+// The generated PNGs include a paper/dark margin and a watermark outside the card
+// frame. These rectangles (in source pixels) are the part we actually show.
+const CROP_FRONT = { x: 89, y: 83, w: 717, h: 1035 };
+const CROP_BACK  = { x: 48, y: 48, w: 800, h: 1104 };
+
+// Card id -> front artwork. Cards without an entry use the emoji placeholder layout.
+const CARD_IMAGES = {
+  1: "raw/fish_ayu.webp",
+  2: "raw/fish_black_bass.webp",
+  3: "raw/fish_herabuna.webp",
+  4: "raw/fish_magoi.webp",
+  5: "raw/fish_biwamasu.webp",
+  6: "raw/fish_namazu.webp",
+  7: "raw/fish_ito.webp",
+  8: "raw/fish_biwako_oonamazu.webp"
+};
+
+// Card size tier -> back artwork. Only small/medium/large exist so far,
+// so Giant/Legendary/Tracker share a back; change here if you add more.
+const BACK_IMAGES = {
+  Small:     "card_back_small_shadow.webp",
+  Medium:    "card_back_medium_shadow.webp",
+  Large:     "card_back_large_shadow.webp",
+  Giant:     "card_back_large_shadow.webp",
+  Legendary: "card_back_large_shadow.webp"
+};
+const SHOW_SIZE_ON_BACK = true;
+
+// Card face is 62mm x 88mm. Returns inline CSS that "covers" the card with the crop window.
+function artImgStyle(crop) {
+  const W = 1, H = 88 / 62;                       // container in width units
+  const k = Math.max(W / crop.w, H / crop.h);     // cover scale
+  const left = -(crop.x + crop.w / 2) * k + W / 2;
+  const top  = -(crop.y + crop.h / 2) * k + H / 2;
+  return `width:${IMG_NATURAL.w * k / W * 100}%;height:${IMG_NATURAL.h * k / H * 100}%;` +
+         `left:${left / W * 100}%;top:${top / H * 100}%;`;
+}
+</script>
+
+<script>
+const CARDS_DATA = [
+  {
+    id: 1,
+    nameEn: "Ayu",
+    nameJa: "鮎 (Sweetfish)",
+    type: "Shallow Water",
+    bait: "Blue",
+    baitClass: "bait-blue",
+    vp: 2,
+    power: "6 PWR",
+    size: "Small",
+    icon: "🐟",
+    desc: "Famous stream & lake fish prized for its cucumber scent and gentle fight in shallow waters."
+  },
+  {
+    id: 2,
+    nameEn: "Black Bass",
+    nameJa: "ブラックバス",
+    type: "Shallow Water",
+    bait: "Red",
+    baitClass: "bait-red",
+    vp: 2,
+    power: "6 PWR",
+    size: "Small",
+    icon: "🎣",
+    desc: "Aggressive game fish introduced to Lake Ashi & Biwa; leaps wildly when hooked."
+  },
+  {
+    id: 3,
+    nameEn: "Herabuna",
+    nameJa: "ヘラブナ (Crucian Carp)",
+    type: "Shallow Water",
+    bait: "Green",
+    baitClass: "bait-green",
+    vp: 3,
+    power: "7 PWR",
+    size: "Medium",
+    icon: "🎏",
+    desc: "Centerpiece of traditional float fishing; requires scented dough bait and soft hands."
+  },
+  {
+    id: 4,
+    nameEn: "Magoi",
+    nameJa: "野鯉 (Wild Carp)",
+    type: "Deep Water",
+    bait: "Green",
+    baitClass: "bait-green",
+    vp: 3,
+    power: "8 PWR",
+    size: "Medium",
+    icon: "🐟",
+    desc: "Muscular native carp lurking in weed beds; tests line endurance with heavy runs."
+  },
+  {
+    id: 5,
+    nameEn: "Biwamasu",
+    nameJa: "ビワマス (Biwa Salmon)",
+    type: "Deep Water",
+    bait: "Red",
+    baitClass: "bait-red",
+    vp: 5,
+    power: "10 PWR",
+    size: "Large",
+    icon: "🍣",
+    desc: "Endemic salmon of Lake Biwa; striking game fish with brilliant pink flesh."
+  },
+  {
+    id: 6,
+    nameEn: "Namazu",
+    nameJa: "ナマズ (Japanese Catfish)",
+    type: "Deep Water",
+    bait: "Blue",
+    baitClass: "bait-blue",
+    vp: 5,
+    power: "10 PWR",
+    size: "Large",
+    icon: "🐉",
+    desc: "Iconic nocturnal predator in deep lake mud; central to Japanese earthquake folklore."
+  },
+  {
+    id: 7,
+    nameEn: "Ito",
+    nameJa: "イトウ (Japanese Huchen)",
+    type: "Deep Water",
+    bait: "Red",
+    baitClass: "bait-red",
+    vp: 6,
+    power: "12 PWR",
+    size: "Giant",
+    icon: "🦈",
+    desc: "Japan's rare 'Phantom Fish' from Hokkaido; apex monster with razor-sharp teeth."
+  },
+  {
+    id: 8,
+    nameEn: "Biwako-Oonamazu",
+    nameJa: "ビワコオオナマズ (Giant Catfish)",
+    type: "Boss (Kingfish)",
+    bait: "Match",
+    baitClass: "bait-any",
+    vp: 8,
+    power: "20 HP",
+    size: "Legendary",
+    isBoss: true,
+    icon: "👑",
+    desc: "Undisputed titan of Lake Biwa (1.2m+). Takes multi-round dice rolls to deplete 20 HP (+5 VP bonus)."
+  },
+  {
+    id: 9,
+    nameEn: "Angler Guide",
+    nameJa: "ルール参照 / パワートラッカー",
+    type: "Game Reference",
+    bait: "Rules",
+    baitClass: "bait-any",
+    vp: "REF",
+    power: "0-5 PWR",
+    size: "Tracker",
+    isRef: true,
+    icon: "📜",
+    desc: "Dice Formula: (Roll - Dist) + Power Spent = Dice Rolled. Matching Bait beats non-matching."
+  }
+];
+
+function guideFront() {
+  const power = [1,2,3,4,5].map(n => `<div class="g-cell ${n===3?'mark':''}">${n}</div>`).join('');
+  const prow = lbl => `<div class="g-prow"><b>${lbl}</b><div class="g-track power">${power}</div></div>`;
+  const hp = Array.from({length:21}, (_,n) =>
+    `<div class="g-cell ${n===15?'mark':''} ${n===20?'mark2':''}">${n}</div>`).join('');
+  return `
+  <div class="card guide-card"><div class="gface">
+    <div class="g-title"><b>ANGLER GUIDE</b><span class="jp">釣り人ガイド</span></div>
+
+    <div class="g-sec">Power Level <small>start on 3 · spend ↓ · bank ↑</small></div>
+    ${prow('P1')}
+    ${prow('P2')}
+
+    <div class="g-sec">Kingfish HP <small>start 15 (2 players: 20)</small></div>
+    <div class="g-track hp">${hp}</div>
+    <div class="g-legend"><span style="color:#b45309">■</span> 15 standard &nbsp; <span style="color:#0369a1">■</span> 20 two-player &nbsp; · Reach 0 = game over</div>
+
+    <div class="g-sec">Each round</div>
+    <ol class="g-steps">
+      <li><b>Roll &amp; Distance.</b> All roll 1 die together; pick a card 1–6 deep. Roll − Distance = power dice. Bank unused: +1 Power each (max 5).</li>
+      <li><b>Bait.</b> All place bait at the same time. Spread out, or stack up to 3.</li>
+      <li><b>Priority.</b> Matching bait wins the spot. Otherwise roll-off, highest total wins.</li>
+      <li><b>Catch.</b> One by one: reveal, roll, beat the target (back).</li>
+      <li><b>Kingfish.</b> If revealed, hits reduce its HP. Reach 0 to land it.</li>
+    </ol>
+    <div class="g-foot"><span>Shared pool: 7 dice</span><span>1 / 2</span></div>
+  </div></div>`;
+}
+
+function guideBack() {
+  return `
+  <div class="card guide-card"><div class="gface">
+    <div class="g-title"><b>CATCH &amp; SCORE</b><span class="jp">釣果</span></div>
+
+    <div class="g-sec">Catch math</div>
+    <div class="g-eq">Target = Fish Power (+1 if bait doesn't match)</div>
+    <p>Dice total must be <b>strictly more</b> than the target.</p>
+    <p><span class="g-win">HIT</span> Keep the card. Bait returns free.</p>
+    <p><span class="g-fail">MISS</span> Fish flees to the bottom of the Lake. Pay 1 Power to get your bait back.</p>
+
+    <div class="g-sec">Power &amp; bait</div>
+    <p>Spend 1 Power (token ↓) = +1 die on any roll-off or catch roll. Pulling bait back by choice also costs 1 Power.</p>
+
+    <div class="g-sec">Kingfish</div>
+    <p>Damage = Total − Target. Move the HP token down that much. At 0 HP you land it and the game ends. Otherwise it stays face up at the bottom.</p>
+
+    <div class="g-sec">Setup <small>the Lake</small></div>
+    <p>This card is the board. Each Power token on 3, Kingfish token on 15 (2P: 20). Each angler: 1 Red, 1 Blue, 1 Green bait + score token. Deal 4 of the 7 fish face-down (top). Shuffle the other 3 + Kingfish under them, so it is never in the first 4. Fan the pile: nearest = distance 1.</p>
+
+    <div class="g-sec">Scoring</div>
+    <p>Add the VP of your fish (Kingfish card included). 2-player: +5 VP to whoever lands the Kingfish. Most VP wins. Tie: Kingfish catcher wins.</p>
+    <div class="g-foot"><span>Master Angler wins</span><span>2 / 2</span></div>
+  </div></div>`;
+}
+
+function renderCards() {
+  const frontGrid = document.getElementById('frontGrid');
+  const backGrid = document.getElementById('backGrid');
+
+  CARDS_DATA.forEach(card => {
+    // ---------- FRONT ----------
+    let frontCardHtml;
+    const art = CARD_IMAGES[card.id];
+
+    if (card.isRef) {
+      frontCardHtml = guideFront();
+    } else if (art) {
+      // Full-bleed artwork card with stat overlays
+      frontCardHtml = `
+        <div class="card has-art">
+          <div class="card-art"><img src="${art}" style="${artImgStyle(CROP_FRONT)}" alt="${card.nameEn}"></div>
+          <div class="art-vp">${card.vp}</div>
+          <div class="art-bait ${card.baitClass}">${card.bait} Bait</div>
+          <div class="art-power">${card.power}</div>
+        </div>
+      `;
+    } else {
+      let customClass = "";
+      if (card.isBoss) customClass = "boss-card-front";
+      if (card.isRef) customClass = "ref-card-front";
+
+      frontCardHtml = `
+        <div class="card">
+          <div class="card-front ${customClass}">
+            <div class="card-header">
+              <div>
+                <div class="card-title-en">${card.nameEn}</div>
+                <div class="card-title-ja">${card.nameJa}</div>
+              </div>
+              <div class="vp-badge">${card.vp}</div>
+            </div>
+            <div class="illustration-box">
+              <div class="art-icon">${card.icon}</div>
+              <div class="bait-tag ${card.baitClass}">${card.bait} Bait</div>
+              <div class="power-badge">${card.power}</div>
+            </div>
+            <div class="card-body">
+              <div class="card-desc">${card.desc}</div>
+              <div class="card-type-tag">${card.type}</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+    frontGrid.insertAdjacentHTML('beforeend', frontCardHtml);
+
+    // Guide card: back side is part of the guide (no hidden size tier)
+    if (card.isRef) { backGrid.insertAdjacentHTML('beforeend', guideBack()); return; }
+
+    // ---------- BACK ----------
+    const plaque = SHOW_SIZE_ON_BACK ? `
+      <div class="back-size-plaque">
+        <div class="size-label">Hidden Size Tier</div>
+        <div class="size-value">${card.size}</div>
+      </div>` : '';
+
+    backGrid.insertAdjacentHTML('beforeend', `
+      <div class="card has-art">
+        <div class="card-art"><img src="${BACK_IMAGES[card.size] || BACK_IMAGES.Small}" style="${artImgStyle(CROP_BACK)}" alt=""></div>
+        ${plaque}
+      </div>
+    `);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", renderCards);
+</script>
+
+</body>
+</html>

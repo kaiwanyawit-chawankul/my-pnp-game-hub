@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>9 Cards Lake Fishing - Monte Carlo Strategy Simulator</title>
+  <style>
+    :root {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --accent: #38bdf8;
+      --accent-hover: #0284c7;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+      --success: #22c55e;
+      --danger: #ef4444;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      margin: 0;
+      padding: 24px;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    h1 {
+      color: var(--accent);
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+    }
+    p.subtitle {
+      color: var(--text-muted);
+      margin-top: 0;
+      margin-bottom: 24px;
+    }
+    .panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    .control-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    select, input {
+      width: 100%;
+      padding: 10px;
+      background: #0f172a;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-main);
+      font-size: 0.95rem;
+      box-sizing: border-box;
+    }
+    button {
+      background: var(--accent);
+      color: #0f172a;
+      font-weight: 700;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: var(--accent-hover);
+    }
+    .btn-secondary {
+      background: #334155;
+      color: var(--text-main);
+      margin-left: 10px;
+    }
+    .btn-secondary:hover {
+      background: #475569;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+    }
+    th, td {
+      padding: 10px 14px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+    }
+    th {
+      background: #0f172a;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    tr:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .stat-card {
+      display: inline-block;
+      background: #0f172a;
+      padding: 12px 18px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      margin-right: 12px;
+      margin-bottom: 12px;
+    }
+    .stat-value {
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: var(--accent);
+    }
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>🎣 9 Cards Lake Fishing - Strategy Simulator</h1>
+  <p class="subtitle">Monte Carlo playtest analysis for 2-player persona matchups with 2-tier card deck shuffling.</p>
+
+  <div class="panel">
+    <div class="control-grid">
+      <div>
+        <label for="p1Select">Player 1 Persona</label>
+        <select id="p1Select">
+          <option value="Catch All">Catch All (Low-Dist Sweeper)</option>
+          <option value="Kingfish Hunter" selected>Kingfish Hunter (Power Hoarder)</option>
+          <option value="Competitor">Competitor (Bait Contester)</option>
+          <option value="Risk Taker">Risk Taker (Far Thrower)</option>
+          <option value="Sniper">Sniper (Last-Hit Stealer)</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="p2Select">Player 2 Persona</label>
+        <select id="p2Select">
+          <option value="Catch All" selected>Catch All (Low-Dist Sweeper)</option>
+          <option value="Kingfish Hunter">Kingfish Hunter (Power Hoarder)</option>
+          <option value="Competitor">Competitor (Bait Contester)</option>
+          <option value="Risk Taker">Risk Taker (Far Thrower)</option>
+          <option value="Sniper">Sniper (Last-Hit Stealer)</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="kingfishHP">Kingfish HP</label>
+        <select id="kingfishHP">
+          <option value="15">15 HP (Standard Rulebook)</option>
+          <option value="20" selected>20 HP (2-Player Balanced)</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="numMatches">Simulated Matches</label>
+        <input type="number" id="numMatches" value="2000" min="100" max="50000" step="100">
+      </div>
+    </div>
+
+    <button onclick="runSingleMatchup()">Run Direct Matchup</button>
+    <button class="btn-secondary" onclick="runAllScenarios()">Run All 25 Scenarios Matrix</button>
+  </div>
+
+  <div id="resultsPanel" class="panel" style="display:none;">
+    <h2 style="margin-top:0; font-size:1.2rem;" id="resultsTitle">Matchup Results</h2>
+    <div id="quickStats"></div>
+    <div id="resultsTableContainer"></div>
+  </div>
+</div>
+
+<script>
+// Exact 7 Regular Fish Cards Definition
+const SHALLOW_FISH = [
+  { name: "Small Bass #1", powerReq: 6, vp: 2, color: "Blue" },
+  { name: "Small Bass #2", powerReq: 6, vp: 2, color: "Red" },
+  { name: "Green Carp #1", powerReq: 7, vp: 3, color: "Green" }
+];
+
+const DEEP_FISH = [
+  { name: "Green Carp #2", powerReq: 8, vp: 3, color: "Green" },
+  { name: "Red Snapper #1", powerReq: 10, vp: 5, color: "Red" },
+  { name: "Red Snapper #2", powerReq: 10, vp: 5, color: "Blue" },
+  { name: "Lake Pike", powerReq: 12, vp: 6, color: "Red" }
+];
+
+function shuffle(array) {
+  let arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function build2TierLakeDeck(kingfishHP) {
+  const kingfishCard = { name: "Kingfish", isKingfish: true, hp: kingfishHP, maxHp: kingfishHP, vp: 8, bonusVp: 5 };
+  const deepPool = shuffle([...DEEP_FISH, kingfishCard]);
+  const shallowPool = shuffle([...SHALLOW_FISH]);
+  return [...shallowPool, ...deepPool];
+}
+
+function simulateGame(p1Type, p2Type, maxKingfishHP) {
+  let deck = build2TierLakeDeck(maxKingfishHP);
+  let lakeSpots = [deck.shift(), deck.shift()];
+
+  let players = [
+    { type: p1Type, power: 3, vp: 0, bait: ["Red", "Blue", "Green"] },
+    { type: p2Type, power: 3, vp: 0, bait: ["Red", "Blue", "Green"] }
+  ];
+
+  let turn = 0;
+  let gameOver = false;
+
+  while (!gameOver && turn < 35) {
+    turn++;
+
+    for (let pIdx = 0; pIdx < 2; pIdx++) {
+      let p = players[pIdx];
+
+      let targetSpotIdx = -1;
+      let targetCard = null;
+      let spendPower = 0;
+
+      const kingfishIdx = lakeSpots.findIndex(c => c && c.isKingfish);
+
+      if (p.type === "Kingfish Hunter") {
+        if (kingfishIdx !== -1) {
+          targetSpotIdx = kingfishIdx;
+          targetCard = lakeSpots[kingfishIdx];
+          spendPower = p.power;
+        } else {
+          targetSpotIdx = 0;
+          targetCard = lakeSpots[0];
+          spendPower = 0;
+        }
+      } else if (p.type === "Catch All") {
+        targetSpotIdx = 0;
+        targetCard = lakeSpots[0];
+        spendPower = p.power > 2 ? 1 : 0;
+      } else if (p.type === "Risk Taker") {
+        targetSpotIdx = lakeSpots.length - 1;
+        targetCard = lakeSpots[targetSpotIdx];
+        spendPower = Math.min(p.power, 2);
+      } else if (p.type === "Sniper") {
+        if (kingfishIdx !== -1 && lakeSpots[kingfishIdx].hp <= maxKingfishHP * 0.5) {
+          targetSpotIdx = kingfishIdx;
+          targetCard = lakeSpots[kingfishIdx];
+          spendPower = p.power;
+        } else {
+          targetSpotIdx = 0;
+          targetCard = lakeSpots[0];
+          spendPower = 0;
+        }
+      } else { // Competitor
+        targetSpotIdx = 0;
+        targetCard = lakeSpots[0];
+        spendPower = p.power > 1 ? 1 : 0;
+      }
+
+      if (!targetCard) continue;
+
+      let dist = targetSpotIdx + 1;
+      let baseDie = Math.floor(Math.random() * 6) + 1;
+      let numDice = Math.max(1, baseDie - dist + spendPower);
+      p.power -= spendPower;
+
+      let rollTotal = 0;
+      for (let d = 0; d < numDice; d++) {
+        rollTotal += Math.floor(Math.random() * 6) + 1;
+      }
+
+      // Action Resolution
+      if (targetCard.isKingfish) {
+        targetCard.hp -= rollTotal;
+        if (targetCard.hp <= 0) {
+          p.vp += targetCard.vp + targetCard.bonusVp;
+          gameOver = true;
+          break;
+        }
+      } else if (rollTotal >= targetCard.powerReq) {
+        p.vp += targetCard.vp;
+        p.power = Math.min(5, p.power + 1);
+        lakeSpots.splice(targetSpotIdx, 1);
+      } else {
+        // Failed catch: Fish flees to bottom of deck
+        let fledCard = lakeSpots.splice(targetSpotIdx, 1);
+        deck.push(fledCard[0]);
+      }
+
+      // Refill Lake
+      while (lakeSpots.length < 2 && deck.length > 0) {
+        let card = deck.shift();
+        if (card) lakeSpots.push(card);
+      }
+
+      if (lakeSpots.length === 0) {
+        gameOver = true;
+        break;
+      }
+    }
+  }
+
+  let winner = 0;
+  if (players[0].vp > players[1].vp) winner = 1;
+  else if (players[1].vp > players[0].vp) winner = 2;
+
+  return {
+    p1Vp: players[0].vp,
+    p2Vp: players[1].vp,
+    turns: turn,
+    winner: winner
+  };
+}
+
+function runSingleMatchup() {
+  const p1 = document.getElementById("p1Select").value;
+  const p2 = document.getElementById("p2Select").value;
+  const hp = parseInt(document.getElementById("kingfishHP").value);
+  const total = parseInt(document.getElementById("numMatches").value);
+
+  let p1Wins = 0, p2Wins = 0, draws = 0;
+  let p1VpSum = 0, p2VpSum = 0, turnsSum = 0;
+
+  for (let i = 0; i < total; i++) {
+    let res = simulateGame(p1, p2, hp);
+    if (res.winner === 1) p1Wins++;
+    else if (res.winner === 2) p2Wins++;
+    else draws++;
+
+    p1VpSum += res.p1Vp;
+    p2VpSum += res.p2Vp;
+    turnsSum += res.turns;
+  }
+
+  document.getElementById("resultsTitle").innerText = `2-Tier Setup Matchup: ${p1} vs ${p2}`;
+  document.getElementById("quickStats").innerHTML = `
+    <div class="stat-card"><div class="stat-value">${((p1Wins / total) * 100).toFixed(1)}%</div><div class="stat-label">P1 (${p1}) Win Rate</div></div>
+    <div class="stat-card"><div class="stat-value">${((p2Wins / total) * 100).toFixed(1)}%</div><div class="stat-label">P2 (${p2}) Win Rate</div></div>
+    <div class="stat-card"><div class="stat-value">${(p1VpSum / total).toFixed(1)} vs ${(p2VpSum / total).toFixed(1)}</div><div class="stat-label">Avg VP (P1 vs P2)</div></div>
+    <div class="stat-card"><div class="stat-value">${(turnsSum / total).toFixed(1)}</div><div class="stat-label">Avg Turn Duration</div></div>
+  `;
+
+  document.getElementById("resultsTableContainer").innerHTML = "";
+  document.getElementById("resultsPanel").style.display = "block";
+}
+
+function runAllScenarios() {
+  const personas = ["Catch All", "Kingfish Hunter", "Competitor", "Risk Taker", "Sniper"];
+  const hp = parseInt(document.getElementById("kingfishHP").value);
+  const total = 500;
+
+  let html = '<table><thead><tr><th>P1 (Row) \\ P2 (Col)</th>';
+  personas.forEach(p => {
+    html += '<th>' + p + '</th>';
+  });
+  html += '</tr></thead><tbody>';
+
+  personas.forEach(p1 => {
+    html += '<tr><td><strong>' + p1 + '</strong></td>';
+    personas.forEach(p2 => {
+      let p1Wins = 0;
+      for (let i = 0; i < total; i++) {
+        let res = simulateGame(p1, p2, hp);
+        if (res.winner === 1) p1Wins++;
+      }
+      let wr = ((p1Wins / total) * 100).toFixed(0);
+      let color = wr > 60 ? '#22c55e' : (wr < 40 ? '#ef4444' : '#38bdf8');
+      html += '<td style="color:' + color + '; font-weight:bold;">' + wr + '%</td>';
+    });
+    html += '</tr>';
+  });
+
+  html += '</tbody></table>';
+
+  document.getElementById("resultsTitle").innerText = "25-Scenario Win Rate Matrix (2-Tier Deck Setup)";
+  document.getElementById("quickStats").innerHTML = "<p style='color:var(--text-muted); font-size:0.9rem;'>Simulated 500 matches per cell under 8-card 2-tier shuffle setup rules.</p>";
+  document.getElementById("resultsTableContainer").innerHTML = html;
+  document.getElementById("resultsPanel").style.display = "block";
+}
+</script>
+
+</body>
+</html>
