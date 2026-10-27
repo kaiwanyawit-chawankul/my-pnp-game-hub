@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outpost 13: Loop Protocol - Phase 1 PnP & Game Simulator</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@500;700;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'outpost-black': '#040609',
+                        'outpost-dark': '#0a0e17',
+                        'outpost-panel': '#111827',
+                        'outpost-red': '#ff2247',
+                        'outpost-green': '#10b981',
+                        'outpost-bio': '#22c55e',
+                        'outpost-amber': '#f59e0b',
+                        'outpost-cyan': '#00d2ff',
+                        'outpost-violet': '#a855f7',
+                        'hud-blue': '#00e5ff',
+                    },
+                    fontFamily: {
+                        mono: ['"Share Tech Mono"', 'monospace'],
+                        title: ['"Orbitron"', 'sans-serif'],
+                        sans: ['"Rajdhani"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #040609;
+            color: #e2e8f0;
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .scanline-overlay {
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.04), rgba(0, 255, 0, 0.01), rgba(0, 210, 255, 0.04));
+            background-size: 100% 3px, 6px 100%;
+            pointer-events: none;
+        }
+
+        .crt-glow-red { text-shadow: 0 0 8px rgba(255, 34, 71, 0.7); }
+        .crt-glow-cyan { text-shadow: 0 0 8px rgba(0, 210, 255, 0.7); }
+        .crt-glow-violet { text-shadow: 0 0 8px rgba(168, 85, 247, 0.7); }
+        .crt-glow-bio { text-shadow: 0 0 8px rgba(34, 197, 94, 0.7); }
+
+        .system-hud-border {
+            border: 1px solid rgba(0, 229, 255, 0.4);
+            box-shadow: inset 0 0 12px rgba(0, 229, 255, 0.15), 0 0 8px rgba(0, 229, 255, 0.2);
+            background: linear-gradient(135deg, rgba(0, 229, 255, 0.05) 0%, rgba(10, 14, 23, 0.95) 100%);
+        }
+
+        .card-frame {
+            border: 1px solid #1e293b;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.95), 0 4px 15px rgba(0,0,0,0.8);
+            position: relative;
+            background: #0d131f;
+        }
+
+        .card-frame::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            pointer-events: none;
+        }
+
+        @media print {
+            body { background: white !important; color: black !important; }
+            .no-print { display: none !important; }
+            .print-sheet {
+                page-break-after: always;
+                box-shadow: none !important;
+                border: 1px solid #000 !important;
+                background: white !important;
+                color: black !important;
+            }
+            .card-frame {
+                border: 1px solid #000 !important;
+                background: white !important;
+                color: black !important;
+                box-shadow: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col bg-outpost-black text-slate-200 selection:bg-outpost-red selection:text-white">
+
+    <!-- Scanline CRT Effect -->
+    <div class="fixed inset-0 scanline-overlay z-50 pointer-events-none opacity-40"></div>
+
+    <!-- Top Navigation Bar -->
+    <header class="no-print border-b border-slate-800 bg-outpost-dark/95 backdrop-blur sticky top-0 z-40 px-4 py-3">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded bg-outpost-red/20 border border-outpost-red flex items-center justify-center text-outpost-red font-title font-bold text-xl crt-glow-red">
+                    13
+                </div>
+                <div>
+                    <h1 class="font-title font-black text-xl tracking-wider text-slate-100 flex items-center gap-2">
+                        OUTPOST 13 <span class="text-outpost-cyan text-xs px-2 py-0.5 rounded bg-outpost-cyan/10 border border-outpost-cyan/40 font-mono uppercase">Phase 1: Pre-Breach</span>
+                    </h1>
+                    <p class="text-xs text-slate-400 font-mono">RIMLANDS BUNKER • 4.2Hz BIOLOGICAL FREQUENCY • BLOOD MOON ECLIPSE</p>
+                </div>
+            </div>
+
+            <!-- Navigation Tabs -->
+            <nav class="flex items-center bg-outpost-panel p-1 rounded-lg border border-slate-700/60 font-title text-xs tracking-wider">
+                <button onclick="switchTab('sim')" id="tab-sim" class="tab-btn px-4 py-2 rounded text-slate-200 bg-outpost-red font-bold transition">
+                    <i class="fa-solid fa-gamepad mr-1.5"></i> DIGITAL SIMULATOR
+                </button>
+                <button onclick="switchTab('pnp')" id="tab-pnp" class="tab-btn px-4 py-2 rounded text-slate-400 hover:text-slate-200 transition">
+                    <i class="fa-solid fa-print mr-1.5"></i> PRINT & PLAY CARDS (9)
+                </button>
+                <button onclick="switchTab('rules')" id="tab-rules" class="tab-btn px-4 py-2 rounded text-slate-400 hover:text-slate-200 transition">
+                    <i class="fa-solid fa-book-skull mr-1.5"></i> PHASE 1 RULEBOOK
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 md:p-6 relative z-10">
+
+        <!-- ========================================== -->
+        <!-- TAB 1: SOLO DIGITAL GAME ENGINE           -->
+        <!-- ========================================== -->
+        <section id="sec-sim" class="tab-content space-y-6">
+            
+            <!-- System Status Header -->
+            <div class="bg-outpost-dark border border-slate-800 rounded-xl p-4 shadow-2xl flex flex-wrap items-center justify-between gap-4">
+                <div class="flex items-center space-x-6">
+                    <div>
+                        <span class="text-[10px] font-mono text-slate-400 uppercase tracking-widest block">TEMPORAL LINE</span>
+                        <span id="sim-loop-display" class="font-title text-xl font-bold text-outpost-red crt-glow-red">LOOP 1 (3 MIN PRE-BREACH)</span>
+                    </div>
+                    <div class="h-8 w-px bg-slate-800"></div>
+                    <div>
+                        <span class="text-[10px] font-mono text-slate-400 uppercase tracking-widest block">BLOOD MOON THREAT</span>
+                        <div class="flex items-center space-x-2">
+                            <span id="sim-threat-val" class="font-title text-xl font-bold text-outpost-amber">1 / 10</span>
+                            <div class="w-20 bg-slate-900 rounded-full h-2 overflow-hidden border border-slate-700">
+                                <div id="sim-threat-bar" class="bg-outpost-amber h-full transition-all duration-300" style="width: 10%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="h-8 w-px bg-slate-800"></div>
+                    <div>
+                        <span class="text-[10px] font-mono text-slate-400 uppercase tracking-widest block">4.2Hz BIO-TELEMETRY</span>
+                        <span id="sim-biomass-val" class="font-title text-lg font-bold text-outpost-bio crt-glow-bio">LEVEL 0 (NORMAL)</span>
+                    </div>
+                    <div class="h-8 w-px bg-slate-800"></div>
+                    <div>
+                        <span class="text-[10px] font-mono text-slate-400 uppercase tracking-widest block">SECTOR 4 DEFENSE</span>
+                        <span id="sim-obj-val" class="font-title text-lg font-bold text-outpost-cyan crt-glow-cyan">0 / 3 DIRECTIVES</span>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-3">
+                    <button id="btn-next-phase" onclick="advancePhase()" class="px-5 py-2.5 bg-outpost-red hover:bg-red-600 text-white font-title font-bold text-xs tracking-wider rounded border border-red-400/40 shadow-lg transition flex items-center gap-2">
+                        <span>EXECUTE PHASE DIRECTIVES</span> <i class="fa-solid fa-forward"></i>
+                    </button>
+                    <button onclick="resetGame()" class="px-3 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono text-xs rounded border border-slate-700" title="Reset Game">
+                        <i class="fa-solid fa-rotate-left"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Current Phase Banner -->
+            <div id="sim-phase-banner" class="bg-outpost-panel border-l-4 border-outpost-cyan p-3 rounded text-sm font-mono flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <span class="bg-outpost-cyan/20 text-outpost-cyan px-2 py-0.5 rounded font-bold uppercase text-xs">WORKER ALLOCATION</span>
+                    <span id="sim-phase-desc" class="text-slate-200">Deploy Vance, Miller, Chen, or Aris to locations around Outpost 13.</span>
+                </div>
+                <div id="sim-log-last" class="text-xs text-slate-400 italic">4.2Hz biological frequency pulsating from Sector 4 Gate.</div>
+            </div>
+
+            <!-- Tactical HUD Special Abilities Bar -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-3 font-mono text-xs">
+                
+                <!-- Vance Ability -->
+                <button onclick="triggerVanceAbility()" class="system-hud-border p-2.5 rounded-lg text-left hover:bg-hud-blue/10 transition">
+                    <div class="flex justify-between items-center text-hud-blue font-bold mb-1">
+                        <span>SGT VANCE</span>
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <span class="text-[10px] text-slate-300 block">OVERTIME SURGE: Super speed & zero recoil (+2 on next hazard roll)</span>
+                </button>
+
+                <!-- Miller Ability -->
+                <button onclick="triggerMillerForesight()" class="bg-outpost-panel border border-red-800/80 p-2.5 rounded-lg text-left hover:bg-red-950/40 transition">
+                    <div class="flex justify-between items-center text-outpost-red font-bold mb-1">
+                        <span>PVT MILLER</span>
+                        <i class="fa-solid fa-eye"></i>
+                    </div>
+                    <span class="text-[10px] text-slate-300 block">PROPHETIC SIGHT: Preview next location hazard outcome</span>
+                </button>
+
+                <!-- Chen Ability -->
+                <button onclick="triggerChenLuck()" class="bg-outpost-panel border border-emerald-800/80 p-2.5 rounded-lg text-left hover:bg-emerald-950/40 transition">
+                    <div class="flex justify-between items-center text-outpost-bio font-bold mb-1">
+                        <span>ROOKIE CHEN</span>
+                        <i class="fa-solid fa-dice"></i>
+                    </div>
+                    <span class="text-[10px] text-slate-300 block">4.2Hz LUCK REROLL: Reroll any failed hazard or mission dice test</span>
+                </button>
+
+                <!-- Aris Ability -->
+                <button onclick="triggerArisSupport()" class="bg-outpost-panel border border-amber-800/80 p-2.5 rounded-lg text-left hover:bg-amber-950/40 transition">
+                    <div class="flex justify-between items-center text-outpost-amber font-bold mb-1">
+                        <span>PVT ARIS</span>
+                        <i class="fa-solid fa-tape"></i>
+                    </div>
+                    <span class="text-[10px] text-slate-300 block">RECORD KEEPING: Conserve 1 supply & record field directive</span>
+                </button>
+
+            </div>
+
+            <!-- Main Locations Board (6 Locations) -->
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                
+                <div class="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    
+                    <!-- Loc 1: Rimlands Perimeter -->
+                    <div class="card-frame rounded-xl p-4 flex flex-col justify-between border-slate-800 relative hover:border-slate-700 transition">
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-xs font-mono text-outpost-cyan font-bold">LOC 01</span>
+                                <span class="text-xs font-mono bg-amber-950/80 border border-amber-800 text-outpost-amber px-1.5 py-0.5 rounded">Risk 3+</span>
+                            </div>
+                            <h3 class="font-title font-bold text-base text-slate-100 mb-1 flex items-center gap-2">
+                                <i class="fa-solid fa-shield-halved text-outpost-amber"></i> Rimlands Perimeter
+                            </h3>
+                            <p class="text-xs text-slate-400 mb-2 font-sans">Razor Wire & Ash-choked Ridge</p>
+                            <div class="bg-slate-950/80 p-2 rounded border border-slate-800/80 text-xs font-mono space-y-1">
+                                <p class="text-slate-300"><span class="text-outpost-green font-bold">Mission:</span> Check Deadbolt Click Counts (x3)</p>
+                                <p class="text-slate-400"><span class="text-outpost-red font-bold">Hazard:</span> Screaming Stalker Ambush (1 Wound)</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-800/80">
+                            <span class="text-[10px] font-mono text-slate-500 uppercase tracking-widest block mb-1">Assigned Operative:</span>
+                            <div id="slot-loc-1" onclick="assignSelectedTo('loc-1')" class="min-h-[42px] bg-outpost-panel/60 border border-dashed border-slate-700 rounded-lg p-1 flex items-center justify-center cursor-pointer hover:border-outpost-cyan transition">
+                                <span class="text-xs text-slate-500 font-mono text-center">Assign Operative Here</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Loc 2: Central Comms Desk -->
+                    <div class="card-frame rounded-xl p-4 flex flex-col justify-between border-slate-800 relative hover:border-slate-700 transition">
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-xs font-mono text-outpost-cyan font-bold">LOC 02</span>
+                                <span class="text-xs font-mono bg-emerald-950/80 border border-emerald-800 text-outpost-green px-1.5 py-0.5 rounded">Risk 2+</span>
+                            </div>
+                            <h3 class="font-title font-bold text-base text-slate-100 mb-1 flex items-center gap-2">
+                                <i class="fa-solid fa-tower-cell text-outpost-cyan"></i> Central Comms Desk
+                            </h3>
+                            <p class="text-xs text-slate-400 mb-2 font-sans">Radio Desk & Bio-Signal Antenna</p>
+                            <div class="bg-slate-950/80 p-2 rounded border border-slate-800/80 text-xs font-mono space-y-1">
+                                <p class="text-slate-300"><span class="text-outpost-green font-bold">Mission:</span> Intercept 4.2Hz Biological Pulse</p>
+                                <p class="text-slate-400"><span class="text-outpost-red font-bold">Hazard:</span> Psychic Feedback Migraine (+1 Threat)</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-800/80">
+                            <span class="text-[10px] font-mono text-slate-500 uppercase tracking-widest block mb-1">Assigned Operative:</span>
+                            <div id="slot-loc-2" onclick="assignSelectedTo('loc-2')" class="min-h-[42px] bg-outpost-panel/60 border border-dashed border-slate-700 rounded-lg p-1 flex items-center justify-center cursor-pointer hover:border-outpost-cyan transition">
+                                <span class="text-xs text-slate-500 font-mono text-center">Assign Operative Here</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Loc 3: Armory & Barricade -->
+                    <div class="card-frame rounded-xl p-4 flex flex-col justify-between border-slate-800 relative hover:border-slate-700 transition">
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-xs font-mono text-outpost-cyan font-bold">LOC 03</span>
+                                <span class="text-xs font-mono bg-amber-950/80 border border-amber-800 text-outpost-amber px-1.5 py-0.5 rounded">Risk 3+</span>
+                            </div>
+                            <h3 class="font-title font-bold text-base text-slate-100 mb-1 flex items-center gap-2">
+                                <i class="fa-solid fa-boxes-packing text-outpost-amber"></i> Armory & Barricade
+                            </h3>
+                            <p class="text-xs text-slate-400 mb-2 font-sans">Ammunition & Kevlar Stash</p>
+                            <div class="bg-slate-950/80 p-2 rounded border border-slate-800/80 text-xs font-mono space-y-1">
+                                <p class="text-slate-300"><span class="text-outpost-green font-bold">Mission:</span> Requisition Ammo & Reinforce Door</p>
+                                <p class="text-slate-400"><span class="text-outpost-red font-bold">Hazard:</span> Weapon Recoil Failure / Jam</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-800/80">
+                            <span class="text-[10px] font-mono text-slate-500 uppercase tracking-widest block mb-1">Assigned Operative:</span>
+                            <div id="slot-loc-3" onclick="assignSelectedTo('loc-3')" class="min-h-[42px] bg-outpost-panel/60 border border-dashed border-slate-700 rounded-lg p-1 flex items-center justify-center cursor-pointer hover:border-outpost-cyan transition">
+                                <span class="text-xs text-slate-500 font-mono text-center">Assign Operative Here</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Loc 4: Sub-Basement Drainage -->
+                    <div class="card-frame rounded-xl p-4 flex flex-col justify-between border-slate-800 relative hover:border-slate-700 transition">
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-xs font-mono text-outpost-cyan font-bold">LOC 04</span>
+                                <span class="text-xs font-mono bg-red-950/80 border border-red-800 text-outpost-red px-1.5 py-0.5 rounded">Risk 4+</span>
+                            </div>
+                            <h3 class="font-title font-bold text-base text-slate-100 mb-1 flex items-center gap-2">
+                                <i class="fa-solid fa-biohazard text-outpost-bio"></i> Sub-Basement Drainage
+                            </h3>
+                            <p class="text-xs text-slate-400 mb-2 font-sans">Black Arterial Vines & Drainage Vault</p>
+                            <div class="bg-slate-950/80 p-2 rounded border border-slate-800/80 text-xs font-mono space-y-1">
+                                <p class="text-slate-300"><span class="text-outpost-green font-bold">Mission:</span> Sever Vines & Equalize Vacuum</p>
+                                <p class="text-slate-400"><span class="text-outpost-red font-bold">Hazard:</span> Crawler Surge (+2 Threat Level)</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-800/80">
+                            <span class="text-[10px] font-mono text-slate-500 uppercase tracking-widest block mb-1">Assigned Operative:</span>
+                            <div id="slot-loc-4" onclick="assignSelectedTo('loc-4')" class="min-h-[42px] bg-outpost-panel/60 border border-dashed border-slate-700 rounded-lg p-1 flex items-center justify-center cursor-pointer hover:border-outpost-cyan transition">
+                                <span class="text-xs text-slate-500 font-mono text-center">Assign Operative Here</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Loc 5: Medical & Decontamination -->
+                    <div class="card-frame rounded-xl p-4 flex flex-col justify-between border-slate-800 relative hover:border-slate-700 transition">
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-xs font-mono text-outpost-cyan font-bold">LOC 05</span>
+                                <span class="text-xs font-mono bg-emerald-950/80 border border-emerald-800 text-outpost-green px-1.5 py-0.5 rounded">SAFE ZONE</span>
+                            </div>
+                            <h3 class="font-title font-bold text-base text-slate-100 mb-1 flex items-center gap-2">
+                                <i class="fa-solid fa-notes-medical text-red-500"></i> Medical & Decon
+                            </h3>
+                            <p class="text-xs text-slate-400 mb-2 font-sans">Visor Verification & Anti-Contamination</p>
+                            <div class="bg-slate-950/80 p-2 rounded border border-slate-800/80 text-xs font-mono space-y-1">
+                                <p class="text-slate-300"><span class="text-outpost-green font-bold">Mission:</span> Treat Wounds & Check Visor</p>
+                                <p class="text-slate-400"><span class="text-outpost-red font-bold">Hazard:</span> Neurological Spasm (on roll of 1)</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-800/80">
+                            <span class="text-[10px] font-mono text-slate-500 uppercase tracking-widest block mb-1">Assigned Operative:</span>
+                            <div id="slot-loc-5" onclick="assignSelectedTo('loc-5')" class="min-h-[42px] bg-outpost-panel/60 border border-dashed border-slate-700 rounded-lg p-1 flex items-center justify-center cursor-pointer hover:border-outpost-cyan transition">
+                                <span class="text-xs text-slate-500 font-mono text-center">Assign Operative Here</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Loc 6: Sector 4 Gate -->
+                    <div class="card-frame rounded-xl p-4 flex flex-col justify-between border-slate-800 relative hover:border-slate-700 transition">
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-xs font-mono text-outpost-cyan font-bold">LOC 06</span>
+                                <span class="text-xs font-mono bg-red-950/80 border border-red-800 text-outpost-red px-1.5 py-0.5 rounded">Risk 5+</span>
+                            </div>
+                            <h3 class="font-title font-bold text-base text-slate-100 mb-1 flex items-center gap-2">
+                                <i class="fa-solid fa-door-closed text-outpost-red"></i> Sector 4 Gate
+                            </h3>
+                            <p class="text-xs text-slate-400 mb-2 font-sans">Breach Point & Primary Hive Barrier</p>
+                            <div class="bg-slate-950/80 p-2 rounded border border-slate-800/80 text-xs font-mono space-y-1">
+                                <p class="text-slate-300"><span class="text-outpost-green font-bold">Mission:</span> Secure Breach & Lock Primary Gate</p>
+                                <p class="text-slate-400"><span class="text-outpost-red font-bold">Hazard:</span> Catastrophic Breach Attack (2 Wounds)</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-800/80">
+                            <span class="text-[10px] font-mono text-slate-500 uppercase tracking-widest block mb-1">Assigned Operative:</span>
+                            <div id="slot-loc-6" onclick="assignSelectedTo('loc-6')" class="min-h-[42px] bg-outpost-panel/60 border border-dashed border-slate-700 rounded-lg p-1 flex items-center justify-center cursor-pointer hover:border-outpost-cyan transition">
+                                <span class="text-xs text-slate-500 font-mono text-center">Assign Operative Here</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Right Side Dossier & Logs -->
+                <div class="space-y-4">
+                    
+                    <!-- Characters Roster Card -->
+                    <div class="card-frame rounded-xl p-4 border-slate-800">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-3">
+                            <h3 class="font-title font-bold text-slate-100 flex items-center gap-2 text-xs uppercase tracking-wider">
+                                <i class="fa-solid fa-users text-outpost-cyan"></i> OPERATIVE SQUAD DOSSIERS
+                            </h3>
+                        </div>
+
+                        <!-- Character Selectors -->
+                        <div class="space-y-2" id="character-roster-list">
+                            
+                            <!-- Vance -->
+                            <div id="char-card-vance" onclick="selectChar('vance')" class="p-2.5 rounded-lg bg-outpost-panel border border-slate-700/70 hover:border-hud-blue cursor-pointer transition">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-8 h-8 rounded bg-cyan-950 border border-hud-blue flex items-center justify-center font-bold font-title text-hud-blue text-xs">
+                                            VAN
+                                        </div>
+                                        <div>
+                                            <h4 class="font-title font-bold text-xs text-slate-100">Sgt. Vance</h4>
+                                            <p class="text-[10px] text-hud-blue font-mono">System HUD • Super Speed/Reflexes</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div id="health-vance" class="text-xs font-mono font-bold text-emerald-400">HP: 2/2</div>
+                                        <span id="status-vance" class="text-[9px] uppercase font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-400">UNASSIGNED</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Miller -->
+                            <div id="char-card-miller" onclick="selectChar('miller')" class="p-2.5 rounded-lg bg-outpost-panel border border-slate-700/70 hover:border-outpost-red cursor-pointer transition">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-8 h-8 rounded bg-red-950 border border-outpost-red flex items-center justify-center font-bold font-title text-outpost-red text-xs">
+                                            MIL
+                                        </div>
+                                        <div>
+                                            <h4 class="font-title font-bold text-xs text-slate-100">Pvt. Miller</h4>
+                                            <p class="text-[10px] text-outpost-red font-mono">Loop Veteran • Prophetic Foresight</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div id="health-miller" class="text-xs font-mono font-bold text-emerald-400">HP: 2/2</div>
+                                        <span id="status-miller" class="text-[9px] uppercase font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-400">UNASSIGNED</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Chen -->
+                            <div id="char-card-chen" onclick="selectChar('chen')" class="p-2.5 rounded-lg bg-outpost-panel border border-slate-700/70 hover:border-outpost-bio cursor-pointer transition">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-8 h-8 rounded bg-emerald-950 border border-outpost-bio flex items-center justify-center font-bold font-title text-outpost-bio text-xs">
+                                            CHE
+                                        </div>
+                                        <div>
+                                            <h4 class="font-title font-bold text-xs text-slate-100">Rookie Chen</h4>
+                                            <p class="text-[10px] text-outpost-bio font-mono">4.2Hz Sensitivity • Luck Rerolls</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div id="health-chen" class="text-xs font-mono font-bold text-emerald-400">HP: 2/2</div>
+                                        <span id="status-chen" class="text-[9px] uppercase font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-400">UNASSIGNED</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Aris -->
+                            <div id="char-card-aris" onclick="selectChar('aris')" class="p-2.5 rounded-lg bg-outpost-panel border border-slate-700/70 hover:border-outpost-amber cursor-pointer transition">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-8 h-8 rounded bg-amber-950 border border-outpost-amber flex items-center justify-center font-bold font-title text-outpost-amber text-xs">
+                                            ARI
+                                        </div>
+                                        <div>
+                                            <h4 class="font-title font-bold text-xs text-slate-100">Pvt. Aris</h4>
+                                            <p class="text-[10px] text-outpost-amber font-mono">Squad Record Keeper • Logistics</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div id="health-aris" class="text-xs font-mono font-bold text-emerald-400">HP: 2/2</div>
+                                        <span id="status-aris" class="text-[9px] uppercase font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-400">UNASSIGNED</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Reserve / Supply Card Status -->
+                    <div class="card-frame rounded-xl p-4 border-slate-800 space-y-2 font-mono text-xs">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                            <h3 class="font-title font-bold text-slate-100 flex items-center gap-2 text-xs uppercase tracking-wider">
+                                <i class="fa-solid fa-boxes-stacked text-outpost-amber"></i> RESERVE & SUPPLY STATUS
+                            </h3>
+                        </div>
+                        <div class="flex justify-between items-center text-slate-300">
+                            <span>Ammo Crates:</span>
+                            <span id="res-ammo" class="text-hud-blue font-bold">3 Crates</span>
+                        </div>
+                        <div class="flex justify-between items-center text-slate-300">
+                            <span>Canteen Rations:</span>
+                            <span id="res-rations" class="text-outpost-amber font-bold">2 Packs</span>
+                        </div>
+                        <div class="flex justify-between items-center text-slate-300">
+                            <span>Tape Recorder Directives:</span>
+                            <span id="res-tapes" class="text-outpost-cyan font-bold">Recorded</span>
+                        </div>
+                    </div>
+
+                    <!-- Tactical Console Log -->
+                    <div class="bg-outpost-black border border-slate-800 rounded-xl p-3 h-40 overflow-y-auto font-mono text-xs space-y-1" id="sim-console">
+                        <div class="text-slate-500">[SYSTEM] Outpost 13 Phase 1 Initialization Complete. Blood Moon locked in violet solar eclipse.</div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ========================================== -->
+        <!-- TAB 2: PRINT & PLAY CARDS (HIGH RES)       -->
+        <!-- ========================================== -->
+        <section id="sec-pnp" class="tab-content hidden space-y-6">
+            <div class="no-print bg-outpost-dark border border-slate-800 rounded-xl p-4 flex flex-wrap items-center justify-between gap-4">
+                <div>
+                    <h2 class="font-title font-bold text-lg text-slate-100 uppercase tracking-wider">OUTPOST 13 - PHASE 1 PRINT & PLAY SHEET (9 CARDS)</h2>
+                    <p class="text-xs text-slate-400 font-mono">Standard Poker Card size layout with crop guidelines & tokens.</p>
+                </div>
+                <button onclick="window.print()" class="px-6 py-2.5 bg-outpost-red hover:bg-red-600 text-white font-title font-bold text-sm rounded shadow-lg transition flex items-center gap-2">
+                    <i class="fa-solid fa-print"></i> PRINT SHEET NOW
+                </button>
+            </div>
+
+            <!-- Print Canvas -->
+            <div class="print-sheet bg-outpost-panel p-6 rounded-xl border border-slate-800 space-y-6">
+                <div class="text-center border-b border-slate-700 pb-3">
+                    <h3 class="font-title font-bold text-xl text-slate-100 uppercase tracking-widest">OUTPOST 13: LOOP PROTOCOL (PHASE 1 CARD SET)</h3>
+                    <p class="text-xs font-mono text-slate-400">6 Location Cards • 1 Tracker Card • 1 Characters Dossier Card • 1 Reserve / Supply Card</p>
+                </div>
+
+                <!-- 9 Cards Layout Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-5xl mx-auto" id="pnp-cards-container">
+                    <!-- Cards injected dynamically -->
+                </div>
+
+                <!-- Tokens Section -->
+                <div class="pt-6 border-t border-slate-700 space-y-4">
+                    <h4 class="font-title font-bold text-sm text-slate-200 text-center uppercase tracking-wider">DOUBLE-SIDED OPERATIVE TOKENS & RESOURCE TOKENS</h4>
+                    
+                    <div class="flex flex-wrap justify-center gap-4" id="pnp-tokens-container">
+                        <!-- Operative tokens injected dynamically -->
+                    </div>
+
+                    <div class="flex flex-wrap justify-center gap-3 pt-3 border-t border-slate-800" id="pnp-resources-container">
+                        <!-- Resource tokens -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ========================================== -->
+        <!-- TAB 3: PHASE 1 RULEBOOK & LORE GUIDE       -->
+        <!-- ========================================== -->
+        <section id="sec-rules" class="tab-content hidden space-y-6">
+            <div class="bg-outpost-dark border border-slate-800 rounded-xl p-6 max-w-4xl mx-auto space-y-6 text-slate-300">
+                <div class="border-b border-slate-800 pb-4">
+                    <span class="text-xs font-mono text-outpost-cyan uppercase tracking-widest block mb-1">Outpost 13 Protocol Manual</span>
+                    <h2 class="font-title font-black text-2xl text-slate-100 crt-glow-cyan">PHASE 1 RULEBOOK & NARRATIVE LORE</h2>
+                    <p class="text-sm text-slate-400 font-mono mt-1">1 Solo Player • 20-30 Mins • Worker Placement / Foresight Loop Reset / Sci-Fi Horror</p>
+                </div>
+
+                <!-- Narrative Overview -->
+                <div class="space-y-2">
+                    <h3 class="font-title font-bold text-base text-outpost-cyan flex items-center gap-2">
+                        <i class="fa-solid fa-moon"></i> 1. PHASE 1 NARRATIVE & SETTING
+                    </h3>
+                    <p class="text-sm leading-relaxed">
+                        Outpost 13 sits perched on an ash-choked ridge surrounded by razor wire and dead pine forest in the Rimlands apocalyptic wasteland. The horizon is locked under a 72-hour total solar eclipse bordered by a ring of dark violet fire. Deep beneath the concrete bunker, a subterranean <strong>4.2 Hertz biological signal</strong> pulses, driving hordes of skinless abominations, Crawlers, and acoustic Screaming Stalkers toward the Sector 4 breach point.
+                    </p>
+                </div>
+
+                <!-- Characters & Phase 1 Abilities -->
+                <div class="space-y-2">
+                    <h3 class="font-title font-bold text-base text-outpost-cyan flex items-center gap-2">
+                        <i class="fa-solid fa-id-card"></i> 2. PHASE 1 SQUAD DOSSIERS & ABILITIES
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs font-mono">
+                        <div class="bg-slate-900 p-3 rounded border border-slate-800 space-y-1">
+                            <span class="text-hud-blue font-bold">Tactical Sgt. Vance:</span>
+                            <p class="text-slate-400">Reincarnated Tokyo corporate clerk endowed with extreme physical strength, super reflexes, real-time ballistic trajectory predictions, and recoil elimination via his System HUD over his missing eye.</p>
+                        </div>
+                        <div class="bg-slate-900 p-3 rounded border border-slate-800 space-y-1">
+                            <span class="text-outpost-red font-bold">Pvt. Miller:</span>
+                            <p class="text-slate-400">Battle-hardened Time-Loop Veteran who predicts monster spawn points and hazard threats from past dead lifetimes. When Miller dies, time resets to 3 minutes pre-breach.</p>
+                        </div>
+                        <div class="bg-slate-900 p-3 rounded border border-slate-800 space-y-1">
+                            <span class="text-outpost-bio font-bold">Rookie Chen:</span>
+                            <p class="text-slate-400">Radio technician experiencing awakening 4.2Hz psychic sensitivity. Can feel biological pulses before attacks occur, granting luck manipulation and hazard rerolls.</p>
+                        </div>
+                        <div class="bg-slate-900 p-3 rounded border border-slate-800 space-y-1">
+                            <span class="text-outpost-amber font-bold">Pvt. Aris:</span>
+                            <p class="text-slate-400">Greenhorn recruit clutching a canteen and tape recorder. Serves as Squad Record Keeper & Logistics Support, managing ammo supplies, rations, and survival directives.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Turn Sequence -->
+                <div class="space-y-2">
+                    <h3 class="font-title font-bold text-base text-outpost-cyan flex items-center gap-2">
+                        <i class="fa-solid fa-rotate"></i> 3. GAMEPLAY TURN PHASES
+                    </h3>
+                    <ul class="space-y-2 text-xs font-mono">
+                        <li class="bg-slate-950 p-2.5 rounded border border-slate-800">
+                            <strong>Phase 1: Worker Allocation</strong> — Place your 4 operative tokens across the 6 Outpost 13 locations.
+                        </li>
+                        <li class="bg-slate-950 p-2.5 rounded border border-slate-800">
+                            <strong>Phase 2: Hazard Checks</strong> — Roll 1d6 per assigned location. Apply Vance speed bonuses, Miller foresight, or Chen luck rerolls.
+                        </li>
+                        <li class="bg-slate-950 p-2.5 rounded border border-slate-800">
+                            <strong>Phase 3: Directives Resolution</strong> — Check off completed survival directives (e.g., deadbolt clicks, vacuum equalization).
+                        </li>
+                        <li class="bg-slate-950 p-2.5 rounded border border-slate-800">
+                            <strong>Phase 4: 4.2Hz Hive Telemetry Surge</strong> — Advance Blood Moon Threat tracker. Reset game if Miller dies.
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Victory & Defeat -->
+                <div class="space-y-2">
+                    <h3 class="font-title font-bold text-base text-outpost-cyan flex items-center gap-2">
+                        <i class="fa-solid fa-flag-checkered"></i> 4. WIN & LOSS CONDITIONS
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
+                        <div class="bg-emerald-950/20 border border-emerald-800/60 p-3 rounded text-emerald-300">
+                            <strong class="text-sm block mb-1">ZERO CASUALTIES VICTORY:</strong>
+                            • Complete 3 Sector 4 Directives.<br/>
+                            • Secure Sector 4 Gate with 0 squad deaths.
+                        </div>
+                        <div class="bg-red-950/20 border border-red-800/60 p-3 rounded text-red-300">
+                            <strong class="text-sm block mb-1">DEFEAT CONDITIONS:</strong>
+                            • Blood Moon Threat reaches 10.<br/>
+                            • Miller dies in Loop 2.<br/>
+                            • All 4 squad members killed.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal for Card Zoom -->
+    <div id="card-modal" class="fixed inset-0 bg-black/85 backdrop-blur z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-outpost-dark border border-slate-700 max-w-lg w-full rounded-xl p-6 relative shadow-2xl">
+            <button onclick="closeCardModal()" class="absolute top-3 right-3 text-slate-400 hover:text-white text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div id="modal-card-content"></div>
+        </div>
+    </div>
+
+    <!-- JS Logic -->
+    <script>
+        const CARDS_DATA = [
+            {
+                id: 'loc-1',
+                title: 'Rimlands Perimeter',
+                locNum: 'LOC 01',
+                risk: '3+',
+                mission: 'Check Deadbolt Click Counts (x3)',
+                reward: 'Secures outer razor wire fence',
+                hazard: 'Screaming Stalker Ambush (1 Wound)',
+                icon: 'fa-shield-halved',
+                color: 'outpost-amber',
+                lore: 'Razor wire and ash-choked ridge perimeter surrounding Outpost 13 bunker.'
+            },
+            {
+                id: 'loc-2',
+                title: 'Central Comms Desk',
+                locNum: 'LOC 02',
+                risk: '2+',
+                mission: 'Intercept 4.2Hz Bio-Signal',
+                reward: 'Provides advance hazard warning',
+                hazard: 'Psychic Feedback Migraine (+1 Threat)',
+                icon: 'fa-tower-cell',
+                color: 'outpost-cyan',
+                lore: 'Stationed radio desk where Chen detects the subterranean biological frequency.'
+            },
+            {
+                id: 'loc-3',
+                title: 'Armory & Barricade',
+                locNum: 'LOC 03',
+                risk: '3+',
+                mission: 'Requisition Ammo & Reinforce Door',
+                reward: '+2 Ammo Crates & Kevlar plates',
+                hazard: 'Weapon Recoil Failure / Supply Jamming',
+                icon: 'fa-boxes-packing',
+                color: 'outpost-amber',
+                lore: 'Logistics hub where Sgt. Vance utilizes System HUD ballistic predictions.'
+            },
+            {
+                id: 'loc-4',
+                title: 'Sub-Basement Drainage',
+                locNum: 'LOC 04',
+                risk: '4+',
+                mission: 'Sever Vines & Equalize Vacuum',
+                reward: 'Reduces 4.2Hz Bio-Telemetry intensity',
+                hazard: 'Crawler Surge (+2 Threat Level)',
+                icon: 'fa-biohazard',
+                color: 'outpost-bio',
+                lore: 'Central Drainage Vault infested with black arterial vines.'
+            },
+            {
+                id: 'loc-5',
+                title: 'Medical & Decontamination',
+                locNum: 'LOC 05',
+                risk: 'SAFE',
+                mission: 'Treat Wounds & Check Visor',
+                reward: 'Heals 1 Wound / Clears Contamination',
+                hazard: 'Neurological Spasm (on roll of 1)',
+                icon: 'fa-notes-medical',
+                color: 'red-500',
+                lore: 'Medical decon chamber enforcing Visor Verification Protocols.'
+            },
+            {
+                id: 'loc-6',
+                title: 'Sector 4 Gate',
+                locNum: 'LOC 06',
+                risk: '5+',
+                mission: 'Secure Breach & Lock Primary Gate',
+                reward: '+1 Core Sector Defense Directive',
+                hazard: 'Catastrophic Breach Attack (2 Wounds)',
+                icon: 'fa-door-closed',
+                color: 'outpost-red',
+                lore: 'The primary breach point where abominations attempt to overwhelm Outpost 13.'
+            },
+            {
+                id: 'card-tracker',
+                title: 'Blood Moon & 4.2Hz Tracker',
+                locNum: 'TRACKER',
+                risk: 'MONITOR',
+                mission: 'Tracks Threat Level (1-10) & Loop Reset',
+                reward: 'Monitors planetary anomalization',
+                hazard: 'Defeat at Threat Level 10',
+                icon: 'fa-gauge-high',
+                color: 'outpost-violet',
+                lore: 'Primary monitor tracking planetary eclipse threat and bio-telemetry pulses.'
+            },
+            {
+                id: 'card-chars',
+                title: 'Operative Squad Dossiers',
+                locNum: 'DOSSIERS',
+                risk: 'SQUAD',
+                mission: 'Vance, Miller, Chen, Aris Profiles',
+                reward: 'System HUD, Loop Foresight, Luck',
+                hazard: 'Miller Death = Loop Reset',
+                icon: 'fa-users',
+                color: 'outpost-cyan',
+                lore: 'Phase 1 tactical profiles of the four survivors defending Outpost 13.'
+            },
+            {
+                id: 'card-reserve',
+                title: 'Reserve / Supply Card',
+                locNum: 'RESERVE',
+                risk: 'SUPPLY',
+                mission: 'Emergency Rations, Ammo & Tapes',
+                reward: 'Conserves supplies during breaches',
+                hazard: 'Supply depletion increases risk',
+                icon: 'fa-boxes-stacked',
+                color: 'outpost-amber',
+                lore: 'Emergency supply crate managed by Pvt. Aris to sustain field operations.'
+            }
+        ];
+
+        let gameState = {
+            loop: 1,
+            threat: 1,
+            biomass: 0,
+            objectives: 0,
+            phase: 'alloc',
+            selectedChar: null,
+            vanceSurgeActive: false,
+            millerForesightActive: false,
+            chenLuckRerolls: 1,
+            arisSupplies: 2,
+            assignments: { 'loc-1': null, 'loc-2': null, 'loc-3': null, 'loc-4': null, 'loc-5': null, 'loc-6': null },
+            characters: {
+                vance: { name: 'Sgt. Vance', maxHp: 2, hp: 2, status: 'unassigned' },
+                miller: { name: 'Pvt. Miller', maxHp: 2, hp: 2, status: 'unassigned' },
+                chen: { name: 'Rookie Chen', maxHp: 2, hp: 2, status: 'unassigned' },
+                aris: { name: 'Pvt. Aris', maxHp: 2, hp: 2, status: 'unassigned' }
+            }
+        };
+
+        function selectChar(charKey) {
+            if (gameState.characters[charKey].hp <= 0) {
+                logConsole(`[ALERT] ${gameState.characters[charKey].name} is incapacitated.`);
+                return;
+            }
+            gameState.selectedChar = charKey;
+            logConsole(`[SELECTED] ${gameState.characters[charKey].name}. Click a location slot to assign.`);
+        }
+
+        function assignSelectedTo(locId) {
+            if (!gameState.selectedChar) {
+                logConsole(`[NOTICE] Select an operative from the Squad Dossiers first.`);
+                return;
+            }
+            const charKey = gameState.selectedChar;
+            
+            Object.keys(gameState.assignments).forEach(slot => {
+                if (gameState.assignments[slot] === charKey) {
+                    gameState.assignments[slot] = null;
+                    document.getElementById(`slot-${slot}`).innerHTML = `<span class="text-xs text-slate-500 font-mono text-center">Assign Operative Here</span>`;
+                }
+            });
+
+            gameState.assignments[locId] = charKey;
+            gameState.characters[charKey].status = locId;
+
+            document.getElementById(`slot-${locId}`).innerHTML = `
+                <div class="flex items-center space-x-2 bg-slate-900 px-3 py-1.5 rounded border border-outpost-cyan w-full justify-between">
+                    <span class="font-title font-bold text-xs text-slate-100">${gameState.characters[charKey].name}</span>
+                    <button onclick="unassignChar('${locId}', event)" class="text-slate-400 hover:text-red-400 text-xs"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            `;
+
+            gameState.selectedChar = null;
+            updateRosterUI();
+            logConsole(`[STATIONED] ${gameState.characters[charKey].name} assigned to ${locId.replace('loc-', 'LOC ')}.`);
+        }
+
+        function unassignChar(locId, event) {
+            if (event) event.stopPropagation();
+            const charKey = gameState.assignments[locId];
+            if (charKey) {
+                gameState.characters[charKey].status = 'unassigned';
+                gameState.assignments[locId] = null;
+                document.getElementById(`slot-${locId}`).innerHTML = `<span class="text-xs text-slate-500 font-mono text-center">Assign Operative Here</span>`;
+                updateRosterUI();
+            }
+        }
+
+        function triggerVanceAbility() {
+            if (gameState.characters.vance.hp <= 0) return;
+            gameState.vanceSurgeActive = true;
+            logConsole(`[SYSTEM HUD] Sgt. Vance activated Overtime Surge! Physical super speed & zero recoil granted (+2 to next hazard roll).`);
+        }
+
+        function triggerMillerForesight() {
+            if (gameState.characters.miller.hp <= 0) return;
+            gameState.millerForesightActive = true;
+            logConsole(`[PROPHETIC SIGHT] Pvt. Miller foresaw upcoming hazard outcomes from past dead loops! Next hazard mitigated.`);
+        }
+
+        function triggerChenLuck() {
+            if (gameState.characters.chen.hp <= 0) return;
+            gameState.chenLuckRerolls++;
+            logConsole(`[PSYCHIC LUCK] Rookie Chen intercepted 4.2Hz bio-pulse frequency. Granted +1 Luck Reroll.`);
+        }
+
+        function triggerArisSupport() {
+            if (gameState.characters.aris.hp <= 0) return;
+            gameState.arisSupplies++;
+            logConsole(`[LOGISTICS] Pvt. Aris recorded tactical survival directives on tape. Conserved +1 Supply Pack.`);
+        }
+
+        function advancePhase() {
+            if (gameState.phase === 'alloc') {
+                const count = Object.values(gameState.assignments).filter(Boolean).length;
+                if (count === 0) {
+                    logConsole(`[WARN] Station at least 1 operative before executing directives.`);
+                    return;
+                }
+                resolveTurn();
+            } else {
+                gameState.phase = 'alloc';
+                document.getElementById('sim-phase-banner').className = 'bg-outpost-panel border-l-4 border-outpost-cyan p-3 rounded text-sm font-mono flex items-center justify-between';
+                document.getElementById('sim-phase-desc').innerText = 'Deploy Vance, Miller, Chen, or Aris to locations around Outpost 13.';
+                document.getElementById('btn-next-phase').innerHTML = `<span>EXECUTE PHASE DIRECTIVES</span> <i class="fa-solid fa-forward"></i>`;
+            }
+        }
+
+        function resolveTurn() {
+            logConsole(`===================================================`);
+            logConsole(`[RESOLVING DIRECTIVES & HAZARD TESTS]`);
+
+            Object.keys(gameState.assignments).forEach(locId => {
+                const charKey = gameState.assignments[locId];
+                if (!charKey) return;
+
+                const charObj = gameState.characters[charKey];
+                let die = Math.floor(Math.random() * 6) + 1;
+
+                if (gameState.vanceSurgeActive && charKey === 'vance') {
+                    die += 2;
+                    logConsole(`[SYSTEM HUD BONUS] Vance applied super speed trajectory bonus! Final Roll: [${die}]`);
+                }
+
+                if (gameState.millerForesightActive && charKey === 'miller') {
+                    die = Math.max(die, 4);
+                    logConsole(`[FORESIGHT BONUS] Miller predicted monster spawn point! Adjusted Roll: [${die}]`);
+                }
+
+                logConsole(`[HAZARD CHECK] ${charObj.name} at ${locId.replace('loc-', 'LOC ')} rolled [${die}]`);
+
+                if (locId === 'loc-1') {
+                    if (die >= 3) {
+                        gameState.objectives++;
+                        logConsole(`[SUCCESS] Deadbolt click counts verified. Sector fence secured.`);
+                    } else {
+                        charObj.hp -= 1;
+                        logConsole(`[HAZARD] Screaming Stalker ambushed ${charObj.name}! (-1 HP)`);
+                    }
+                } else if (locId === 'loc-2') {
+                    if (die >= 2 || charKey === 'chen') {
+                        logConsole(`[SUCCESS] 4.2Hz Bio-Signal pulse intercepted at Comms Desk.`);
+                    } else {
+                        gameState.threat++;
+                        logConsole(`[HAZARD] Psychic Feedback Migraine (+1 Threat Level).`);
+                    }
+                } else if (locId === 'loc-3') {
+                    if (die >= 3) {
+                        logConsole(`[SUCCESS] Ammo crates requisitioned & barricade reinforced.`);
+                    } else {
+                        logConsole(`[HAZARD] Weapon recoil jam! Supply delay.`);
+                    }
+                } else if (locId === 'loc-4') {
+                    if (die >= 4) {
+                        gameState.threat = Math.max(1, gameState.threat - 1);
+                        logConsole(`[SUCCESS] Black Arterial Vines severed! Threat Level decreased.`);
+                    } else {
+                        gameState.threat += 2;
+                        logConsole(`[HAZARD] Crawler Surge from Central Drainage! (+2 Threat).`);
+                    }
+                } else if (locId === 'loc-5') {
+                    charObj.hp = Math.min(charObj.maxHp, charObj.hp + 1);
+                    logConsole(`[MEDICAL DECON] Visor Verification Protocol passed. ${charObj.name} healed 1 HP.`);
+                } else if (locId === 'loc-6') {
+                    if (die >= 5) {
+                        gameState.objectives++;
+                        logConsole(`[SUCCESS] Sector 4 Primary Breach Gate locked down! (+1 Directive)`);
+                    } else {
+                        charObj.hp -= 2;
+                        logConsole(`[HAZARD] Catastrophic breach attack at Sector 4 Gate! (-2 HP)`);
+                    }
+                }
+            });
+
+            gameState.vanceSurgeActive = false;
+            gameState.millerForesightActive = false;
+
+            gameState.threat += 1;
+            logConsole(`[SURGE] 4.2Hz Bio-Telemetry Surge (+1 Threat Level).`);
+
+            checkGameState();
+
+            gameState.phase = 'surge';
+            document.getElementById('sim-phase-banner').className = 'bg-outpost-panel border-l-4 border-outpost-red p-3 rounded text-sm font-mono flex items-center justify-between';
+            document.getElementById('sim-phase-desc').innerText = 'SURGE RESOLVED: Review outcomes. Click NEXT TURN to reassign squad.';
+            document.getElementById('btn-next-phase').innerHTML = `<span>START NEXT TURN</span> <i class="fa-solid fa-arrow-rotate-right"></i>`;
+
+            updateUI();
+        }
+
+        function checkGameState() {
+            if (gameState.characters.miller.hp <= 0) {
+                if (gameState.loop === 1) {
+                    gameState.loop = 2;
+                    gameState.threat = 1;
+                    Object.keys(gameState.characters).forEach(k => {
+                        gameState.characters[k].hp = gameState.characters[k].maxHp;
+                        gameState.characters[k].status = 'unassigned';
+                    });
+                    alert(`3-MINUTE TIME LOOP RESET!\n\nPvt. Miller died. Temporal reset triggers 3 minutes before Sector 4 breach.\nRetaining past loop foresight memory!`);
+                    logConsole(`[TEMPORAL RESET] MILLER DIED. TIME RESET TO LOOP 2.`);
+                    return;
+                } else {
+                    alert(`GAME OVER: Miller died during Loop 2. Time Loop Echo exhausted.`);
+                }
+            }
+
+            if (gameState.threat >= 10) {
+                alert(`GAME OVER: Blood Moon Threat reached Level 10. Sector 4 breached.`);
+            } else if (gameState.objectives >= 3) {
+                alert(`ZERO CASUALTIES VICTORY! Sector 4 breach point secured and all Directives completed!`);
+            }
+        }
+
+        function resetGame() {
+            gameState.loop = 1;
+            gameState.threat = 1;
+            gameState.objectives = 0;
+            gameState.phase = 'alloc';
+            Object.keys(gameState.characters).forEach(k => {
+                gameState.characters[k].hp = gameState.characters[k].maxHp;
+                gameState.characters[k].status = 'unassigned';
+            });
+            Object.keys(gameState.assignments).forEach(s => {
+                gameState.assignments[s] = null;
+                document.getElementById(`slot-${s}`).innerHTML = `<span class="text-xs text-slate-500 font-mono text-center">Assign Operative Here</span>`;
+            });
+            logConsole(`[SYSTEM] Simulation reset to Loop 1.`);
+            updateUI();
+        }
+
+        function updateUI() {
+            document.getElementById('sim-loop-display').innerText = gameState.loop === 1 ? 'LOOP 1 (3 MIN PRE-BREACH)' : 'LOOP 2 (FINAL TEMPORAL RESET)';
+            document.getElementById('sim-threat-val').innerText = `${gameState.threat} / 10`;
+            document.getElementById('sim-threat-bar').style.width = `${Math.min(100, gameState.threat * 10)}%`;
+            document.getElementById('sim-obj-val').innerText = `${gameState.objectives} / 3 DIRECTIVES`;
+
+            updateRosterUI();
+        }
+
+        function updateRosterUI() {
+            Object.keys(gameState.characters).forEach(k => {
+                const char = gameState.characters[k];
+                const hpEl = document.getElementById(`health-${k}`);
+                const statusEl = document.getElementById(`status-${k}`);
+
+                if (hpEl) {
+                    hpEl.innerText = `HP: ${char.hp}/${char.maxHp}`;
+                    hpEl.className = char.hp === 2 ? 'text-xs font-mono font-bold text-emerald-400' : (char.hp === 1 ? 'text-xs font-mono font-bold text-amber-400' : 'text-xs font-mono font-bold text-red-500');
+                }
+
+                if (statusEl) {
+                    if (char.hp <= 0) {
+                        statusEl.innerText = 'DEAD / GORED';
+                        statusEl.className = 'text-[9px] uppercase font-mono px-1.5 py-0.5 rounded bg-red-950 text-red-400 border border-red-800';
+                    } else if (char.status === 'unassigned') {
+                        statusEl.innerText = 'UNASSIGNED';
+                        statusEl.className = 'text-[9px] uppercase font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-400';
+                    } else {
+                        statusEl.innerText = `STATIONED (${char.status.replace('loc-', 'L')})`;
+                        statusEl.className = 'text-[9px] uppercase font-mono px-1.5 py-0.5 rounded bg-outpost-cyan/20 text-outpost-cyan border border-outpost-cyan/40';
+                    }
+                }
+            });
+        }
+
+        function logConsole(msg) {
+            const consoleEl = document.getElementById('sim-console');
+            const item = document.createElement('div');
+            item.className = 'text-slate-300';
+            item.innerText = msg;
+            consoleEl.appendChild(item);
+            consoleEl.scrollTop = consoleEl.scrollHeight;
+            document.getElementById('sim-log-last').innerText = msg;
+        }
+
+        function renderPnP() {
+            const cardContainer = document.getElementById('pnp-cards-container');
+            const tokenContainer = document.getElementById('pnp-tokens-container');
+            const resourceContainer = document.getElementById('pnp-resources-container');
+
+            cardContainer.innerHTML = CARDS_DATA.map(card => `
+                <div onclick="openCardModal('${card.id}')" class="card-frame rounded-lg p-3.5 border border-slate-700 flex flex-col justify-between text-slate-200 aspect-[2.5/3.5] relative cursor-pointer hover:border-outpost-cyan transition">
+                    <div class="flex justify-between items-center text-[10px] font-mono border-b border-slate-800 pb-1">
+                        <span class="text-outpost-cyan font-bold">${card.locNum}</span>
+                        <span class="text-outpost-red font-bold">${card.risk}</span>
+                    </div>
+                    <div class="text-center py-2">
+                        <i class="fa-solid ${card.icon} text-3xl text-slate-300 mb-2"></i>
+                        <h4 class="font-title font-bold text-xs text-white leading-tight">${card.title}</h4>
+                    </div>
+                    <div class="bg-slate-900/90 p-2 rounded text-[9px] font-mono space-y-1">
+                        <div><strong class="text-outpost-green">Mission:</strong> ${card.mission}</div>
+                        <div><strong class="text-outpost-red">Hazard:</strong> ${card.hazard}</div>
+                    </div>
+                    <div class="text-[8px] font-mono text-slate-500 text-right">PHASE 1 PNP</div>
+                </div>
+            `).join('');
+
+            const tokens = [
+                { name: 'SGT VANCE', color: 'border-cyan-500 text-cyan-400' },
+                { name: 'PVT MILLER', color: 'border-red-500 text-red-400' },
+                { name: 'ROOKIE CHEN', color: 'border-emerald-500 text-emerald-400' },
+                { name: 'PVT ARIS', color: 'border-amber-500 text-amber-400' },
+            ];
+
+            tokenContainer.innerHTML = tokens.map(t => `
+                <div class="flex items-center space-x-2 bg-slate-900 p-2 rounded border border-slate-700">
+                    <div class="w-11 h-11 rounded-full border-2 ${t.color} flex flex-col items-center justify-center font-title font-bold text-[8px] bg-slate-950">
+                        <span>${t.name}</span>
+                        <span class="text-[6px] text-slate-400">NORMAL</span>
+                    </div>
+                    <i class="fa-solid fa-arrows-rotate text-xs text-slate-600"></i>
+                    <div class="w-11 h-11 rounded-full border-2 border-red-700 text-red-500 flex flex-col items-center justify-center font-title font-bold text-[8px] bg-red-950/40">
+                        <span>${t.name}</span>
+                        <span class="text-[6px] text-red-400">WOUNDED</span>
+                    </div>
+                </div>
+            `).join('');
+
+            const resources = ['AMMO CRATE', 'CANTEEN PACK', 'TAPE DIRECTIVE', '4.2Hz SIGNAL', 'LOOP MARKER'];
+            resourceContainer.innerHTML = resources.map(r => `
+                <div class="px-2.5 py-1 bg-slate-900 border border-slate-700 rounded text-[10px] font-mono text-slate-300 flex items-center gap-1.5">
+                    <i class="fa-solid fa-square-check text-outpost-cyan"></i> ${r}
+                </div>
+            `).join('');
+        }
+
+        function openCardModal(cardId) {
+            const card = CARDS_DATA.find(c => c.id === cardId);
+            if (!card) return;
+
+            const modalContent = document.getElementById('modal-card-content');
+            modalContent.innerHTML = `
+                <div class="text-center space-y-3">
+                    <span class="text-xs font-mono text-outpost-cyan font-bold block">${card.locNum} SPECS & LORE</span>
+                    <i class="fa-solid ${card.icon} text-5xl text-slate-200 my-2"></i>
+                    <h2 class="font-title font-black text-xl text-slate-100">${card.title}</h2>
+                    <p class="text-xs text-slate-400 font-sans italic">"${card.lore}"</p>
+                    <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 text-xs font-mono text-left space-y-1.5">
+                        <p><strong class="text-outpost-cyan">MISSION:</strong> ${card.mission}</p>
+                        <p><strong class="text-outpost-green">REWARD:</strong> ${card.reward}</p>
+                        <p><strong class="text-outpost-red">HAZARD:</strong> ${card.hazard}</p>
+                    </div>
+                </div>
+            `;
+            document.getElementById('card-modal').classList.remove('hidden');
+        }
+
+        function closeCardModal() {
+            document.getElementById('card-modal').classList.add('hidden');
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-outpost-red', 'text-slate-200', 'font-bold');
+                btn.classList.add('text-slate-400');
+            });
+
+            document.getElementById(`sec-${tabId}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`tab-${tabId}`);
+            activeBtn.classList.add('bg-outpost-red', 'text-slate-200', 'font-bold');
+            activeBtn.classList.remove('text-slate-400');
+        }
+
+        window.onload = function () {
+            renderPnP();
+            updateUI();
+        };
+    </script>
+</body>
+</html>

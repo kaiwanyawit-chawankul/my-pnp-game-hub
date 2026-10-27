@@ -77,5 +77,18 @@
       "printAndPlayCards": "https://raw.githubusercontent.com/kaiwanyawit-chawankul/my-pnp-game-hub/master/games/9CardsFishing/cards-color.pdf"
     },
     "playableInBrowser": false
+  },
+  {
+    "id": "9cardsOutpost13",
+    "title": "9 Cards Outpost 13",
+    "tagline": "A print-and-play micro game.",
+    "thumbnail": "https://raw.githubusercontent.com/kaiwanyawit-chawankul/my-pnp-game-hub/master/games/9cardsOutpost13/outpost-13-surface-courtyard--bunker-a-concrete-bu-20260916-101817.png",
+    "playerCount": "1 Players",
+    "playTime": "15 mins",
+    "tags": ["PnP", "9-Card"],
+    "downloads": {
+      "printAndPlayCards": "https://raw.githubusercontent.com/kaiwanyawit-chawankul/my-pnp-game-hub/master/games/9cardsOutpost13/Outpost 13_ Print-and-Play Cards.pdf"
+    },
+    "playableInBrowser": false
   }
 ]

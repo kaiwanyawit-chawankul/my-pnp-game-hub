@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outpost 13: Loop Protocol - Rules, Components & Print-and-Play Cards</title>
+    <style>
+        :root {
+            --bg-dark: #0a0c10;
+            --panel-bg: #12161f;
+            --border-color: #2a3447;
+            --text-main: #d0d7de;
+            --text-dim: #7d8590;
+            --accent-red: #ff3333;
+            --accent-green: #00ff66;
+            --accent-cyan: #00e5ff;
+            --accent-yellow: #ffcc00;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-main); padding: 25px; line-height: 1.6; }
+
+        header { text-align: center; margin-bottom: 25px; border-bottom: 2px solid var(--border-color); padding-bottom: 15px; }
+        header h1 { color: var(--accent-red); font-size: 2.2rem; letter-spacing: 3px; text-transform: uppercase; text-shadow: 0 0 10px rgba(255,51,51,0.5); }
+        header p { color: var(--text-dim); font-size: 0.95rem; }
+
+        .container { max-width: 1100px; margin: 0 auto; }
+
+        section { margin-bottom: 40px; }
+        h2 { color: var(--accent-cyan); border-bottom: 1px solid var(--border-color); padding-bottom: 8px; margin-bottom: 15px; text-transform: uppercase; font-size: 1.3rem; letter-spacing: 1px; }
+
+        /* Rules & Components Boxes */
+        .info-box { background: var(--panel-bg); border: 1px solid var(--border-color); padding: 20px; border-radius: 8px; margin-bottom: 30px; }
+        .info-box ul, .info-box ol { margin-left: 20px; margin-top: 8px; }
+        .info-box li { margin-bottom: 6px; font-size: 0.95rem; }
+
+        .print-btn-bar { text-align: center; margin-bottom: 25px; }
+        .print-btn { background: var(--accent-cyan); color: #000; border: none; padding: 10px 25px; font-weight: bold; cursor: pointer; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; }
+        .print-btn:hover { opacity: 0.9; box-shadow: 0 0 10px rgba(0,229,255,0.5); }
+
+        /* Print & Play Card Grid Layout */
+        .card-grid { display: grid; grid-template-columns: repeat(3, 2.5in); gap: 20px; justify-content: center; margin-bottom: 30px; }
+        .pnp-card { width: 2.5in; height: 3.5in; background: var(--panel-bg); border: 2px solid var(--border-color); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 10px rgba(0,0,0,0.6); position: relative; page-break-inside: avoid; }
+
+        .card-title { font-size: 0.82rem; font-weight: bold; color: var(--accent-cyan); text-transform: uppercase; border-bottom: 1px solid var(--border-color); padding-bottom: 4px; display: flex; justify-content: space-between; align-items: center; }
+        .card-target-badge { font-size: 0.65rem; background: var(--accent-red); color: #fff; padding: 1px 5px; border-radius: 3px; font-weight: bold; }
+        .card-type { font-size: 0.6rem; color: var(--text-dim); }
+        .card-body { font-size: 0.68rem; margin: 4px 0; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-around; }
+
+        .card-stat { background: rgba(255,255,255,0.04); border-left: 3px solid var(--accent-red); padding: 4px 6px; margin: 2px 0; font-size: 0.65rem; }
+        .card-stat.hazard { border-color: var(--accent-yellow); }
+        .card-stat.threat { border-color: var(--accent-red); }
+        .card-stat.mission { border-color: var(--accent-green); }
+
+        @media print {
+            body { background: #fff; color: #000; padding: 0; }
+            header, .print-btn-bar, .rules-section, .components-section { display: none !important; }
+            .card-grid { display: grid; grid-template-columns: repeat(3, 2.5in); gap: 10px; page-break-inside: avoid; }
+            .pnp-card { border: 2px solid #000; box-shadow: none; background: #fff; color: #000; page-break-inside: avoid; }
+            .card-title { color: #000; border-bottom: 1px solid #000; }
+            .card-stat { background: #f2f2f2; border-left: 3px solid #000; color: #000; }
+            .card-target-badge { background: #000; color: #fff; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>OUTPOST 13: LOOP PROTOCOL</h1>
+            <p>Phase 1 Sci-Fi Horror Micro Game — Components, Rules & Print-and-Play Cards</p>
+        </header>
+
+        <div class="print-btn-bar">
+            <button class="print-btn" onclick="window.print()">Print Cards & Rules Sheet</button>
+        </div>
+
+        <!-- COMPONENTS LIST SECTION -->
+        <section class="components-section">
+            <h2>Components List</h2>
+            <div class="info-box">
+                <p>To play <b>Outpost 13: Loop Protocol</b>, you will need the following physical components:</p>
+                <ul>
+                    <li><b>9 Cards (Provided Below):</b>
+                        <ul>
+                            <li>7 Location Cards (Draft 6 from the 7 Locations pool)</li>
+                            <li>1 Time & Tracker Card (Contains Time Track, Winning Condition & Loop Reset Rules)</li>
+                            <li>1 Operatives Dossier Card (Characters)</li>
+                        </ul>
+                    </li>
+                    <li><b>4 Operative Tokens:</b> Representing Sgt. Vance, Pvt. Miller, Rookie Chen, and Pvt. Aris. (Double-sided normal / wounded state).</li>
+                    <li><b>Threat Markers:</b> Small cubes or tokens (approx. 10–12 pieces) to track threat levels on locations and the time tracker.</li>
+                    <li><b>Action Dice:</b> Standard 6-sided dice (D6) for threat rolls and operative mission checks.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- RULES SECTION -->
+        <section class="rules-section">
+            <h2>Game Rules & Phase Structure</h2>
+            <div class="info-box">
+                <h3 style="color:var(--accent-green); margin-bottom:8px;">Core Objective</h3>
+                <p>Pvt. Miller is trapped in a repeating 3-minute time loop. Secure <b>3 Directives</b> by clearing location cards before <b>Time reaches 10</b>, with <b>no dead operatives</b>.</p>
+
+                <h3 style="color:var(--accent-yellow); margin-top:15px; margin-bottom:8px;">Turn Phase Breakdown</h3>
+                <ol>
+                    <li><b>Threat Activation:</b> Roll 1 D6 to add 1 Threat Token to the matching location. <i>(Skips any location that is already Face-Down!)</i></li>
+                    <li><b>Assign Operatives:</b> Place characters (Vance, Miller, Chen, Aris) onto locations to clear threats and complete missions. Multiple operatives can team up on a single location.</li>
+                    <li><b>Mission Checks:</b> Roll D6 vs Location Target:
+                        <ul>
+                            <li><b>Pass 1st Time:</b> Card is <b>Tapped</b> (1st Check complete).</li>
+                            <li><b>Pass 2nd Time:</b> Card flips <b>Face-Down</b> (Secures 1 Directive, immune to future threats).</li>
+                            <li><b>Fail Roll:</b> Operative suffers the location's specific <b>Hazard</b> effect.</li>
+                        </ul>
+                    </li>
+                    <li><b>End of Turn:</b> Unresolved active threats trigger their end-of-turn effects. <b>Time advances by the total number of active threat tokens</b> across all locations.</li>
+                    <li><b>Win / Loss Condition:</b> Secure 3 Directives with <b>no dead operatives</b> before Time reaches 10. Defeat occurs if Time reaches 10, any location reaches 3 Threats (overrun), or Miller dies twice.</li>
+                </ol>
+
+                <h3 style="color:var(--accent-red); margin-top:15px; margin-bottom:8px;">Miller's Loop Reset</h3>
+                <p>If Pvt. Miller dies for <b>any reason</b>, the time loop collapses! Flip the <b>Time & Tracker Card</b> to represent the reset into Loop 2: Time resets back to 0, <b>all operatives are revived to normal status</b>, and previously cleared Directives are retained. If Miller dies a second time, the game ends in defeat.</p>
+            </div>
+        </section>
+
+        <!-- PRINT AND PLAY CARDS SECTION -->
+        <section>
+            <h2>9-Card Print & Play Deck</h2>
+            <div class="card-grid">
+
+                <!-- CARD 1 -->
+                <div class="pnp-card">
+                    <div class="card-title">Rimlands Perimeter <span class="card-target-badge">4+</span></div>
+                    <div class="card-body">
+                        <p style="font-size:0.62rem; color:var(--text-dim); font-style:italic;">Razor Wire & Ash-choked Ridge</p>
+                        <div class="card-stat mission"><b>Mission:</b> Check Deadbolt Click Counts (x3)</div>
+                        <div class="card-stat hazard"><b>Hazard:</b> Screaming Stalker Ambush (1 Wound)</div>
+                        <div class="card-stat threat"><b>Threat:</b> Perimeter Breach (+1 Threat)</div>
+                    </div>
+                </div>
+
+                <!-- CARD 2 -->
+                <div class="pnp-card">
+                    <div class="card-title">Central Comms Desk <span class="card-target-badge">3+</span></div>
+                    <div class="card-body">
+                        <p style="font-size:0.62rem; color:var(--text-dim); font-style:italic;">Radio Desk & Bio-Signal Antenna</p>
+                        <div class="card-stat mission"><b>Mission:</b> Intercept 4.2Hz Biological Pulse</div>
+                        <div class="card-stat hazard"><b>Hazard:</b> Psychic Feedback Migraine (+1 Threat)</div>
+                        <div class="card-stat threat"><b>Threat:</b> Doom Beacon (+1 location threat next turn)</div>
+                    </div>
+                </div>
+
+                <!-- CARD 3 -->
+                <div class="pnp-card">
+                    <div class="card-title">Armory & Barricade <span class="card-target-badge">4+</span></div>
+                    <div class="card-body">
+                        <p style="font-size:0.62rem; color:var(--text-dim); font-style:italic;">Munitions Vault & Heavy Door</p>
+                        <div class="card-stat mission"><b>Mission:</b> Requisition Ammo & Reinforce Door</div>
+                        <div class="card-stat hazard"><b>Hazard:</b> Weapon Recoil Failure / Jam (1 Wound)</div>
+                        <div class="card-stat threat"><b>Threat:</b> Munitions Decay (-1 to all operative rolls)</div>
+                    </div>
+                </div>
+
+                <!-- CARD 4 -->
+                <div class="pnp-card">
+                    <div class="card-title">Sub-Basement Drainage <span class="card-target-badge">5+</span></div>
+                    <div class="card-body">
+                        <p style="font-size:0.62rem; color:var(--text-dim); font-style:italic;">Black Arterial Vines & Drainage Vault</p>
+                        <div class="card-stat mission"><b>Mission:</b> Sever Vines & Equalize Vacuum</div>
+                        <div class="card-stat hazard"><b>Hazard:</b> Acidic Vine Exposure (1 Wound)</div>
+                        <div class="card-stat threat"><b>Threat:</b> Crawler Surge (+2 Threat)</div>
+                    </div>
+                </div>
+
+                <!-- CARD 5 -->
+                <div class="pnp-card">
+                    <div class="card-title">Medical & Decon <span class="card-target-badge">3+</span></div>
+                    <div class="card-body">
+                        <p style="font-size:0.62rem; color:var(--text-dim); font-style:italic;">Triage Bay & Bio-Scanner</p>
+                        <div class="card-stat mission"><b>Mission:</b> Treat Wounds & Check Visor</div>
+                        <div class="card-stat hazard"><b>Hazard:</b> Neurological Spasm (on roll of 1), can't heal</div>
+                        <div class="card-stat threat"><b>Threat:</b> Door Jam, can enter this location (can't fix)</div>
+                    </div>
+                </div>
+
+                <!-- CARD 6 -->
+                <div class="pnp-card">
+                    <div class="card-title">Sector 4 Gate <span class="card-target-badge">5+</span></div>
+                    <div class="card-body">
+                        <p style="font-size:0.62rem; color:var(--text-dim); font-style:italic;">Breach Point & Primary Hive Barrier</p>
+                        <div class="card-stat mission"><b>Mission:</b> Secure Breach & Lock Primary Gate</div>
+                        <div class="card-stat hazard"><b>Hazard:</b> Catastrophic Breach Attack (2 Wounds)</div>
+                        <div class="card-stat threat"><b>Threat:</b> Perimeter Breach (+1 Threat)</div>
+                    </div>
+                </div>
+
+                <!-- CARD 7 -->
+                <div class="pnp-card">
+                    <div class="card-title">TIME & TRACKER <span class="card-type">Tracker Card</span></div>
+                    <div class="card-body" style="font-size:0.58rem;">
+                        <p><b>Time Track (0 to 10):</b> Advances at end of turn by total active threat tokens on board.</p>
+                        <p style="color:var(--accent-green); margin-top:2px;"><b>Winning Condition:</b> Secure 3 Directives with <b>no dead operatives</b> before Time reaches 10.</p>
+                        <p style="color:var(--accent-red); margin-top:2px;"><b>Loop Reset Rule:</b> When Miller dies for any reason, flip this card (resets Time to 0, <b>revives all operatives</b>, retains cleared Directives). Miller dying a second time causes defeat.</p>
+                    </div>
+                </div>
+
+                <!-- CARD 8 -->
+                <div class="pnp-card">
+                    <div class="card-title">OPERATIVES DOSSIER <span class="card-type">Characters Card</span></div>
+                    <div class="card-body" style="font-size:0.62rem;">
+                        <p><b>Sgt. Vance:</b> Super Soldier (+2 Strength on rolls)</p>
+                        <p><b>Pvt. Miller:</b> Loop Veteran (Can Reroll once per turn)</p>
+                        <p><b>Rookie Chen:</b> 4.2Hz Psychic (+1 to friendly roll)</p>
+                        <p><b>Pvt. Aris:</b> Greenie (-1 Mission Target difficulty)</p>
+                    </div>
+                </div>
+
+                <!-- CARD 9 -->
+                <div class="pnp-card">
+                    <div class="card-title">Air Duct Network <span class="card-target-badge">4+</span></div>
+                    <div class="card-body">
+                        <p style="font-size:0.62rem; color:var(--text-dim); font-style:italic;">Ventilation Shafts & Skittering Grates</p>
+                        <div class="card-stat mission"><b>Mission:</b> Clear Vent Grates & Seal Intakes</div>
+                        <div class="card-stat hazard"><b>Hazard:</b> Stalker Drop Ambush (1 Wound)</div>
+                        <div class="card-stat threat"><b>Threat:</b> Vent Infestation (Must be cleared first; moves threat & rerolls D6)</div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </div>
+
+</body>
+</html>

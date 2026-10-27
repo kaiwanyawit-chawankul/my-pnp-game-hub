@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outpost 13: Loop Protocol - Phase 1 Revision</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@500;700;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'outpost-black': '#040609',
+                        'outpost-dark': '#0a0e17',
+                        'outpost-panel': '#111827',
+                        'outpost-red': '#ff2247',
+                        'outpost-green': '#10b981',
+                        'outpost-bio': '#22c55e',
+                        'outpost-amber': '#f59e0b',
+                        'outpost-cyan': '#00d2ff',
+                        'outpost-violet': '#a855f7',
+                        'hud-blue': '#00e5ff',
+                    },
+                    fontFamily: {
+                        mono: ['"Share Tech Mono"', 'monospace'],
+                        title: ['"Orbitron"', 'sans-serif'],
+                        sans: ['"Rajdhani"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #040609;
+            color: #e2e8f0;
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .scanline-overlay {
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.04), rgba(0, 255, 0, 0.01), rgba(0, 210, 255, 0.04));
+            background-size: 100% 3px, 6px 100%;
+            pointer-events: none;
+        }
+
+        .crt-glow-red { text-shadow: 0 0 8px rgba(255, 34, 71, 0.7); }
+        .crt-glow-cyan { text-shadow: 0 0 8px rgba(0, 210, 255, 0.7); }
+        .crt-glow-violet { text-shadow: 0 0 8px rgba(168, 85, 247, 0.7); }
+        .crt-glow-bio { text-shadow: 0 0 8px rgba(34, 197, 94, 0.7); }
+
+        .system-hud-border {
+            border: 1px solid rgba(0, 229, 255, 0.4);
+            box-shadow: inset 0 0 12px rgba(0, 229, 255, 0.15), 0 0 8px rgba(0, 229, 255, 0.2);
+            background: linear-gradient(135deg, rgba(0, 229, 255, 0.05) 0%, rgba(10, 14, 23, 0.95) 100%);
+        }
+
+        .card-frame {
+            border: 1px solid #1e293b;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.95), 0 4px 15px rgba(0,0,0,0.8);
+            position: relative;
+            background: #0d131f;
+        }
+
+        .card-frame::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            pointer-events: none;
+        }
+
+        .threat-pulse {
+            animation: pulse-red 1.5s infinite;
+        }
+
+        @keyframes pulse-red {
+            0%, 100% { box-shadow: 0 0 15px rgba(255, 34, 71, 0.8); border-color: #ff2247; }
+            50% { box-shadow: 0 0 4px rgba(255, 34, 71, 0.3); border-color: #881337; }
+        }
+
+        @media print {
+            body { background: white !important; color: black !important; }
+            .no-print { display: none !important; }
+            .print-sheet {
+                page-break-after: always;
+                box-shadow: none !important;
+                border: 1px solid #000 !important;
+                background: white !important;
+                color: black !important;
+            }
+            .card-frame {
+                border: 1px solid #000 !important;
+                background: white !important;
+                color: black !important;
+                box-shadow: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col bg-outpost-black text-slate-200 selection:bg-outpost-red selection:text-white">
+
+    <!-- Scanline CRT Effect -->
+    <div class="fixed inset-0 scanline-overlay z-50 pointer-events-none opacity-40"></div>
+
+    <!-- Top Navigation Bar -->
+    <header class="no-print border-b border-slate-800 bg-outpost-dark/95 backdrop-blur sticky top-0 z-40 px-4 py-3">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded bg-outpost-red/20 border border-outpost-red flex items-center justify-center text-outpost-red font-title font-bold text-xl crt-glow-red">
+                    13
+                </div>
+                <div>
+                    <h1 class="font-title font-black text-xl tracking-wider text-slate-100 flex items-center gap-2">
+                        OUTPOST 13 <span class="text-outpost-cyan text-xs px-2 py-0.5 rounded bg-outpost-cyan/10 border border-outpost-cyan/40 font-mono uppercase">Shared Action Dice Edition</span>
+                    </h1>
+                    <p class="text-xs text-slate-400 font-mono">SCIFI HORROR PNP • SHARED ACTION DICE • MULTI-THREAT CHECKS</p>
+                </div>
+            </div>
+
+            <!-- Navigation Tabs -->
+            <nav class="flex flex-wrap items-center bg-outpost-panel p-1 rounded-lg border border-slate-700/60 font-title text-xs tracking-wider gap-1">
+                <button onclick="switchTab('sim')" id="tab-sim" class="tab-btn px-3 py-2 rounded text-slate-200 bg-outpost-red font-bold transition">
+                    <i class="fa-solid fa-gamepad mr-1.5"></i> PLAY ENGINE
+                </button>
+                <button onclick="switchTab('guide')" id="tab-guide" class="tab-btn px-3 py-2 rounded text-outpost-cyan hover:text-white transition">
+                    <i class="fa-solid fa-map-location-dot mr-1.5"></i> RULES & REWARDS
+                </button>
+                <button onclick="switchTab('pnp')" id="tab-pnp" class="tab-btn px-3 py-2 rounded text-slate-400 hover:text-slate-200 transition">
+                    <i class="fa-solid fa-print mr-1.5"></i> PRINT & PLAY (9 CARDS)
+                </button>
+                <button onclick="switchTab('gallery')" id="tab-gallery" class="tab-btn px-3 py-2 rounded text-slate-400 hover:text-slate-200 transition">
+                    <i class="fa-solid fa-images mr-1.5"></i> CARD GALLERY
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 md:p-6 relative z-10">
+
+        <!-- ========================================== -->
+        <!-- TAB 1: PLAY DIGITAL ENGINE                 -->
+        <!-- ========================================== -->
+        <section id="sec-sim" class="tab-content space-y-6">
+            
+            <!-- System Tracker Header -->
+            <div class="bg-outpost-dark border border-slate-800 rounded-xl p-4 shadow-2xl flex flex-wrap items-center justify-between gap-4">
+                <div class="flex items-center space-x-6 flex-wrap gap-y-2">
+                    <div>
+                        <span class="text-[10px] font-mono text-slate-400 uppercase tracking-widest block">TEMPORAL TIMELINE</span>
+                        <span id="sim-loop-display" class="font-title text-lg font-bold text-outpost-violet crt-glow-violet">LOOP 1 (NORMAL TIMELINE)</span>
+                    </div>
+                    <div class="h-8 w-px bg-slate-800 hidden sm:block"></div>
+                    <div>
+                        <span class="text-[10px] font-mono text-slate-400 uppercase tracking-widest block">THREAT TRACK (MAX 10)</span>
+                        <div class="flex items-center space-x-2">
+                            <span id="sim-threat-val" class="font-title text-lg font-bold text-outpost-amber">1 / 10</span>
+                            <div class="w-24 bg-slate-900 rounded-full h-2 overflow-hidden border border-slate-700">
+                                <div id="sim-threat-bar" class="bg-outpost-amber h-full transition-all duration-300" style="width: 10%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="h-8 w-px bg-slate-800 hidden sm:block"></div>
+                    <div>
+                        <span class="text-[10px] font-mono text-slate-400 uppercase tracking-widest block">DIRECTIVES COLLECTED</span>
+                        <span id="sim-obj-val" class="font-title text-lg font-bold text-outpost-green crt-glow-bio">0 / 3 DIRECTIVES</span>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-3">
+                    <button id="btn-next-phase" onclick="advancePhase()" class="px-5 py-2.5 bg-outpost-red hover:bg-red-600 text-white font-title font-bold text-xs tracking-wider rounded border border-red-400/40 shadow-lg transition flex items-center gap-2">
+                        <i class="fa-solid fa-dice"></i> <span>1. ROLL SHARED ACTION DICE & SPREAD THREAT</span>
+                    </button>
+                    <button onclick="resetGame()" class="px-3 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-mono text-xs rounded border border-slate-700" title="Reset Game">
+                        <i class="fa-solid fa-rotate-left"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Current Phase Interactive Banner & Shared Action Dice Bar -->
+            <div id="sim-phase-banner" class="bg-outpost-panel border-l-4 border-outpost-cyan p-3 rounded text-sm font-mono flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <div class="flex items-center space-x-3">
+                    <span id="phase-tag" class="bg-outpost-cyan/20 text-outpost-cyan px-2 py-0.5 rounded font-bold uppercase text-xs">PHASE 1: DICE & THREAT SPREAD</span>
+                    <span id="sim-phase-desc" class="text-slate-200">Click to roll the round's Shared Action Dice pool and add +1 Threat Token.</span>
+                </div>
+                <!-- Shared Dice Pool Display -->
+                <div class="flex items-center space-x-2 bg-slate-950 px-3 py-1.5 rounded border border-slate-800">
+                    <span class="text-[10px] text-slate-400 font-mono uppercase">SHARED DICE POOL:</span>
+                    <div id="shared-dice-display" class="flex items-center space-x-1.5 font-title font-bold text-outpost-cyan text-sm">
+                        <span class="px-2 py-0.5 bg-slate-900 border border-slate-700 rounded">-</span>
+                        <span class="px-2 py-0.5 bg-slate-900 border border-slate-700 rounded">-</span>
+                        <span class="px-2 py-0.5 bg-slate-900 border border-slate-700 rounded">-</span>
+                        <span class="px-2 py-0.5 bg-slate-900 border border-slate-700 rounded">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Character Abilities Bar -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 font-mono text-xs">
+                
+                <!-- Vance Ability -->
+                <div class="system-hud-border p-3 rounded-lg text-left">
+                    <div class="flex justify-between items-center text-hud-blue font-bold mb-1">
+                        <span>SGT VANCE</span>
+                        <span class="text-[9px] bg-hud-blue/20 px-1.5 py-0.5 rounded">+2 COMBAT/ROLLS</span>
+                    </div>
+                    <span class="text-[10px] text-slate-300 block">System HUD adds automatic +2 bonus to any location or combat roll Vance takes part in.</span>
+                </div>
+
+                <!-- Miller Ability -->
+                <div class="card-frame p-3 rounded-lg text-left border-red-800/80 bg-red-950/20 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center text-outpost-red font-bold mb-1">
+                            <span>PVT MILLER</span>
+                            <span class="text-[9px] bg-red-900/40 px-1.5 py-0.5 rounded">REROLL / BREACH SACRIFICE</span>
+                        </div>
+                        <span class="text-[10px] text-slate-300 block">Can reroll any action. Assigning Miller to Sector 4 Gate triggers Catastrophic Breach (2 wounds) for Temporal Reset!</span>
+                    </div>
+                </div>
+
+                <!-- Chen Ability -->
+                <div class="card-frame p-3 rounded-lg text-left border-emerald-800/80 bg-emerald-950/20">
+                    <div class="flex justify-between items-center text-outpost-bio font-bold mb-1">
+                        <span>ROOKIE CHEN</span>
+                        <span class="text-[9px] bg-emerald-900/40 px-1.5 py-0.5 rounded">+1 FRIENDLY ROLL</span>
+                    </div>
+                    <span class="text-[10px] text-slate-300 block">4.2Hz Sensitivity adds +1 bonus to any team member's dice check at his location.</span>
+                </div>
+
+                <!-- Aris Ability -->
+                <div class="card-frame p-3 rounded-lg text-left border-amber-800/80 bg-amber-950/20">
+                    <div class="flex justify-between items-center text-outpost-amber font-bold mb-1">
+                        <span>PVT ARIS</span>
+                        <span class="text-[9px] bg-amber-900/40 px-1.5 py-0.5 rounded">-1 REQ TARGET</span>
+                    </div>
+                    <span class="text-[10px] text-slate-300 block">Record Keeper tape directives subtract -1 from the target difficulty requirement at his site.</span>
+                </div>
+
+            </div>
+
+            <!-- Main Locations Board (6 Cards) -->
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                
+                <div class="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    
+                    <!-- Loc 1: Rimlands Perimeter -->
+                    <div id="card-loc-1" class="card-frame rounded-xl p-4 flex flex-col justify-between border-slate-800 relative hover:border-slate-700 transition">
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-xs font-mono text-outpost-cyan font-bold">LOC 01</span>
+                                <div class="flex items-center space-x-1" id="threat-tokens-loc-1">
+                                    <!-- Threat tokens rendered dynamically -->
+                                </div>
+                            </div>
+                            <h3 class="font-title font-bold text-base text-slate-100 mb-1 flex items-center gap-2">
+                                <i class="fa-solid fa-shield-halved text-outpost-amber"></i> Rimlands Perimeter
+                            </h3>
+                            <p class="text-xs text-slate-400 mb-2 font-sans">Razor Wire & Ash Ridge Barricade (Cap: 3 Threat)</p>
+                            <div class="bg-slate-950/80 p-2 rounded border border-slate-800/80 text-xs font-mono space-y-1">
+                                <p class="text-outpost-green"><strong class="text-slate-200">PURPOSE:</strong> Target 3+ | Reduces Global Threat by 1 & Barricades Gate.</p>
+                                <p class="text-outpost-amber"><strong class="text-slate-200">HAZARD:</strong> Perform Threat Check for EVERY Threat Token present (&lt;3 = Wound).</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-800/80">
+                            <span class="text-[10px] font-mono text-slate-500 uppercase tracking-widest block mb-1">Assigned Operatives:</span>
+                            <div id="slot-loc-1" onclick="assignSelectedTo('loc-1')" class="min-h-[48px] bg-outpost-panel/60 border border-dashed border-slate-700 rounded-lg p-1.5 flex flex-wrap gap-1 items-center justify-center cursor-pointer hover:border-outpost-cyan transition">
+                                <span class="text-xs text-slate-500 font-mono text-center">Click to Assign Selected Operative</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Loc 2: Central Comms Desk -->
+                    <div id="card-loc-2" class="card-frame rounded-xl p-4 flex flex-col justify-between border-slate-800 relative hover:border-slate-700 transition">
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-xs font-mono text-outpost-cyan font-bold">LOC 02</span>
+                                <div class="flex items-center space-x-1" id="threat-tokens-loc-2">
+                                    <!-- Threat tokens -->
+                                </div>
+                            </div>
+                            <h3 class="font-title font-bold text-base text-slate-100 mb-1 flex items-center gap-2">
+                                <i class="fa-solid fa-tower-cell text-outpost-cyan"></i> Central Comms Desk
+                            </h3>
+                            <p class="text-xs text-slate-400 mb-2 font-sans">4.2Hz Bio-Signal Antenna (Cap: 3 Threat)</p>
+                            <div class="bg-slate-950/80 p-2 rounded border border-slate-800/80 text-xs font-mono space-y-1">
+                                <p class="text-outpost-green"><strong class="text-slate-200">PURPOSE:</strong> Target 3+ | Provides +1 to ALL squad rolls next turn or clears threat.</p>
+                                <p class="text-outpost-amber"><strong class="text-slate-200">HAZARD:</strong> Perform Threat Check for EVERY Threat Token present (&lt;3 = Wound).</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-800/80">
+                            <span class="text-[10px] font-mono text-slate-500 uppercase tracking-widest block mb-1">Assigned Operatives:</span>
+                            <div id="slot-loc-2" onclick="assignSelectedTo('loc-2')" class="min-h-[48px] bg-outpost-panel/60 border border-dashed border-slate-700 rounded-lg p-1.5 flex flex-wrap gap-1 items-center justify-center cursor-pointer hover:border-outpost-cyan transition">
+                                <span class="text-xs text-slate-500 font-mono text-center">Click to Assign Selected Operative</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Loc 3: Armory & Barricade -->
+                    <div id="card-loc-3" class="card-frame rounded-xl p-4 flex flex-col justify-between border-slate-800 relative hover:border-slate-700 transition">
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-xs font-mono text-outpost-cyan font-bold">LOC 03</span>
+                                <div class="flex items-center space-x-1" id="threat-tokens-loc-3">
+                                    <!-- Threat tokens -->
+                                </div>
+                            </div>
+                            <h3 class="font-title font-bold text-base text-slate-100 mb-1 flex items-center gap-2">
+                                <i class="fa-solid fa-boxes-packing text-outpost-amber"></i> Armory & Stash
+                            </h3>
+                            <p class="text-xs text-slate-400 mb-2 font-sans">Ammunition Stash (Cap: 3 Threat)</p>
+                            <div class="bg-slate-950/80 p-2 rounded border border-slate-800/80 text-xs font-mono space-y-1">
+                                <p class="text-outpost-green"><strong class="text-slate-200">PURPOSE:</strong> Target 3+ | Grants Ammo/Combat Token (+2 on combat roll).</p>
+                                <p class="text-outpost-amber"><strong class="text-slate-200">HAZARD:</strong> Perform Threat Check for EVERY Threat Token present (&lt;3 = Wound).</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-800/80">
+                            <span class="text-[10px] font-mono text-slate-500 uppercase tracking-widest block mb-1">Assigned Operatives:</span>
+                            <div id="slot-loc-3" onclick="assignSelectedTo('loc-3')" class="min-h-[48px] bg-outpost-panel/60 border border-dashed border-slate-700 rounded-lg p-1.5 flex flex-wrap gap-1 items-center justify-center cursor-pointer hover:border-outpost-cyan transition">
+                                <span class="text-xs text-slate-500 font-mono text-center">Click to Assign Selected Operative</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Loc 4: Sub-Basement Vault -->
+                    <div id="card-loc-4" class="card-frame rounded-xl p-4 flex flex-col justify-between border-slate-800 relative hover:border-slate-700 transition">
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-xs font-mono text-outpost-cyan font-bold">LOC 04</span>
+                                <div class="flex items-center space-x-1" id="threat-tokens-loc-4">
+                                    <!-- Threat tokens -->
+                                </div>
+                            </div>
+                            <h3 class="font-title font-bold text-base text-slate-100 mb-1 flex items-center gap-2">
+                                <i class="fa-solid fa-biohazard text-outpost-bio"></i> Sub-Basement Vault
+                            </h3>
+                            <p class="text-xs text-slate-400 mb-2 font-sans">Central Drainage Bio-Refinery (Cap: 3 Threat)</p>
+                            <div class="bg-slate-950/80 p-2 rounded border border-slate-800/80 text-xs font-mono space-y-1">
+                                <p class="text-outpost-green"><strong class="text-slate-200">PURPOSE:</strong> Target 4+ | **HARVEST 1 DIRECTIVE** (Primary objective!).</p>
+                                <p class="text-outpost-amber"><strong class="text-slate-200">HAZARD:</strong> Perform Threat Check for EVERY Threat Token present (&lt;3 = Wound).</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-800/80">
+                            <span class="text-[10px] font-mono text-slate-500 uppercase tracking-widest block mb-1">Assigned Operatives:</span>
+                            <div id="slot-loc-4" onclick="assignSelectedTo('loc-4')" class="min-h-[48px] bg-outpost-panel/60 border border-dashed border-slate-700 rounded-lg p-1.5 flex flex-wrap gap-1 items-center justify-center cursor-pointer hover:border-outpost-cyan transition">
+                                <span class="text-xs text-slate-500 font-mono text-center">Click to Assign Selected Operative</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Loc 5: Medical Bay -->
+                    <div id="card-loc-5" class="card-frame rounded-xl p-4 flex flex-col justify-between border-slate-800 relative hover:border-slate-700 transition">
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-xs font-mono text-outpost-cyan font-bold">LOC 05</span>
+                                <div class="flex items-center space-x-1" id="threat-tokens-loc-5">
+                                    <!-- Threat tokens -->
+                                </div>
+                            </div>
+                            <h3 class="font-title font-bold text-base text-slate-100 mb-1 flex items-center gap-2">
+                                <i class="fa-solid fa-notes-medical text-red-500"></i> Medical Bay
+                            </h3>
+                            <p class="text-xs text-slate-400 mb-2 font-sans">Visor Verification & Triage (Cap: 3 Threat)</p>
+                            <div class="bg-slate-950/80 p-2 rounded border border-slate-800/80 text-xs font-mono space-y-1">
+                                <p class="text-outpost-green"><strong class="text-slate-200">PURPOSE:</strong> Target 2+ | **HEALS 1 WOUNDED OPERATIVE** back to Normal side.</p>
+                                <p class="text-outpost-amber"><strong class="text-slate-200">HAZARD:</strong> Perform Threat Check for EVERY Threat Token present (&lt;3 = Wound).</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-800/80">
+                            <span class="text-[10px] font-mono text-slate-500 uppercase tracking-widest block mb-1">Assigned Operatives:</span>
+                            <div id="slot-loc-5" onclick="assignSelectedTo('loc-5')" class="min-h-[48px] bg-outpost-panel/60 border border-dashed border-slate-700 rounded-lg p-1.5 flex flex-wrap gap-1 items-center justify-center cursor-pointer hover:border-outpost-cyan transition">
+                                <span class="text-xs text-slate-500 font-mono text-center">Click to Assign Selected Operative</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Loc 6: Sector 4 Gate (Catastrophic Breach) -->
+                    <div id="card-loc-6" class="card-frame rounded-xl p-4 flex flex-col justify-between border-red-900/60 bg-red-950/10 relative hover:border-outpost-red transition">
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-xs font-mono text-outpost-red font-bold">LOC 06</span>
+                                <div class="flex items-center space-x-1" id="threat-tokens-loc-6">
+                                    <!-- Threat tokens -->
+                                </div>
+                            </div>
+                            <h3 class="font-title font-bold text-base text-outpost-red mb-1 flex items-center gap-2">
+                                <i class="fa-solid fa-door-closed text-outpost-red"></i> Sector 4 Gate
+                            </h3>
+                            <p class="text-xs text-slate-400 mb-2 font-sans">CATASTROPHIC BREACH POINT (Cap: 3 Threat)</p>
+                            <div class="bg-slate-950/80 p-2 rounded border border-red-900/40 text-xs font-mono space-y-1">
+                                <p class="text-outpost-green"><strong class="text-slate-200">PURPOSE:</strong> Target 5+ | **SEALS BREACH / GAINS 1 DIRECTIVE**.</p>
+                                <p class="text-outpost-red"><strong class="text-slate-200">HAZARD (BREACH):</strong> Unprotected breach deals 2 Instant Wounds (Triggers Miller's Loop Reset if Miller dies!).</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-800/80">
+                            <span class="text-[10px] font-mono text-slate-500 uppercase tracking-widest block mb-1">Assigned Operatives:</span>
+                            <div id="slot-loc-6" onclick="assignSelectedTo('loc-6')" class="min-h-[48px] bg-outpost-panel/60 border border-dashed border-red-800/60 rounded-lg p-1.5 flex flex-wrap gap-1 items-center justify-center cursor-pointer hover:border-outpost-red transition">
+                                <span class="text-xs text-slate-500 font-mono text-center">Click to Assign Operative (Sacrifice Zone)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Right Sidebar: Operative Squad Dossier & Console -->
+                <div class="space-y-4">
+                    
+                    <!-- Characters Roster Card -->
+                    <div class="card-frame rounded-xl p-4 border-slate-800">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-3">
+                            <h3 class="font-title font-bold text-slate-100 flex items-center gap-2 text-xs uppercase tracking-wider">
+                                <i class="fa-solid fa-users text-outpost-cyan"></i> SQUAD ROSTER (SELECT TO ASSIGN)
+                            </h3>
+                        </div>
+
+                        <div class="space-y-2">
+                            
+                            <!-- Vance -->
+                            <div id="char-card-vance" onclick="selectChar('vance')" class="p-2.5 rounded-lg bg-outpost-panel border border-slate-700/70 hover:border-hud-blue cursor-pointer transition">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-8 h-8 rounded bg-cyan-950 border border-hud-blue flex items-center justify-center font-bold font-title text-hud-blue text-xs">
+                                            VAN
+                                        </div>
+                                        <div>
+                                            <h4 class="font-title font-bold text-xs text-slate-100">Sgt. Vance</h4>
+                                            <p class="text-[10px] text-hud-blue font-mono">+2 Combat/Strength Bonus</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div id="status-vance" class="text-[10px] font-mono font-bold text-emerald-400">NORMAL</div>
+                                        <span id="loc-vance" class="text-[9px] uppercase font-mono text-slate-500">UNASSIGNED</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Miller -->
+                            <div id="char-card-miller" onclick="selectChar('miller')" class="p-2.5 rounded-lg bg-outpost-panel border border-slate-700/70 hover:border-outpost-red cursor-pointer transition">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-8 h-8 rounded bg-red-950 border border-outpost-red flex items-center justify-center font-bold font-title text-outpost-red text-xs">
+                                            MIL
+                                        </div>
+                                        <div>
+                                            <h4 class="font-title font-bold text-xs text-slate-100">Pvt. Miller</h4>
+                                            <p class="text-[10px] text-outpost-red font-mono">Die Reroll / Loop Veteran</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div id="status-miller" class="text-[10px] font-mono font-bold text-emerald-400">NORMAL</div>
+                                        <span id="loc-miller" class="text-[9px] uppercase font-mono text-slate-500">UNASSIGNED</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Chen -->
+                            <div id="char-card-chen" onclick="selectChar('chen')" class="p-2.5 rounded-lg bg-outpost-panel border border-slate-700/70 hover:border-outpost-bio cursor-pointer transition">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-8 h-8 rounded bg-emerald-950 border border-outpost-bio flex items-center justify-center font-bold font-title text-outpost-bio text-xs">
+                                            CHE
+                                        </div>
+                                        <div>
+                                            <h4 class="font-title font-bold text-xs text-slate-100">Rookie Chen</h4>
+                                            <p class="text-[10px] text-outpost-bio font-mono">+1 to Friendly Roll</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div id="status-chen" class="text-[10px] font-mono font-bold text-emerald-400">NORMAL</div>
+                                        <span id="loc-chen" class="text-[9px] uppercase font-mono text-slate-500">UNASSIGNED</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Aris -->
+                            <div id="char-card-aris" onclick="selectChar('aris')" class="p-2.5 rounded-lg bg-outpost-panel border border-slate-700/70 hover:border-outpost-amber cursor-pointer transition">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-8 h-8 rounded bg-amber-950 border border-outpost-amber flex items-center justify-center font-bold font-title text-outpost-amber text-xs">
+                                            ARI
+                                        </div>
+                                        <div>
+                                            <h4 class="font-title font-bold text-xs text-slate-100">Pvt. Aris</h4>
+                                            <p class="text-[10px] text-outpost-amber font-mono">-1 Location Target Check</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div id="status-aris" class="text-[10px] font-mono font-bold text-emerald-400">NORMAL</div>
+                                        <span id="loc-aris" class="text-[9px] uppercase font-mono text-slate-500">UNASSIGNED</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Tactical Console Log -->
+                    <div class="bg-outpost-black border border-slate-800 rounded-xl p-3 h-52 overflow-y-auto font-mono text-xs space-y-1" id="sim-console">
+                        <div class="text-slate-500">[SYSTEM] Outpost 13 Shared Action Dice Pool Engine Initialized.</div>
+                        <div class="text-slate-400">[INSTRUCTION] Step 1: Click "1. ROLL SHARED ACTION DICE & SPREAD THREAT" to begin.</div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ========================================== -->
+        <!-- TAB 2: RULES & LOCATION REWARDS GUIDE     -->
+        <!-- ========================================== -->
+        <section id="sec-guide" class="tab-content hidden space-y-6">
+            <div class="bg-outpost-dark border border-slate-800 rounded-xl p-6 max-w-5xl mx-auto space-y-6 text-slate-300">
+                <div class="border-b border-slate-800 pb-4">
+                    <span class="text-xs font-mono text-outpost-cyan uppercase tracking-widest block mb-1">REVISED SHARED ACTION DICE & MULTI-THREAT PROTOCOL MANUAL</span>
+                    <h2 class="font-title font-black text-2xl text-slate-100 crt-glow-cyan">GAMEPLAY RULES & MECHANICS</h2>
+                    <p class="text-xs text-slate-400 font-mono mt-1">1 Solo Player • 20-30 Mins • Shared Action Dice Pool • Multi-Threat Checks</p>
+                </div>
+
+                <!-- Section 1: Objective & Win/Loss -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="card-frame rounded-xl p-4 border-emerald-800/80 bg-emerald-950/20 space-y-2">
+                        <h3 class="font-title font-bold text-outpost-green flex items-center gap-2 text-sm uppercase">
+                            <i class="fa-solid fa-trophy"></i> HOW TO WIN
+                        </h3>
+                        <p class="text-xs font-mono leading-relaxed">
+                            Harvest <strong>3 DIRECTIVES</strong> from locations (like Sub-Basement Vault LOC 04 or Sector 4 Gate LOC 06) and survive before the global Threat Track reaches 10!
+                        </p>
+                    </div>
+
+                    <div class="card-frame rounded-xl p-4 border-red-800/80 bg-red-950/20 space-y-2">
+                        <h3 class="font-title font-bold text-outpost-red flex items-center gap-2 text-sm uppercase">
+                            <i class="fa-solid fa-skull-crossbones"></i> OVERRUN THRESHOLD (CAP = 3) & RESET
+                        </h3>
+                        <p class="text-xs font-mono leading-relaxed">
+                            • <strong>Threat Capacity increased to 3:</strong> A location overruns only when reaching 3 Threat Tokens.<br/>
+                            • <strong>Organic Miller Reset:</strong> Assigning Miller to Sector 4 Gate exposes him to Catastrophic Breach (2 Wounds), killing him and triggering a 1-time Temporal Reset!
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Section 2: Core Mechanics -->
+                <div class="space-y-3 font-mono text-xs">
+                    <h3 class="font-title font-bold text-slate-100 text-sm uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-rotate text-outpost-violet"></i> CORE GAMEPLAY MECHANICS
+                    </h3>
+
+                    <div class="space-y-2">
+                        <div class="p-3 bg-slate-950 rounded border border-slate-800">
+                            <strong class="text-outpost-cyan block mb-1">1. SHARED ACTION DICE POOL</strong>
+                            At the start of each turn, 4 shared action dice are rolled. Assigned operatives draw from this pool as their base check values.
+                        </div>
+                        <div class="p-3 bg-slate-950 rounded border border-slate-800">
+                            <strong class="text-outpost-amber block mb-1">2. MULTI-THREAT HAZARD CHECKS</strong>
+                            If a location has multiple Threat Tokens, operatives must perform a separate Hazard Check for EVERY Threat Token present (&lt;3 = Wound).
+                        </div>
+                        <div class="p-3 bg-slate-950 rounded border border-slate-800">
+                            <strong class="text-outpost-red block mb-1">3. CATASTROPHIC BREACH AT SECTOR 4 GATE</strong>
+                            Sector 4 Gate features a Catastrophic Breach Attack dealing 2 instant wounds. Use this strategically with Miller to activate his 1-time Temporal Loop Reset into Loop 2 (+1 Knowledge Boost).
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ========================================== -->
+        <!-- TAB 3: PRINT & PLAY SHEET (9 CARDS)        -->
+        <!-- ========================================== -->
+        <section id="sec-pnp" class="tab-content hidden space-y-6">
+            <div class="no-print bg-outpost-dark border border-slate-800 rounded-xl p-4 flex flex-wrap items-center justify-between gap-4">
+                <div>
+                    <h2 class="font-title font-bold text-lg text-slate-100 uppercase tracking-wider">PRINT & PLAY SHEET (9 CARDS + TOKENS)</h2>
+                    <p class="text-xs text-slate-400 font-mono">Standard poker card sizing layout with crop guidelines for home printing.</p>
+                </div>
+                <button onclick="window.print()" class="px-6 py-2.5 bg-outpost-red hover:bg-red-600 text-white font-title font-bold text-sm rounded shadow-lg transition flex items-center gap-2">
+                    <i class="fa-solid fa-print"></i> PRINT SHEET NOW
+                </button>
+            </div>
+
+            <div class="print-sheet bg-outpost-panel p-6 rounded-xl border border-slate-800 space-y-6">
+                <div class="text-center border-b border-slate-700 pb-3">
+                    <h3 class="font-title font-bold text-xl text-slate-100 uppercase tracking-widest">OUTPOST 13: LOOP PROTOCOL (9-CARD PnP SET)</h3>
+                    <p class="text-xs font-mono text-slate-400">6 Location Cards • 1 Tracker Card • 1 Characters Dossier Card • 1 Reserve Card</p>
+                </div>
+
+                <!-- 9 Grid Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-5xl mx-auto" id="pnp-cards-container">
+                    <!-- Cards injected dynamically -->
+                </div>
+
+                <!-- Double Sided Tokens -->
+                <div class="pt-6 border-t border-slate-700 space-y-4">
+                    <h4 class="font-title font-bold text-sm text-slate-200 text-center uppercase tracking-wider">OPERATIVE TOKENS (NORMAL / WOUNDED) & THREAT TOKENS</h4>
+                    
+                    <div class="flex flex-wrap justify-center gap-4" id="pnp-tokens-container">
+                        <!-- Tokens injected -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ========================================== -->
+        <!-- TAB 4: CARD GALLERY                        -->
+        <!-- ========================================== -->
+        <section id="sec-gallery" class="tab-content hidden space-y-6">
+            <div class="bg-outpost-dark border border-slate-800 rounded-xl p-6 max-w-6xl mx-auto space-y-6">
+                <div class="border-b border-slate-800 pb-4">
+                    <h2 class="font-title font-black text-2xl text-slate-100 crt-glow-cyan">FULL CARD GALLERY (9 CARDS)</h2>
+                    <p class="text-xs text-slate-400 font-mono mt-1">Detailed inspector for all 6 Locations, Tracker, Characters Dossier, and Reserve cards.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="gallery-cards-container">
+                    <!-- Detailed cards injected dynamically -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- JS Engine & Game Mechanics -->
+    <script>
+        const CARDS_DATA = [
+            {
+                id: 'loc-1',
+                title: 'Rimlands Perimeter',
+                locNum: 'LOC 01',
+                target: 'Target 3+',
+                purpose: 'Barricade Defense (Cap: 3 Threat)',
+                reward: 'Reduces global Threat Track by 1 & prevents overrun.',
+                hazard: 'Check EVERY Threat Token present (&lt;3 = Wound).',
+                icon: 'fa-shield-halved',
+                color: 'outpost-amber'
+            },
+            {
+                id: 'loc-2',
+                title: 'Central Comms Desk',
+                locNum: 'LOC 02',
+                target: 'Target 3+',
+                purpose: '4.2Hz Bio-Signal Antenna (Cap: 3 Threat)',
+                reward: 'Provides +1 roll bonus to ALL squad members next turn.',
+                hazard: 'Check EVERY Threat Token present (&lt;3 = Wound).',
+                icon: 'fa-tower-cell',
+                color: 'outpost-cyan'
+            },
+            {
+                id: 'loc-3',
+                title: 'Armory & Stash',
+                locNum: 'LOC 03',
+                target: 'Target 3+',
+                purpose: 'Ammunition Stash (Cap: 3 Threat)',
+                reward: 'Grants +1 Ammo Token (+2 on combat roll).',
+                hazard: 'Check EVERY Threat Token present (&lt;3 = Wound).',
+                icon: 'fa-boxes-packing',
+                color: 'outpost-amber'
+            },
+            {
+                id: 'loc-4',
+                title: 'Sub-Basement Vault',
+                locNum: 'LOC 04',
+                target: 'Target 4+',
+                purpose: 'Primary Directive Extraction (Cap: 3 Threat)',
+                reward: 'HARVESTS 1 DIRECTIVE toward win condition!',
+                hazard: 'Check EVERY Threat Token present (&lt;3 = Wound).',
+                icon: 'fa-biohazard',
+                color: 'outpost-bio'
+            },
+            {
+                id: 'loc-5',
+                title: 'Medical Bay',
+                locNum: 'LOC 05',
+                target: 'Target 2+',
+                purpose: 'Triage & Decontamination (Cap: 3 Threat)',
+                reward: 'HEALS 1 wounded operative back to Normal side.',
+                hazard: 'Check EVERY Threat Token present (&lt;3 = Wound).',
+                icon: 'fa-notes-medical',
+                color: 'red-500'
+            },
+            {
+                id: 'loc-6',
+                title: 'Sector 4 Gate',
+                locNum: 'LOC 06',
+                target: 'Target 5+',
+                purpose: 'Catastrophic Breach Point (Cap: 3 Threat)',
+                reward: 'HARVESTS 1 DIRECTIVE & seals breach point.',
+                hazard: 'Catastrophic Breach deals 2 Instant Wounds (Miller Loop Reset).',
+                icon: 'fa-door-closed',
+                color: 'outpost-red'
+            },
+            {
+                id: 'card-tracker',
+                title: 'Threat & Loop Tracker',
+                locNum: 'TRACKER',
+                target: 'TRACK 1-10',
+                purpose: 'Monitors Outpost Threat & Directives',
+                reward: 'Tracks Directives 0-3 & Loop 1-2 status.',
+                hazard: 'Threat 10 or 3 Threat Tokens on 1 loc = OVERRUN.',
+                icon: 'fa-gauge-high',
+                color: 'outpost-violet'
+            },
+            {
+                id: 'card-chars',
+                title: 'Characters Dossier Card',
+                locNum: 'DOSSIER',
+                target: 'SQUAD',
+                purpose: 'Phase 1 Operative Stat Summaries',
+                reward: 'Vance +2, Miller Reroll, Chen +1, Aris -1 Req.',
+                hazard: 'Operative deaths decrease tactical options.',
+                icon: 'fa-users',
+                color: 'outpost-cyan'
+            },
+            {
+                id: 'card-reserve',
+                title: 'Reserve / Supply Card',
+                locNum: 'RESERVE',
+                target: 'SUPPLY',
+                purpose: 'Inventory & Shared Action Dice Vault',
+                reward: 'Stores Ammo Tokens & Shared Dice results.',
+                hazard: 'Supply depletion increases mission risk.',
+                icon: 'fa-boxes-stacked',
+                color: 'outpost-amber'
+            }
+        ];
+
+        let gameState = {
+            loop: 1,
+            threatTrack: 1,
+            directives: 0,
+            phase: 'spread',
+            selectedChar: null,
+            ammoTokens: 1,
+            sharedDicePool: [3, 4, 2, 5],
+            threatOnLocations: { 'loc-1': 0, 'loc-2': 0, 'loc-3': 0, 'loc-4': 0, 'loc-5': 0, 'loc-6': 0 },
+            assignments: { 'loc-1': [], 'loc-2': [], 'loc-3': [], 'loc-4': [], 'loc-5': [], 'loc-6': [] },
+            characters: {
+                vance: { name: 'Sgt. Vance', state: 'normal', location: null },
+                miller: { name: 'Pvt. Miller', state: 'normal', location: null },
+                chen: { name: 'Rookie Chen', state: 'normal', location: null },
+                aris: { name: 'Pvt. Aris', state: 'normal', location: null }
+            }
+        };
+
+        function selectChar(charKey) {
+            if (gameState.characters[charKey].state === 'dead') {
+                logConsole(`[ALERT] ${gameState.characters[charKey].name} is dead.`);
+                return;
+            }
+            gameState.selectedChar = charKey;
+            logConsole(`[SELECTED] ${gameState.characters[charKey].name}. Click any location slot to assign.`);
+        }
+
+        function assignSelectedTo(locId) {
+            if (!gameState.selectedChar) {
+                logConsole(`[NOTICE] Select an operative from the Squad Roster first.`);
+                return;
+            }
+            const charKey = gameState.selectedChar;
+
+            Object.keys(gameState.assignments).forEach(slot => {
+                gameState.assignments[slot] = gameState.assignments[slot].filter(c => c !== charKey);
+            });
+
+            gameState.assignments[locId].push(charKey);
+            gameState.characters[charKey].location = locId;
+
+            gameState.selectedChar = null;
+            renderAssignments();
+            updateUI();
+            logConsole(`[ASSIGNED] ${gameState.characters[charKey].name} assigned to ${locId.replace('loc-', 'LOC ')}.`);
+        }
+
+        function renderAssignments() {
+            Object.keys(gameState.assignments).forEach(locId => {
+                const chars = gameState.assignments[locId];
+                const slotEl = document.getElementById(`slot-${locId}`);
+
+                if (chars.length === 0) {
+                    slotEl.innerHTML = `<span class="text-xs text-slate-500 font-mono text-center">Click to Assign Selected Operative</span>`;
+                } else {
+                    slotEl.innerHTML = chars.map(c => `
+                        <div class="flex items-center space-x-1 bg-slate-900 border border-outpost-cyan px-2 py-1 rounded text-xs font-mono text-slate-100">
+                            <span>${gameState.characters[c].name}</span>
+                            <button onclick="unassignChar('${locId}', '${c}', event)" class="text-slate-400 hover:text-red-400 ml-1"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                    `).join('');
+                }
+            });
+        }
+
+        function unassignChar(locId, charKey, event) {
+            if (event) event.stopPropagation();
+            gameState.assignments[locId] = gameState.assignments[locId].filter(c => c !== charKey);
+            gameState.characters[charKey].location = null;
+            renderAssignments();
+            updateUI();
+        }
+
+        function advancePhase() {
+            if (gameState.phase === 'spread') {
+                // Roll Shared Action Dice Pool (4 Dice)
+                gameState.sharedDicePool = Array(4).fill(0).map(() => Math.floor(Math.random() * 6) + 1);
+
+                // Roll Threat Spread
+                const locNum = Math.floor(Math.random() * 6) + 1;
+                const locId = `loc-${locNum}`;
+                gameState.threatOnLocations[locId]++;
+
+                logConsole(`[SHARED DICE ROLLED] New Action Dice Pool: [${gameState.sharedDicePool.join(', ')}]`);
+                logConsole(`[THREAT SPREAD ROLL] D6 rolled [${locNum}]. +1 Threat Token added to LOC 0${locNum}!`);
+
+                // Check Overrun condition (3 Threat Tokens on 1 Location)
+                if (gameState.threatOnLocations[locId] >= 3) {
+                    logConsole(`[OVERRUN ALERT] LOC 0${locNum} HAS ACCUMULATED 3 THREAT TOKENS! OUTPOST OVERRUN!`);
+                    triggerOverrunDefeat();
+                    return;
+                }
+
+                gameState.phase = 'place';
+                document.getElementById('phase-tag').innerText = 'PHASE 2: WORKER PLACEMENT';
+                document.getElementById('sim-phase-desc').innerText = 'Assign Vance, Miller, Chen, or Aris to locations. Shared Action Dice are available for checks!';
+                document.getElementById('btn-next-phase').innerHTML = `<i class="fa-solid fa-shield-halved"></i> <span>2. EXECUTE COMBAT & MISSIONS</span>`;
+
+            } else if (gameState.phase === 'place') {
+                resolveRoundActions();
+                
+                gameState.phase = 'spread';
+                document.getElementById('phase-tag').innerText = 'PHASE 1: DICE & THREAT SPREAD';
+                document.getElementById('sim-phase-desc').innerText = 'Click to roll Shared Action Dice pool and add +1 Threat Token.';
+                document.getElementById('btn-next-phase').innerHTML = `<i class="fa-solid fa-dice"></i> <span>1. ROLL SHARED ACTION DICE & SPREAD THREAT</span>`;
+            }
+
+            updateUI();
+        }
+
+        function resolveRoundActions() {
+            logConsole(`===================================================`);
+            logConsole(`[RESOLVING MULTI-THREAT HAZARDS & LOCATION MISSIONS]`);
+
+            let diceIdx = 0;
+
+            Object.keys(gameState.assignments).forEach(locId => {
+                const chars = gameState.assignments[locId];
+                if (chars.length === 0) return;
+
+                const hasVance = chars.includes('vance');
+                const hasMiller = chars.includes('miller');
+                const hasChen = chars.includes('chen');
+                const hasAris = chars.includes('aris');
+
+                // Step A: Catastrophic Breach Check at Sector 4 Gate
+                if (locId === 'loc-6') {
+                    chars.forEach(cKey => {
+                        logConsole(`[CATASTROPHIC BREACH] Sector 4 Gate breach strikes ${gameState.characters[cKey].name} with 2 Instant Wounds!`);
+                        const charObj = gameState.characters[cKey];
+                        
+                        if (charObj.state === 'normal') {
+                            charObj.state = 'dead';
+                            logConsole(`[FATAL BREACH] ${charObj.name} took 2 instant wounds and was KILLED!`);
+                        } else if (charObj.state === 'wounded') {
+                            charObj.state = 'dead';
+                            logConsole(`[FATAL BREACH] ${charObj.name} was KILLED by breach attack!`);
+                        }
+
+                        if (cKey === 'miller') {
+                            logConsole(`[TEMPORAL TRIGGER] Pvt. Miller died at Sector 4 Gate! Triggering Temporal Loop Reset!`);
+                            triggerLoopReset();
+                            return;
+                        }
+                    });
+                }
+
+                // Step B: Multi-Threat Hazard Check (Check for EVERY Threat Token present)
+                const threatCount = gameState.threatOnLocations[locId];
+                if (threatCount > 0) {
+                    logConsole(`[MULTI-THREAT HAZARD] ${locId.replace('loc-', 'LOC ')} has ${threatCount} Threat Token(s). Performing ${threatCount} check(s)...`);
+
+                    for (let i = 1; i <= threatCount; i++) {
+                        chars.forEach(cKey => {
+                            if (gameState.characters[cKey].state === 'dead') return;
+
+                            let baseRoll = gameState.sharedDicePool[diceIdx % gameState.sharedDicePool.length];
+                            diceIdx++;
+
+                            if (hasVance) baseRoll += 2; // Vance +2
+                            if (hasChen) baseRoll += 1;  // Chen +1
+                            if (gameState.loop === 2) baseRoll += 1;
+
+                            logConsole(`[THREAT CHECK ${i}/${threatCount}] ${gameState.characters[cKey].name} used Shared Action Die + Stats = [${baseRoll}] against threat hazard.`);
+
+                            if (baseRoll < 3) {
+                                const charObj = gameState.characters[cKey];
+                                if (charObj.state === 'normal') {
+                                    charObj.state = 'wounded';
+                                    logConsole(`[WOUNDED] ${charObj.name} took a wound from Threat Token ${i}!`);
+                                } else if (charObj.state === 'wounded') {
+                                    charObj.state = 'dead';
+                                    logConsole(`[FATAL] ${charObj.name} sustained 2nd wound from Threat Token ${i} and was KILLED!`);
+                                    if (cKey === 'miller') triggerLoopReset();
+                                }
+                            } else {
+                                logConsole(`[THREAT CLEARED] ${gameState.characters[cKey].name} cleared Threat Token ${i}!`);
+                            }
+                        });
+                    }
+
+                    // Remove cleared threat tokens
+                    gameState.threatOnLocations[locId] = 0;
+                }
+
+                // Step C: Location Mission Check
+                let targetReq = 3;
+                if (locId === 'loc-4') targetReq = 4;
+                if (locId === 'loc-5') targetReq = 2;
+                if (locId === 'loc-6') targetReq = 5;
+
+                if (hasAris) targetReq = Math.max(1, targetReq - 1); // Aris -1 target check requirement
+
+                let missionRoll = gameState.sharedDicePool[diceIdx % gameState.sharedDicePool.length];
+                diceIdx++;
+
+                if (hasVance) missionRoll += 2;
+                if (hasChen) missionRoll += 1;
+                if (gameState.loop === 2) missionRoll += 1;
+
+                if (hasMiller && missionRoll < targetReq && gameState.characters.miller.state !== 'dead') {
+                    missionRoll = Math.floor(Math.random() * 6) + 1; // Miller reroll
+                    logConsole(`[MILLER FORESIGHT REROLL] Pvt. Miller rerolled failed mission check to [${missionRoll}]!`);
+                }
+
+                logConsole(`[MISSION CHECK] ${locId.replace('loc-', 'LOC ')} roll [${missionRoll}] vs Required Target [${targetReq}].`);
+
+                if (missionRoll >= targetReq) {
+                    if (locId === 'loc-1') {
+                        gameState.threatTrack = Math.max(1, gameState.threatTrack - 1);
+                        logConsole(`[REWARD - LOC 01] Perimeter barricaded! Global Threat Track reduced by 1.`);
+                    } else if (locId === 'loc-2') {
+                        logConsole(`[REWARD - LOC 02] 4.2Hz Bio-Signal Antenna aligned! +1 roll bonus ready.`);
+                    } else if (locId === 'loc-3') {
+                        gameState.ammoTokens += 1;
+                        logConsole(`[REWARD - LOC 03] Armory Stash looted! +1 Ammo Token.`);
+                    } else if (locId === 'loc-4') {
+                        gameState.directives += 1;
+                        logConsole(`[REWARD - LOC 04] DIRECTIVE HARVESTED FROM SUB-BASEMENT VAULT!`);
+                    } else if (locId === 'loc-5') {
+                        const woundedKey = Object.keys(gameState.characters).find(k => gameState.characters[k].state === 'wounded');
+                        if (woundedKey) {
+                            gameState.characters[woundedKey].state = 'normal';
+                            logConsole(`[REWARD - LOC 05] Medical Bay healed ${gameState.characters[woundedKey].name} back to Normal!`);
+                        }
+                    } else if (locId === 'loc-6') {
+                        gameState.directives += 1;
+                        logConsole(`[REWARD - LOC 06] SECTOR 4 GATE BREACH SECURED! DIRECTIVE HARVESTED!`);
+                    }
+                }
+            });
+
+            // End of round Threat Track +1
+            gameState.threatTrack += 1;
+            logConsole(`[ROUND END] Blood Moon Threat Track advanced to ${gameState.threatTrack}/10.`);
+
+            checkWinLossConditions();
+            updateUI();
+        }
+
+        function triggerLoopReset() {
+            if (gameState.loop === 1) {
+                gameState.loop = 2;
+                gameState.threatTrack = 1;
+                Object.keys(gameState.threatOnLocations).forEach(k => gameState.threatOnLocations[k] = 0);
+                Object.keys(gameState.characters).forEach(k => {
+                    gameState.characters[k].state = 'normal';
+                    gameState.characters[k].location = null;
+                });
+                Object.keys(gameState.assignments).forEach(k => gameState.assignments[k] = []);
+
+                renderAssignments();
+                alert(`3-MINUTE TEMPORAL LOOP RESET ACTIVATED!\n\nMiller's death triggered a timeline reset! Board reset back to Round 1 with Loop 2 Knowledge (+1 permanent roll boost).`);
+                logConsole(`[TEMPORAL RESET] TIMELINE RESET TO LOOP 2 WITH PERMANENT +1 STAT BOOST.`);
+            } else {
+                alert(`TIMELINE COLLAPSE: Miller died in Loop 2. Game Over.`);
+            }
+            updateUI();
+        }
+
+        function triggerOverrunDefeat() {
+            if (gameState.loop === 1 && gameState.characters.miller.state !== 'dead') {
+                alert("OUTPOST OVERRUN! A location reached 3 Threat Tokens.\n\nMiller's Temporal Loop activates automatically!");
+                triggerLoopReset();
+            } else {
+                alert("GAME OVER! Outpost overrun by skinless abominations.");
+            }
+        }
+
+        function checkWinLossConditions() {
+            if (gameState.directives >= 3) {
+                alert("VICTORY! You collected 3 Directives and survived Outpost 13!");
+            } else if (gameState.threatTrack >= 10) {
+                if (gameState.loop === 1 && gameState.characters.miller.state !== 'dead') {
+                    alert("THREAT TRACK REACHED 10!\n\nMiller's Temporal Loop activates!");
+                    triggerLoopReset();
+                } else {
+                    alert("GAME OVER! Threat Track reached 10 without 3 Directives.");
+                }
+            }
+        }
+
+        function resetGame() {
+            gameState.loop = 1;
+            gameState.threatTrack = 1;
+            gameState.directives = 0;
+            gameState.phase = 'spread';
+            gameState.ammoTokens = 1;
+            gameState.sharedDicePool = [3, 4, 2, 5];
+            Object.keys(gameState.threatOnLocations).forEach(k => gameState.threatOnLocations[k] = 0);
+            Object.keys(gameState.characters).forEach(k => {
+                gameState.characters[k].state = 'normal';
+                gameState.characters[k].location = null;
+            });
+            Object.keys(gameState.assignments).forEach(k => gameState.assignments[k] = []);
+
+            renderAssignments();
+            logConsole(`[SYSTEM] Game state fully reset.`);
+            updateUI();
+        }
+
+        function updateUI() {
+            document.getElementById('sim-loop-display').innerText = gameState.loop === 1 ? 'LOOP 1 (NORMAL TIMELINE)' : 'LOOP 2 (+1 KNOWLEDGE BOOST)';
+            document.getElementById('sim-threat-val').innerText = `${gameState.threatTrack} / 10`;
+            document.getElementById('sim-threat-bar').style.width = `${Math.min(100, gameState.threatTrack * 10)}%`;
+            document.getElementById('sim-obj-val').innerText = `${gameState.directives} / 3 DIRECTIVES`;
+
+            // Display Shared Action Dice Pool
+            document.getElementById('shared-dice-display').innerHTML = gameState.sharedDicePool.map(d => `
+                <span class="px-2 py-0.5 bg-slate-900 border border-outpost-cyan rounded shadow">${d}</span>
+            `).join('');
+
+            // Render Threat Tokens on Locations
+            Object.keys(gameState.threatOnLocations).forEach(locId => {
+                const count = gameState.threatOnLocations[locId];
+                const container = document.getElementById(`threat-tokens-${locId}`);
+                if (container) {
+                    if (count === 0) {
+                        container.innerHTML = '';
+                    } else {
+                        container.innerHTML = Array(count).fill(0).map(() => `
+                            <span class="w-3.5 h-3.5 rounded-full bg-outpost-red border border-white threat-pulse flex items-center justify-center text-[7px] font-bold text-white">T</span>
+                        `).join('');
+                    }
+                }
+            });
+
+            // Render Character Statuses
+            Object.keys(gameState.characters).forEach(k => {
+                const char = gameState.characters[k];
+                const statusEl = document.getElementById(`status-${k}`);
+                const locEl = document.getElementById(`loc-${k}`);
+
+                if (statusEl) {
+                    if (char.state === 'normal') {
+                        statusEl.innerText = 'NORMAL';
+                        statusEl.className = 'text-[10px] font-mono font-bold text-emerald-400';
+                    } else if (char.state === 'wounded') {
+                        statusEl.innerText = 'WOUNDED';
+                        statusEl.className = 'text-[10px] font-mono font-bold text-amber-400';
+                    } else {
+                        statusEl.innerText = 'DEAD';
+                        statusEl.className = 'text-[10px] font-mono font-bold text-red-500';
+                    }
+                }
+
+                if (locEl) {
+                    locEl.innerText = char.location ? `STATIONED (${char.location.replace('loc-', 'L')})` : 'UNASSIGNED';
+                }
+            });
+        }
+
+        function logConsole(msg) {
+            const consoleEl = document.getElementById('sim-console');
+            const item = document.createElement('div');
+            item.className = 'text-slate-300';
+            item.innerText = msg;
+            consoleEl.appendChild(item);
+            consoleEl.scrollTop = consoleEl.scrollHeight;
+        }
+
+        function renderPnP() {
+            const cardContainer = document.getElementById('pnp-cards-container');
+            const tokenContainer = document.getElementById('pnp-tokens-container');
+
+            cardContainer.innerHTML = CARDS_DATA.map(card => `
+                <div class="card-frame rounded-lg p-3.5 border border-slate-700 flex flex-col justify-between text-slate-200 aspect-[2.5/3.5] relative">
+                    <div class="flex justify-between items-center text-[10px] font-mono border-b border-slate-800 pb-1">
+                        <span class="text-outpost-cyan font-bold">${card.locNum}</span>
+                        <span class="text-outpost-red font-bold">${card.target}</span>
+                    </div>
+                    <div class="text-center py-2">
+                        <i class="fa-solid ${card.icon} text-3xl text-slate-300 mb-2"></i>
+                        <h4 class="font-title font-bold text-xs text-white leading-tight">${card.title}</h4>
+                    </div>
+                    <div class="bg-slate-900/90 p-2 rounded text-[9px] font-mono space-y-1">
+                        <div><strong class="text-outpost-green">Purpose:</strong> ${card.purpose}</div>
+                        <div><strong class="text-outpost-cyan">Reward:</strong> ${card.reward}</div>
+                    </div>
+                    <div class="text-[8px] font-mono text-slate-500 text-right">PHASE 1 PNP</div>
+                </div>
+            `).join('');
+
+            const tokens = [
+                { name: 'SGT VANCE', color: 'border-cyan-500 text-cyan-400' },
+                { name: 'PVT MILLER', color: 'border-red-500 text-red-400' },
+                { name: 'ROOKIE CHEN', color: 'border-emerald-500 text-emerald-400' },
+                { name: 'PVT ARIS', color: 'border-amber-500 text-amber-400' },
+            ];
+
+            tokenContainer.innerHTML = tokens.map(t => `
+                <div class="flex items-center space-x-2 bg-slate-900 p-2 rounded border border-slate-700">
+                    <div class="w-11 h-11 rounded-full border-2 ${t.color} flex flex-col items-center justify-center font-title font-bold text-[8px] bg-slate-950">
+                        <span>${t.name}</span>
+                        <span class="text-[6px] text-slate-400">NORMAL</span>
+                    </div>
+                    <i class="fa-solid fa-arrows-rotate text-xs text-slate-600"></i>
+                    <div class="w-11 h-11 rounded-full border-2 border-red-700 text-red-500 flex flex-col items-center justify-center font-title font-bold text-[8px] bg-red-950/40">
+                        <span>${t.name}</span>
+                        <span class="text-[6px] text-red-400">WOUNDED</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderGallery() {
+            const galleryContainer = document.getElementById('gallery-cards-container');
+            galleryContainer.innerHTML = CARDS_DATA.map(card => `
+                <div class="card-frame rounded-xl p-5 border border-slate-800 space-y-3">
+                    <div class="flex justify-between items-center text-xs font-mono border-b border-slate-800 pb-2">
+                        <span class="text-outpost-cyan font-bold">${card.locNum}</span>
+                        <span class="text-outpost-red font-bold">${card.target}</span>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <i class="fa-solid ${card.icon} text-3xl text-outpost-cyan"></i>
+                        <div>
+                            <h3 class="font-title font-bold text-base text-slate-100">${card.title}</h3>
+                            <p class="text-xs text-slate-400 font-mono">${card.purpose}</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-950 p-3 rounded border border-slate-800 text-xs font-mono space-y-1">
+                        <p><strong class="text-outpost-green">REWARD / BENEFIT:</strong> ${card.reward}</p>
+                        <p><strong class="text-outpost-amber">HAZARD:</strong> ${card.hazard}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-outpost-red', 'text-slate-200', 'font-bold');
+                btn.classList.add('text-slate-400');
+            });
+
+            document.getElementById(`sec-${tabId}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`tab-${tabId}`);
+            activeBtn.classList.add('bg-outpost-red', 'text-slate-200', 'font-bold');
+            activeBtn.classList.remove('text-slate-400');
+        }
+
+        window.onload = function () {
+            renderPnP();
+            renderGallery();
+            updateUI();
+        };
+    </script>
+</body>
+</html>

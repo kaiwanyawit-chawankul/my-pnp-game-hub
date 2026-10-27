@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outpost 13: Loop Protocol - PnP & Digital Game</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        sci: {
+                            base: '#0b0f19',
+                            panel: '#151c2c',
+                            border: '#2a364f',
+                            accent: '#00f0ff',
+                            warn: '#ff3366',
+                            gold: '#ffb703',
+                            green: '#00ff66'
+                        }
+                    },
+                    fontFamily: {
+                        mono: ['"Share Tech Mono"', 'monospace'],
+                        sans: ['Rajdhani', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0b0f19;
+            color: #e2e8f0;
+            font-family: 'Rajdhani', sans-serif;
+            background-image: radial-gradient(circle at 50% 50%, #151c2c 0%, #0b0f19 100%);
+        }
+        .glitch-text {
+            text-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
+        }
+        .card-shadow {
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.7), 0 0 10px 0 rgba(0, 240, 255, 0.1);
+        }
+        @media print {
+            .no-print { display: none !important; }
+            .print-page { page-break-after: always; background: white !important; color: black !important; }
+            body { background: white !important; color: black !important; }
+        }
+        .tab-btn.active {
+            border-bottom: 3px solid #00f0ff;
+            color: #00f0ff;
+            background-color: rgba(0, 240, 255, 0.05);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- TOP HEADER -->
+    <header class="border-b border-sci-border bg-sci-panel/80 backdrop-blur sticky top-0 z-50 no-print">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-[#00f0ff] fa-rotate-right text-2xl text-sci-accent animate-spin" style="animation-duration: 12s;"></i>
+                <div>
+                    <h1 class="text-xl font-bold font-mono tracking-wider text-sci-accent glitch-text">OUTPOST 13: LOOP PROTOCOL</h1>
+                    <p class="text-xs text-gray-400 font-mono">9-CARD SOLO / CO-OP SCI-FI SURVIVAL</p>
+                </div>
+            </div>
+
+            <!-- NAV TABS -->
+            <nav class="flex gap-2 border-l border-sci-border pl-4">
+                <button onclick="switchTab('game')" id="tab-game" class="tab-btn active px-4 py-2 font-mono font-bold text-sm rounded-t transition flex items-center gap-2">
+                    <i class="fa-solid fa-gamepad"></i> DIGITAL SIMULATOR
+                </button>
+                <button onclick="switchTab('pnp')" id="tab-pnp" class="tab-btn px-4 py-2 font-mono font-bold text-sm rounded-t transition flex items-center gap-2">
+                    <i class="fa-solid fa-print"></i> PRINT & PLAY (PNP)
+                </button>
+                <button onclick="switchTab('rules')" id="tab-rules" class="tab-btn px-4 py-2 font-mono font-bold text-sm rounded-t transition flex items-center gap-2">
+                    <i class="fa-solid fa-book-open"></i> RULEBOOK
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4">
+
+        <!-- ========================================== -->
+        <!-- TAB 1: DIGITAL GAME SIMULATOR -->
+        <!-- ========================================== -->
+        <section id="view-game" class="space-y-6">
+            <!-- Game Status & Trackers -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <!-- Time & Loop Status -->
+                <div class="bg-sci-panel border border-sci-border rounded-lg p-4 flex flex-col justify-between">
+                    <div>
+                        <div class="text-xs font-mono text-gray-400 flex justify-between">
+                            <span>LOOP CORRUPTION TRACK</span>
+                            <span class="text-sci-warn">MAX 10</span>
+                        </div>
+                        <div class="flex items-center gap-2 mt-2">
+                            <i class="fa-solid fa-clock text-2xl text-sci-accent"></i>
+                            <div class="text-3xl font-bold font-mono text-sci-accent" id="time-display">0 / 10</div>
+                        </div>
+                    </div>
+                    <div class="w-full bg-gray-900 h-2 rounded-full overflow-hidden mt-2 border border-sci-border">
+                        <div id="time-bar" class="bg-sci-accent h-full w-0 transition-all duration-300"></div>
+                    </div>
+                </div>
+
+                <!-- Directives Cleared -->
+                <div class="bg-sci-panel border border-sci-border rounded-lg p-4 flex flex-col justify-between">
+                    <div>
+                        <div class="text-xs font-mono text-gray-400">DIRECTIVES SECURED</div>
+                        <div class="flex items-center gap-2 mt-2">
+                            <i class="fa-solid fa-microchip text-2xl text-sci-gold"></i>
+                            <div class="text-3xl font-bold font-mono text-sci-gold" id="directives-display">0 / 3</div>
+                        </div>
+                    </div>
+                    <div class="flex gap-2 mt-2">
+                        <div id="dir-1" class="h-3 flex-1 bg-gray-800 border border-sci-border rounded"></div>
+                        <div id="dir-2" class="h-3 flex-1 bg-gray-800 border border-sci-border rounded"></div>
+                        <div id="dir-3" class="h-3 flex-1 bg-gray-800 border border-sci-border rounded"></div>
+                    </div>
+                </div>
+
+                <!-- Miller Status -->
+                <div class="bg-sci-panel border border-sci-border rounded-lg p-4 flex flex-col justify-between">
+                    <div>
+                        <div class="text-xs font-mono text-gray-400">MILLER VITAL SIGNS</div>
+                        <div class="flex items-center gap-2 mt-2">
+                            <i class="fa-solid fa-heart-pulse text-2xl text-sci-warn"></i>
+                            <div class="text-xl font-bold font-mono text-white" id="miller-status">HEALTHY</div>
+                        </div>
+                    </div>
+                    <div class="text-xs font-mono text-gray-400 mt-2">
+                        RESETS LEFT: <span id="miller-resets" class="text-sci-accent font-bold">1</span> (Sacrifice at Sector 4)
+                    </div>
+                </div>
+
+                <!-- Game Controls & Phase -->
+                <div class="bg-sci-panel border border-sci-border rounded-lg p-4 flex flex-col justify-between">
+                    <div>
+                        <div class="text-xs font-mono text-gray-400">CURRENT PHASE</div>
+                        <div class="text-lg font-bold font-mono text-sci-accent mt-1" id="phase-display">1. THREAT ACTIVATION</div>
+                    </div>
+                    <button id="main-action-btn" onclick="advancePhase()" class="w-full bg-sci-accent hover:bg-cyan-400 text-sci-base font-mono font-bold py-2 px-4 rounded transition flex items-center justify-center gap-2 mt-2">
+                        <i class="fa-solid fa-play"></i> START TURN (ROLL THREAT)
+                    </button>
+                </div>
+            </div>
+
+            <!-- LOG CONSOLE & DICE ROLLER -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Action / Log Feed -->
+                <div class="md:col-span-2 bg-sci-panel border border-sci-border rounded-lg p-4 h-36 flex flex-col">
+                    <div class="text-xs font-mono text-gray-400 mb-1 flex justify-between">
+                        <span>STATION LOG HUD</span>
+                        <span id="log-turn">TURN 1</span>
+                    </div>
+                    <div id="game-log" class="flex-grow font-mono text-xs overflow-y-auto space-y-1 text-gray-300 pr-2">
+                        <div class="text-sci-accent">> Protocol initialized. Team Miller deployed to Outpost 13.</div>
+                        <div class="text-gray-400">> Objective: Clear 3 Directives (Face-Down Locations) before Corruption reaches 10.</div>
+                    </div>
+                </div>
+
+                <!-- Operative Roster & Selection -->
+                <div class="bg-sci-panel border border-sci-border rounded-lg p-4 flex flex-col justify-between">
+                    <div class="text-xs font-mono text-gray-400 mb-2">ACTIVE OPERATIVE SELECTION</div>
+                    <div id="op-selector" class="grid grid-cols-2 gap-2">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- BOARD LOCATIONS GRID -->
+            <div>
+                <div class="flex justify-between items-center mb-3">
+                    <h2 class="text-lg font-mono font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-border-all text-sci-accent"></i> OUTPOST SECTORS (LOCATIONS)
+                    </h2>
+                    <span class="text-xs font-mono text-gray-400">Click Operative to select, then click Location to Deploy</span>
+                </div>
+                <div id="locations-grid" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Cards 1 to 6 generated dynamically -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- TAB 2: PRINT & PLAY (PNP) GENERATOR -->
+        <!-- ========================================== -->
+        <section id="view-pnp" class="hidden space-y-6">
+            <div class="bg-sci-panel border border-sci-border rounded-lg p-6 no-print flex justify-between items-center">
+                <div>
+                    <h2 class="text-xl font-bold font-mono text-sci-accent">PRINT & PLAY CARD SHEET (9 CARDS)</h2>
+                    <p class="text-sm text-gray-300 mt-1">Print these pages or save as PDF. Standard Poker Card size (2.5" x 3.5").</p>
+                </div>
+                <button onclick="window.print()" class="bg-sci-gold hover:bg-yellow-400 text-sci-base font-mono font-bold py-2 px-6 rounded transition flex items-center gap-2">
+                    <i class="fa-solid fa-print"></i> PRINT CARDS / SAVE PDF
+                </button>
+            </div>
+
+            <!-- Print Grid: 9 Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 print:grid-cols-3 print:gap-2">
+                
+                <!-- CARD 1 -->
+                <div class="bg-sci-panel border-2 border-sci-accent rounded-xl p-4 flex flex-col justify-between card-shadow print:border-black print:text-black print:bg-white min-h-[300px]">
+                    <div>
+                        <div class="flex justify-between items-start border-b border-sci-border pb-2 print:border-black">
+                            <div>
+                                <span class="text-xs font-mono text-sci-accent font-bold print:text-black">01 // LOCATION</span>
+                                <h3 class="font-bold text-lg leading-tight text-white print:text-black">Rimlands Perimeter</h3>
+                            </div>
+                            <span class="w-7 h-7 rounded-full bg-sci-accent/20 border border-sci-accent flex items-center justify-center font-mono font-bold text-sci-accent print:border-black print:text-black">1</span>
+                        </div>
+                        <p class="text-xs italic text-gray-400 mt-2 print:text-gray-700">Razor Wire & Ash-choked Ridge</p>
+                        <div class="mt-4 space-y-2 text-xs font-mono">
+                            <div class="bg-sci-base/60 p-2 rounded border border-sci-border print:bg-gray-100 print:border-gray-400">
+                                <span class="text-sci-accent font-bold print:text-black">MISSION (4+):</span> Check Deadbolt Clicks
+                            </div>
+                            <div class="bg-sci-warn/10 p-2 rounded border border-sci-warn/30 text-sci-warn print:bg-red-50 print:text-red-800 print:border-red-300">
+                                <span class="font-bold">HAZARD:</span> Stalker Ambush (1 Wound)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-2 border-t border-sci-border text-xs font-mono text-gray-400 print:border-black print:text-black flex justify-between">
+                        <span>THREAT: Perimeter Breach (+1 Threat)</span>
+                        <span class="font-bold">CARD 1 OF 9</span>
+                    </div>
+                </div>
+
+                <!-- CARD 2 -->
+                <div class="bg-sci-panel border-2 border-sci-accent rounded-xl p-4 flex flex-col justify-between card-shadow print:border-black print:text-black print:bg-white min-h-[300px]">
+                    <div>
+                        <div class="flex justify-between items-start border-b border-sci-border pb-2 print:border-black">
+                            <div>
+                                <span class="text-xs font-mono text-sci-accent font-bold print:text-black">02 // LOCATION</span>
+                                <h3 class="font-bold text-lg leading-tight text-white print:text-black">Central Comms Desk</h3>
+                            </div>
+                            <span class="w-7 h-7 rounded-full bg-sci-accent/20 border border-sci-accent flex items-center justify-center font-mono font-bold text-sci-accent print:border-black print:text-black">2</span>
+                        </div>
+                        <p class="text-xs italic text-gray-400 mt-2 print:text-gray-700">Radio Desk & Antenna</p>
+                        <div class="mt-4 space-y-2 text-xs font-mono">
+                            <div class="bg-sci-base/60 p-2 rounded border border-sci-border print:bg-gray-100 print:border-gray-400">
+                                <span class="text-sci-accent font-bold print:text-black">MISSION (3+):</span> Intercept 4.2Hz Pulse
+                            </div>
+                            <div class="bg-sci-warn/10 p-2 rounded border border-sci-warn/30 text-sci-warn print:bg-red-50 print:text-red-800 print:border-red-300">
+                                <span class="font-bold">HAZARD:</span> Psychic Migraine (+1 Threat)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-2 border-t border-sci-border text-xs font-mono text-gray-400 print:border-black print:text-black flex justify-between">
+                        <span>THREAT: Doom Beacon (+1 Threat next turn)</span>
+                        <span class="font-bold">CARD 2 OF 9</span>
+                    </div>
+                </div>
+
+                <!-- CARD 3 -->
+                <div class="bg-sci-panel border-2 border-sci-accent rounded-xl p-4 flex flex-col justify-between card-shadow print:border-black print:text-black print:bg-white min-h-[300px]">
+                    <div>
+                        <div class="flex justify-between items-start border-b border-sci-border pb-2 print:border-black">
+                            <div>
+                                <span class="text-xs font-mono text-sci-accent font-bold print:text-black">03 // LOCATION</span>
+                                <h3 class="font-bold text-lg leading-tight text-white print:text-black">Armory & Barricade</h3>
+                            </div>
+                            <span class="w-7 h-7 rounded-full bg-sci-accent/20 border border-sci-accent flex items-center justify-center font-mono font-bold text-sci-accent print:border-black print:text-black">3</span>
+                        </div>
+                        <p class="text-xs italic text-gray-400 mt-2 print:text-gray-700">Munitions Vault</p>
+                        <div class="mt-4 space-y-2 text-xs font-mono">
+                            <div class="bg-sci-base/60 p-2 rounded border border-sci-border print:bg-gray-100 print:border-gray-400">
+                                <span class="text-sci-accent font-bold print:text-black">MISSION (4+):</span> Requisition Ammo
+                            </div>
+                            <div class="bg-sci-warn/10 p-2 rounded border border-sci-warn/30 text-sci-warn print:bg-red-50 print:text-red-800 print:border-red-300">
+                                <span class="font-bold">HAZARD:</span> Weapon Jam (Lose Ammo/Wound)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-2 border-t border-sci-border text-xs font-mono text-gray-400 print:border-black print:text-black flex justify-between">
+                        <span>THREAT: Munitions Decay (-1 to rolls)</span>
+                        <span class="font-bold">CARD 3 OF 9</span>
+                    </div>
+                </div>
+
+                <!-- CARD 4 -->
+                <div class="bg-sci-panel border-2 border-sci-accent rounded-xl p-4 flex flex-col justify-between card-shadow print:border-black print:text-black print:bg-white min-h-[300px]">
+                    <div>
+                        <div class="flex justify-between items-start border-b border-sci-border pb-2 print:border-black">
+                            <div>
+                                <span class="text-xs font-mono text-sci-accent font-bold print:text-black">04 // LOCATION</span>
+                                <h3 class="font-bold text-lg leading-tight text-white print:text-black">Sub-Basement Vault</h3>
+                            </div>
+                            <span class="w-7 h-7 rounded-full bg-sci-accent/20 border border-sci-accent flex items-center justify-center font-mono font-bold text-sci-accent print:border-black print:text-black">4</span>
+                        </div>
+                        <p class="text-xs italic text-gray-400 mt-2 print:text-gray-700">Black Arterial Vines</p>
+                        <div class="mt-4 space-y-2 text-xs font-mono">
+                            <div class="bg-sci-base/60 p-2 rounded border border-sci-border print:bg-gray-100 print:border-gray-400">
+                                <span class="text-sci-accent font-bold print:text-black">MISSION (5+):</span> Sever Vines & Vacuum
+                            </div>
+                            <div class="bg-sci-warn/10 p-2 rounded border border-sci-warn/30 text-sci-warn print:bg-red-50 print:text-red-800 print:border-red-300">
+                                <span class="font-bold">HAZARD:</span> Acidic Exposure (1 Wound)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-2 border-t border-sci-border text-xs font-mono text-gray-400 print:border-black print:text-black flex justify-between">
+                        <span>THREAT: Crawler Surge (+2 Threat)</span>
+                        <span class="font-bold">CARD 4 OF 9</span>
+                    </div>
+                </div>
+
+                <!-- CARD 5 -->
+                <div class="bg-sci-panel border-2 border-sci-accent rounded-xl p-4 flex flex-col justify-between card-shadow print:border-black print:text-black print:bg-white min-h-[300px]">
+                    <div>
+                        <div class="flex justify-between items-start border-b border-sci-border pb-2 print:border-black">
+                            <div>
+                                <span class="text-xs font-mono text-sci-accent font-bold print:text-black">05 // LOCATION</span>
+                                <h3 class="font-bold text-lg leading-tight text-white print:text-black">Medical & Decon</h3>
+                            </div>
+                            <span class="w-7 h-7 rounded-full bg-sci-accent/20 border border-sci-accent flex items-center justify-center font-mono font-bold text-sci-accent print:border-black print:text-black">5</span>
+                        </div>
+                        <p class="text-xs italic text-gray-400 mt-2 print:text-gray-700">Triage Bay</p>
+                        <div class="mt-4 space-y-2 text-xs font-mono">
+                            <div class="bg-sci-base/60 p-2 rounded border border-sci-border print:bg-gray-100 print:border-gray-400">
+                                <span class="text-sci-accent font-bold print:text-black">MISSION (3+):</span> Treat Wounds & Visor
+                            </div>
+                            <div class="bg-sci-warn/10 p-2 rounded border border-sci-warn/30 text-sci-warn print:bg-red-50 print:text-red-800 print:border-red-300">
+                                <span class="font-bold">HAZARD:</span> Neuro Spasm (Cannot Heal)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-2 border-t border-sci-border text-xs font-mono text-gray-400 print:border-black print:text-black flex justify-between">
+                        <span>THREAT: Door Jam (Location Locked)</span>
+                        <span class="font-bold">CARD 5 OF 9</span>
+                    </div>
+                </div>
+
+                <!-- CARD 6 -->
+                <div class="bg-sci-panel border-2 border-sci-accent rounded-xl p-4 flex flex-col justify-between card-shadow print:border-black print:text-black print:bg-white min-h-[300px]">
+                    <div>
+                        <div class="flex justify-between items-start border-b border-sci-border pb-2 print:border-black">
+                            <div>
+                                <span class="text-xs font-mono text-sci-accent font-bold print:text-black">06 // LOCATION</span>
+                                <h3 class="font-bold text-lg leading-tight text-white print:text-black">Sector 4 Gate</h3>
+                            </div>
+                            <span class="w-7 h-7 rounded-full bg-sci-accent/20 border border-sci-accent flex items-center justify-center font-mono font-bold text-sci-accent print:border-black print:text-black">6</span>
+                        </div>
+                        <p class="text-xs italic text-gray-400 mt-2 print:text-gray-700">Primary Hive Barrier</p>
+                        <div class="mt-4 space-y-2 text-xs font-mono">
+                            <div class="bg-sci-base/60 p-2 rounded border border-sci-border print:bg-gray-100 print:border-gray-400">
+                                <span class="text-sci-accent font-bold print:text-black">MISSION (5+):</span> Lock Primary Gate
+                            </div>
+                            <div class="bg-sci-warn/10 p-2 rounded border border-sci-warn/30 text-sci-warn print:bg-red-50 print:text-red-800 print:border-red-300">
+                                <span class="font-bold">HAZARD:</span> Catastrophic Breach (2 Wounds)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-2 border-t border-sci-border text-xs font-mono text-gray-400 print:border-black print:text-black flex justify-between">
+                        <span>THREAT: Structural Collapse (+1 Threat/+1 Time)</span>
+                        <span class="font-bold">CARD 6 OF 9</span>
+                    </div>
+                </div>
+
+                <!-- CARD 7 -->
+                <div class="bg-sci-panel border-2 border-sci-gold rounded-xl p-4 flex flex-col justify-between card-shadow print:border-black print:text-black print:bg-white min-h-[300px]">
+                    <div>
+                        <div class="border-b border-sci-border pb-2 print:border-black">
+                            <span class="text-xs font-mono text-sci-gold font-bold print:text-black">07 // TRACKER</span>
+                            <h3 class="font-bold text-lg leading-tight text-white print:text-black">Time & Loop Track</h3>
+                        </div>
+                        <div class="mt-4 space-y-3 font-mono text-xs">
+                            <div class="text-center p-2 bg-sci-base border border-sci-border rounded print:bg-gray-100">
+                                <div class="text-sci-gold font-bold">TIME TRACK (0 - 10)</div>
+                                <div class="flex justify-between text-[10px] mt-1 text-gray-400 print:text-black">
+                                    <span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span class="text-sci-warn font-bold">10</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-300 print:text-black leading-relaxed">
+                                <strong>Time advances</strong> at End of Turn by the total active Threat tokens remaining on locations.
+                            </p>
+                            <div class="p-2 bg-sci-warn/10 border border-sci-warn/30 text-sci-warn rounded print:bg-red-50 print:text-red-800">
+                                <strong>DEFEAT:</strong> Time reaches 10 OR Miller dies twice without resetting.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-2 border-t border-sci-border text-xs font-mono text-gray-400 print:border-black print:text-black flex justify-between">
+                        <span>LOOP OVERSEER</span>
+                        <span class="font-bold">CARD 7 OF 9</span>
+                    </div>
+                </div>
+
+                <!-- CARD 8 -->
+                <div class="bg-sci-panel border-2 border-sci-gold rounded-xl p-4 flex flex-col justify-between card-shadow print:border-black print:text-black print:bg-white min-h-[300px]">
+                    <div>
+                        <div class="border-b border-sci-border pb-2 print:border-black">
+                            <span class="text-xs font-mono text-sci-gold font-bold print:text-black">08 // OPERATIVES</span>
+                            <h3 class="font-bold text-lg leading-tight text-white print:text-black">Team Dossier</h3>
+                        </div>
+                        <div class="mt-3 space-y-2 font-mono text-xs">
+                            <div class="border-b border-sci-border/50 pb-1 print:border-gray-300">
+                                <span class="text-sci-accent font-bold print:text-black">Vance:</span> System HUD (+2 Strength to rolls)
+                            </div>
+                            <div class="border-b border-sci-border/50 pb-1 print:border-gray-300">
+                                <span class="text-sci-warn font-bold print:text-black">Miller:</span> Loop Veteran (Reroll / Sector 4 Reset)
+                            </div>
+                            <div class="border-b border-sci-border/50 pb-1 print:border-gray-300">
+                                <span class="text-sci-green font-bold print:text-black">Chen:</span> 4.2Hz Psychic (+1 friendly roll)
+                            </div>
+                            <div class="border-b border-sci-border/50 pb-1 print:border-gray-300">
+                                <span class="text-sci-gold font-bold print:text-black">Aris:</span> Record Keeper (-1 Target Difficulty)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-2 border-t border-sci-border text-xs font-mono text-gray-400 print:border-black print:text-black flex justify-between">
+                        <span>SPECIALISTS</span>
+                        <span class="font-bold">CARD 8 OF 9</span>
+                    </div>
+                </div>
+
+                <!-- CARD 9 -->
+                <div class="bg-sci-panel border-2 border-sci-gold rounded-xl p-4 flex flex-col justify-between card-shadow print:border-black print:text-black print:bg-white min-h-[300px]">
+                    <div>
+                        <div class="border-b border-sci-border pb-2 print:border-black">
+                            <span class="text-xs font-mono text-sci-gold font-bold print:text-black">09 // RESERVES</span>
+                            <h3 class="font-bold text-lg leading-tight text-white print:text-black">Reserves & Protocol</h3>
+                        </div>
+                        <div class="mt-3 space-y-3 font-mono text-xs">
+                            <div>
+                                <div class="text-gray-400 print:text-black mb-1">DIRECTIVES SECURED (3 TO WIN):</div>
+                                <div class="flex gap-2">
+                                    <div class="border border-sci-border w-8 h-8 rounded flex items-center justify-center font-bold print:border-black">[ ]</div>
+                                    <div class="border border-sci-border w-8 h-8 rounded flex items-center justify-center font-bold print:border-black">[ ]</div>
+                                    <div class="border border-sci-border w-8 h-8 rounded flex items-center justify-center font-bold print:border-black">[ ]</div>
+                                </div>
+                            </div>
+                            <div class="p-2 bg-sci-base border border-sci-border rounded print:bg-gray-100 print:border-gray-400">
+                                <strong class="text-sci-accent print:text-black">LOOP RESET PROTOCOL:</strong><br>
+                                If Miller dies at Sector 4, reset Time to 0. Heal all living team members. Cleared Directives stay cleared!
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-2 border-t border-sci-border text-xs font-mono text-gray-400 print:border-black print:text-black flex justify-between">
+                        <span>RESERVE LOGIC</span>
+                        <span class="font-bold">CARD 9 OF 9</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- TAB 3: RULEBOOK -->
+        <!-- ========================================== -->
+        <section id="view-rules" class="hidden space-y-6">
+            <div class="bg-sci-panel border border-sci-border rounded-lg p-6 max-w-4xl mx-auto space-y-6">
+                <div class="border-b border-sci-border pb-4">
+                    <h2 class="text-2xl font-bold font-mono text-sci-accent">OUTPOST 13: LOOP PROTOCOL - OFFICIAL RULEBOOK</h2>
+                    <p class="text-sm text-gray-400 mt-1">A 9-Card Tactical Sci-Fi Loop Survival Game (Solo / Co-op)</p>
+                </div>
+
+                <div class="space-y-4 font-mono text-sm leading-relaxed text-gray-300">
+                    <h3 class="text-base font-bold text-sci-gold uppercase flex items-center gap-2">
+                        <i class="fa-solid fa-compass"></i> 1. Mission Overview
+                    </h3>
+                    <p>
+                        Miller and his specialized operative team are trapped in a decaying temporal loop inside Outpost 13. Parasitic vines, breach anomalies, and psychic pulse signals threaten to collapse the facility. To break the loop, Miller's team must secure <strong>3 Directives</strong> before station corruption (Time Track) reaches 10.
+                    </p>
+
+                    <h3 class="text-base font-bold text-sci-gold uppercase flex items-center gap-2">
+                        <i class="fa-solid fa-arrows-spin"></i> 2. Game Phase Sequence
+                    </h3>
+                    <ol class="list-decimal pl-5 space-y-2">
+                        <li>
+                            <strong class="text-sci-accent">Threat Activation:</strong> Roll 1 D6. Add 1 Threat token to the location matching the roll number. <em>Note: Face-down (cleared) locations are skipped; if a cleared location is rolled, no threat is placed!</em>
+                        </li>
+                        <li>
+                            <strong class="text-sci-accent">Assign Operatives:</strong> Place your available Operatives onto active locations to attempt missions or clear threats.
+                        </li>
+                        <li>
+                            <strong class="text-sci-accent">Mission Checks:</strong> Roll a D6 against the location's Target Number (apply operative bonuses).
+                            <ul class="list-disc pl-5 mt-1 space-y-1 text-gray-400">
+                                <li><strong>1st Success:</strong> Tap the location card (1 Directive Click secured).</li>
+                                <li><strong>2nd Success:</strong> Flip the card Face-Down (Directive Fully Secured!).</li>
+                                <li><strong>Failure:</strong> Suffer the location's Hazard penalty.</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong class="text-sci-accent">End of Turn:</strong> Unresolved threats trigger their negative effects. Time advances by the total number of active Threat tokens currently on the board.
+                        </li>
+                        <li>
+                            <strong class="text-sci-accent">Win Condition:</strong> Secure 3 Directives (flip 3 location cards face-down) before Time reaches 10.
+                        </li>
+                    </ol>
+
+                    <h3 class="text-base font-bold text-sci-gold uppercase flex items-center gap-2">
+                        <i class="fa-solid fa-users text-sci-warn"></i> 3. Operative Dossier Abilities
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                        <div class="p-3 bg-sci-base border border-sci-border rounded">
+                            <strong class="text-sci-accent text-sm">VANCE (System HUD)</strong>
+                            <p class="mt-1 text-gray-400">Grants +2 Strength modifier on all combat & mission check rolls.</p>
+                        </div>
+                        <div class="p-3 bg-sci-base border border-sci-border rounded">
+                            <strong class="text-sci-warn text-sm">MILLER (Loop Veteran)</strong>
+                            <p class="mt-1 text-gray-400">Allows 1 reroll per turn. If Miller is sacrificed at Sector 4, the entire loop resets (Time -> 0, Team Healed, Cleared Directives remain!).</p>
+                        </div>
+                        <div class="p-3 bg-sci-base border border-sci-border rounded">
+                            <strong class="text-sci-green text-sm">CHEN (4.2Hz Psychic)</strong>
+                            <p class="mt-1 text-gray-400 font-mono">+1 modifier to friendly roll results in adjacent sectors.</p>
+                        </div>
+                        <div class="p-3 bg-sci-base border border-sci-border rounded">
+                            <strong class="text-sci-gold text-sm">ARIS (Record Keeper)</strong>
+                            <p class="mt-1 text-gray-400 font-mono">Permanently reduces Mission Target Difficulty by 1 at her deployed location.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-sci-border bg-sci-panel/50 py-3 text-center text-xs font-mono text-gray-500 no-print">
+        Outpost 13: Loop Protocol © 2026 Board Game System · Designed for 9-Card Micro Format
+    </footer>
+
+    <!-- JAVASCRIPT GAME LOGIC -->
+    <script>
+        // --- GAME STATE ---
+        const gameState = {
+            time: 0,
+            directives: 0,
+            phase: 1, // 1: Threat, 2: Deploy, 3: Resolve, 4: End
+            turn: 1,
+            selectedOp: null,
+            millerResets: 1,
+            millerDead: false,
+            operatives: {
+                vance: { name: 'Vance', title: 'System HUD', color: 'text-sci-accent', ready: true },
+                miller: { name: 'Miller', title: 'Loop Veteran', color: 'text-sci-warn', ready: true },
+                chen: { name: 'Chen', title: 'Psychic', color: 'text-sci-green', ready: true },
+                aris: { name: 'Aris', title: 'Record Keeper', color: 'text-sci-gold', ready: true }
+            },
+            locations: [
+                { id: 1, name: "Rimlands Perimeter", sub: "Razor Wire & Ash-choked Ridge", target: 4, hazard: "Stalker Ambush (1 Wound)", threat: 0, tapped: false, cleared: false },
+                { id: 2, name: "Central Comms Desk", sub: "Radio Desk & Antenna", target: 3, hazard: "Psychic Migraine (+1 Threat)", threat: 0, tapped: false, cleared: false },
+                { id: 3, name: "Armory & Barricade", sub: "Munitions Vault", target: 4, hazard: "Weapon Jam (Lose Ammo/Wound)", threat: 0, tapped: false, cleared: false },
+                { id: 4, name: "Sub-Basement Vault", sub: "Black Arterial Vines", target: 5, hazard: "Acidic Vine Exposure (1 Wound)", threat: 0, tapped: false, cleared: false },
+                { id: 5, name: "Medical & Decon", sub: "Triage Bay", target: 3, hazard: "Neuro Spasm (Cannot Heal)", threat: 0, tapped: false, cleared: false },
+                { id: 6, name: "Sector 4 Gate", sub: "Primary Hive Barrier", target: 5, hazard: "Catastrophic Breach (2 Wounds)", threat: 0, tapped: false, cleared: false }
+            ]
+        };
+
+        // --- NAVIGATION ---
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+
+            document.getElementById('view-game').classList.add('hidden');
+            document.getElementById('view-pnp').classList.add('hidden');
+            document.getElementById('view-rules').classList.add('hidden');
+
+            document.getElementById(`view-${tabId}`).classList.remove('hidden');
+        }
+
+        // --- UI RENDERERS ---
+        function log(msg, color = 'text-gray-300') {
+            const logBox = document.getElementById('game-log');
+            const entry = document.createElement('div');
+            entry.className = `${color} font-mono`;
+            entry.innerHTML = `> ${msg}`;
+            logBox.appendChild(entry);
+            logBox.scrollTop = logBox.scrollHeight;
+        }
+
+        function renderTrackers() {
+            document.getElementById('time-display').innerText = `${gameState.time} / 10`;
+            document.getElementById('time-bar').style.width = `${(gameState.time / 10) * 100}%`;
+            document.getElementById('directives-display').innerText = `${gameState.directives} / 3`;
+
+            // Directive boxes
+            for (let i = 1; i <= 3; i++) {
+                const el = document.getElementById(`dir-${i}`);
+                if (i <= gameState.directives) {
+                    el.className = "h-3 flex-1 bg-sci-gold border border-sci-gold rounded";
+                } else {
+                    el.className = "h-3 flex-1 bg-gray-800 border border-sci-border rounded";
+                }
+            }
+
+            document.getElementById('miller-resets').innerText = gameState.millerResets;
+        }
+
+        function renderOps() {
+            const container = document.getElementById('op-selector');
+            container.innerHTML = '';
+            
+            Object.keys(gameState.operatives).forEach(key => {
+                const op = gameState.operatives[key];
+                const btn = document.createElement('button');
+                const isSelected = gameState.selectedOp === key;
+                btn.className = `p-2 text-xs font-mono rounded border text-left transition ${
+                    !op.ready ? 'bg-gray-900 border-gray-800 opacity-40 cursor-not-allowed' :
+                    isSelected ? 'bg-sci-accent/20 border-sci-accent text-white' :
+                    'bg-sci-base border-sci-border text-gray-300 hover:border-sci-accent'
+                }`;
+                btn.disabled = !op.ready;
+                btn.onclick = () => selectOp(key);
+                btn.innerHTML = `
+                    <div class="font-bold ${op.color}">${op.name}</div>
+                    <div class="text-[10px] text-gray-400">${op.title}</div>
+                `;
+                container.appendChild(btn);
+            });
+        }
+
+        function renderLocations() {
+            const container = document.getElementById('locations-grid');
+            container.innerHTML = '';
+
+            gameState.locations.forEach(loc => {
+                const card = document.createElement('div');
+                card.className = `bg-sci-panel border-2 ${
+                    loc.cleared ? 'border-sci-green/40 opacity-60' :
+                    loc.tapped ? 'border-sci-gold' : 'border-sci-border'
+                } rounded-xl p-4 flex flex-col justify-between transition relative overflow-hidden`;
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-start border-b border-sci-border pb-2">
+                            <div>
+                                <span class="text-xs font-mono text-sci-accent font-bold">SECTOR 0${loc.id}</span>
+                                <h3 class="font-bold text-base text-white">${loc.name}</h3>
+                            </div>
+                            <span class="w-6 h-6 rounded-full bg-sci-accent/10 border border-sci-accent flex items-center justify-center font-mono font-bold text-xs text-sci-accent">${loc.id}</span>
+                        </div>
+                        
+                        <p class="text-[11px] italic text-gray-400 mt-1">${loc.sub}</p>
+
+                        ${loc.cleared ? `
+                            <div class="my-6 p-3 bg-sci-green/10 border border-sci-green text-sci-green font-mono text-center font-bold text-xs rounded">
+                                <i class="fa-solid fa-check-circle mr-1"></i> DIRECTIVE SECURED (FACE DOWN)
+                            </div>
+                        ` : `
+                            <div class="mt-3 space-y-1.5 font-mono text-xs">
+                                <div class="bg-sci-base/80 p-2 rounded border border-sci-border flex justify-between items-center">
+                                    <span>TARGET CHECK:</span>
+                                    <span class="font-bold text-sci-accent text-sm">${loc.target}+</span>
+                                </div>
+                                <div class="bg-sci-warn/10 p-2 rounded border border-sci-warn/20 text-sci-warn text-[11px]">
+                                    <strong>HAZARD:</strong> ${loc.hazard}
+                                </div>
+                            </div>
+                        `}
+                    </div>
+
+                    <div class="mt-4 pt-2 border-t border-sci-border flex justify-between items-center font-mono text-xs">
+                        <div class="flex items-center gap-1">
+                            <i class="fa-solid fa-triangle-exclamation ${loc.threat > 0 ? 'text-sci-warn animate-pulse' : 'text-gray-600'}"></i>
+                            <span class="${loc.threat > 0 ? 'text-sci-warn font-bold' : 'text-gray-500'}">THREAT: ${loc.threat}</span>
+                        </div>
+                        ${!loc.cleared ? `
+                            <button onclick="deployToLoc(${loc.id})" class="px-3 py-1 bg-sci-accent/20 hover:bg-sci-accent/40 text-sci-accent border border-sci-accent/50 rounded text-xs transition">
+                                ${loc.tapped ? 'FINISH CLEAR' : 'EXECUTE MISSION'}
+                            </button>
+                        ` : ''}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // --- GAME ACTIONS ---
+        function selectOp(opKey) {
+            if (gameState.selectedOp === opKey) {
+                gameState.selectedOp = null;
+            } else {
+                gameState.selectedOp = opKey;
+                log(`Selected operative: ${gameState.operatives[opKey].name}`, 'text-sci-accent');
+            }
+            renderOps();
+        }
+
+        function advancePhase() {
+            if (gameState.phase === 1) {
+                // Threat Activation
+                const roll = Math.floor(Math.random() * 6) + 1;
+                log(`Phase 1: Rolled D6 [${roll}] for Threat Activation.`, 'text-sci-gold');
+                
+                const targetLoc = gameState.locations.find(l => l.id === roll);
+                if (targetLoc) {
+                    if (targetLoc.cleared) {
+                        log(`Sector 0${roll} is Face-Down (Cleared)! Threat skipped.`, 'text-sci-green');
+                    } else {
+                        targetLoc.threat += 1;
+                        log(`+1 Threat added to Sector 0${roll} (${targetLoc.name}).`, 'text-sci-warn');
+                    }
+                }
+                
+                gameState.phase = 2;
+                document.getElementById('phase-display').innerText = '2. MISSION EXECUTION';
+                document.getElementById('main-action-btn').innerText = 'END TURN (RESOLVE THREATS)';
+                renderLocations();
+            } else if (gameState.phase === 2) {
+                // End of Turn & Threat Resolution
+                let totalThreat = 0;
+                gameState.locations.forEach(loc => {
+                    if (!loc.cleared) {
+                        totalThreat += loc.threat;
+                    }
+                });
+
+                log(`End of Turn: ${totalThreat} active Threat tokens on board.`, 'text-sci-warn');
+                gameState.time += totalThreat;
+                log(`Corruption Time increased by +${totalThreat}. Total Time: ${gameState.time}`, 'text-sci-warn');
+
+                // Reset operatives for next turn
+                Object.keys(gameState.operatives).forEach(k => gameState.operatives[k].ready = true);
+                gameState.selectedOp = null;
+
+                // Check Win/Loss
+                if (gameState.directives >= 3) {
+                    alert('VICTORY! All 3 Directives secured. Loop broken!');
+                    log('MISSION ACCOMPLISHED: THE LOOP HAS BEEN BROKEN!', 'text-sci-green font-bold');
+                    return;
+                }
+
+                if (gameState.time >= 10) {
+                    alert('DEFEAT! Outpost corruption reached maximum (10). Loop collapsed.');
+                    log('CRITICAL SYSTEM FAILURE: TIME CORRUPTION REACHED 10.', 'text-sci-warn font-bold');
+                    return;
+                }
+
+                gameState.turn += 1;
+                gameState.phase = 1;
+                document.getElementById('log-turn').innerText = `TURN ${gameState.turn}`;
+                document.getElementById('phase-display').innerText = '1. THREAT ACTIVATION';
+                document.getElementById('main-action-btn').innerText = 'START TURN (ROLL THREAT)';
+                
+                renderTrackers();
+                renderOps();
+                renderLocations();
+            }
+        }
+
+        function deployToLoc(locId) {
+            if (!gameState.selectedOp) {
+                alert('Please select an active Operative first!');
+                return;
+            }
+
+            const loc = gameState.locations.find(l => l.id === locId);
+            const opKey = gameState.selectedOp;
+            const op = gameState.operatives[opKey];
+
+            // Roll D6
+            let roll = Math.floor(Math.random() * 6) + 1;
+            let modifier = 0;
+
+            if (opKey === 'vance') modifier += 2; // Vance HUD bonus
+            let effectiveTarget = loc.target;
+            if (opKey === 'aris') effectiveTarget = Math.max(2, loc.target - 1); // Aris difficulty reduction
+
+            let total = roll + modifier;
+            log(`${op.name} attempted mission at ${loc.name}. Rolled [${roll}] ${modifier > 0 ? `+${modifier}` : ''} = ${total} (Target: ${effectiveTarget}+)`, 'text-sci-accent');
+
+            if (total >= effectiveTarget) {
+                if (!loc.tapped) {
+                    loc.tapped = true;
+                    log(`SUCCESS! 1st Click secured on ${loc.name}. Card Tapped!`, 'text-sci-gold');
+                } else {
+                    loc.cleared = true;
+                    gameState.directives += 1;
+                    log(`SUCCESS! 2nd Click secured! Directive for ${loc.name} completed (Face-Down)!`, 'text-sci-green font-bold');
+                }
+            } else {
+                log(`FAILURE! Suffer Hazard: ${loc.hazard}`, 'text-sci-warn');
+                if (locId === 6 && opKey === 'miller' && gameState.millerResets > 0) {
+                    // Miller sacrifice reset logic
+                    if (confirm('Miller died at Sector 4! Activate Temporal Loop Reset? (Resets Time to 0, keeps Directives)')) {
+                        gameState.time = 0;
+                        gameState.millerResets = 0;
+                        log('TEMPORAL LOOP RESET ACTIVATED! Time reset to 0.', 'text-sci-accent font-bold');
+                    }
+                }
+            }
+
+            op.ready = false;
+            gameState.selectedOp = null;
+
+            renderTrackers();
+            renderOps();
+            renderLocations();
+        }
+
+        // INITIALIZE
+        renderTrackers();
+        renderOps();
+        renderLocations();
+    </script>
+</body>
+</html>

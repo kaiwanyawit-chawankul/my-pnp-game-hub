@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outpost 13: Loop Protocol - Rules & PnP Deck</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @media print {
+            .no-print { display: none !important; }
+            .print-page { page-break-after: always; break-after: page; }
+            body { background: white !important; color: black !important; }
+            .card-grid { display: grid !important; grid-template-columns: repeat(3, 2.5in) !important; gap: 0.1in !important; }
+            .pnp-card { width: 2.5in !important; height: 3.5in !important; box-shadow: none !important; border: 1px solid #000 !important; }
+        }
+
+        /* Poker Card Dimensions: 2.5in x 3.5in */
+        .pnp-card {
+            width: 2.5in;
+            height: 3.5in;
+            box-sizing: border-box;
+            border-radius: 0.125in;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col">
+
+    <!-- Top Navigation Bar -->
+    <header class="bg-slate-950 border-b border-slate-800 p-4 sticky top-0 z-50 no-print">
+        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <span class="text-2xl">⏳</span>
+                <div>
+                    <h1 class="text-xl font-bold tracking-wider text-amber-400">OUTPOST 13: LOOP PROTOCOL</h1>
+                    <p class="text-xs text-slate-400">Single-Player & Co-op Survival Card Game</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-3">
+                <button onclick="toggleView('rules')" id="btn-rules" class="px-4 py-2 rounded-lg font-semibold text-sm bg-amber-500 text-slate-950 hover:bg-amber-400 transition">
+                    📖 Rulebook
+                </button>
+                <button onclick="toggleView('cards')" id="btn-cards" class="px-4 py-2 rounded-lg font-semibold text-sm bg-slate-800 text-slate-300 hover:bg-slate-700 transition">
+                    🃏 Cards & PnP Sheets
+                </button>
+                <button onclick="window.print()" class="px-4 py-2 rounded-lg font-semibold text-sm bg-indigo-600 text-white hover:bg-indigo-500 transition">
+                    🖨️ Print PnP Cards
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6">
+
+        <!-- SECTION 1: RULEBOOK VIEW -->
+        <section id="view-rules" class="space-y-8">
+            <!-- Header Banner -->
+            <div class="bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-950 border border-slate-800 rounded-2xl p-6 md:p-8 shadow-2xl">
+                <div class="max-w-3xl">
+                    <span class="text-xs font-bold uppercase tracking-widest text-amber-500 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">Official Rulebook v2.0</span>
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-white mt-3">Survive the Loop. Contain the Breach.</h2>
+                    <p class="text-slate-300 mt-2 text-sm md:text-base leading-relaxed">
+                        Outpost 13 is trapped in a temporal feedback loop infested with mutating anomalies. As chief commander, manage your squad of heroes, deploy limited energy dice, harvest essential power cells, and defeat the Anomaly Boss before Turn 10 ends.
+                    </p>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 pt-6 border-t border-slate-800">
+                        <div>
+                            <span class="text-xs text-slate-400 block">PLAYERS</span>
+                            <span class="text-sm font-bold text-slate-200">1 - 2 Players</span>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400 block">DURATION</span>
+                            <span class="text-sm font-bold text-slate-200">20 - 30 Mins</span>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400 block">DECK SIZE</span>
+                            <span class="text-sm font-bold text-slate-200">9 Cards Total</span>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400 block">DICE POOL</span>
+                            <span class="text-sm font-bold text-slate-200">7 Shared Dice</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Main Rules Left Column -->
+                <div class="lg:col-span-2 space-y-8">
+                    
+                    <!-- Overview & Components -->
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-6">
+                        <h3 class="text-xl font-bold text-amber-400 mb-4 flex items-center gap-2">
+                            <span>📦</span> Component Budget (27 Total Pieces)
+                        </h3>
+                        <div class="grid sm:grid-cols-2 gap-4 text-sm">
+                            <div class="bg-slate-900 p-4 rounded-lg border border-slate-800">
+                                <h4 class="font-bold text-indigo-400 mb-2">9 Print-and-Play Cards</h4>
+                                <ul class="space-y-1 text-slate-300">
+                                    <li>• 1 Tracker Card (Turn 1-10 & Boss HP Track)</li>
+                                    <li>• 5 Hero Squad Cards (Warrior, Mage, Rogue, Cleric, Ranger)</li>
+                                    <li>• 2 Double-Sided Sector Cards (Forest/Ruin, Cave/Tomb)</li>
+                                    <li>• 1 Boss Anomaly Card (The Temporal Weaver)</li>
+                                </ul>
+                            </div>
+                            <div class="bg-slate-900 p-4 rounded-lg border border-slate-800">
+                                <h4 class="font-bold text-indigo-400 mb-2">18 Physical Tokens & Dice</h4>
+                                <ul class="space-y-1 text-slate-300">
+                                    <li>• 7 Dice (1 Shared Pool for Search & Combat)</li>
+                                    <li>• 2 Tracker Cubes (Turn Marker & Boss HP)</li>
+                                    <li>• 3 Hero Deployment Tokens</li>
+                                    <li>• 6 Energy / Resource Cubes</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Turn Structure -->
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-6">
+                        <h3 class="text-xl font-bold text-amber-400 mb-4 flex items-center gap-2">
+                            <span>🔄</span> Round Sequence (5 Phases)
+                        </h3>
+
+                        <div class="space-y-4">
+                            <div class="flex gap-4 items-start">
+                                <div class="bg-amber-500 text-slate-950 font-black rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0">1</div>
+                                <div>
+                                    <h4 class="font-bold text-white text-base">Roll & Calculate Distance</h4>
+                                    <p class="text-sm text-slate-300 mt-1">
+                                        Anglers/Commanders roll 1 die from the shared pool simultaneously. Choose a target sector 1 to 6 positions down the sector stack.
+                                        <span class="block font-mono text-xs bg-slate-900 text-amber-400 p-2 rounded mt-1">Available Power Dice = Roll Value - Target Distance</span>
+                                        You may bank unused dice to raise your Power Level (+1 Power Level per banked die, max 5).
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="flex gap-4 items-start">
+                                <div class="bg-amber-500 text-slate-950 font-black rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0">2</div>
+                                <div>
+                                    <h4 class="font-bold text-white text-base">Deploy Heroes & Place Tokens</h4>
+                                    <p class="text-sm text-slate-300 mt-1">
+                                        Simultaneously assign hero tokens onto sector target cards. You may spread deployment across sectors or stack up to 3 tokens on one sector to focus firepower.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="flex gap-4 items-start">
+                                <div class="bg-amber-500 text-slate-950 font-black rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0">3</div>
+                                <div>
+                                    <h4 class="font-bold text-white text-base">Sector Competition & Priority</h4>
+                                    <p class="text-sm text-slate-300 mt-1">
+                                        If multiple heroes enter the same sector card, determine priority:
+                                        <ul class="list-disc list-inside text-xs text-slate-400 mt-1 space-y-1">
+                                            <li><b>Trait Match:</b> Hero matching sector affinity acts first.</li>
+                                            <li><b>Roll-Off:</b> If tied, roll-off using shared dice. Higher total takes priority. Spend 1 Power Level for +1 extra die.</li>
+                                        </ul>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="flex gap-4 items-start">
+                                <div class="bg-amber-500 text-slate-950 font-black rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0">4</div>
+                                <div>
+                                    <h4 class="font-bold text-white text-base">Execute Sector Checks</h4>
+                                    <p class="text-sm text-slate-300 mt-1">
+                                        Resolve checks sequentially using assigned Power Dice. Target number equals Sector Defense (or Sector Defense + 1 if unmatched hero).
+                                        <span class="block text-xs text-emerald-400 font-semibold mt-1">✓ Success: Secure sector reward & regain hero token free.</span>
+                                        <span class="block text-xs text-rose-400 font-semibold">✗ Failure: Sector anomaly flees to bottom of deck. Pay 1 Power Level to recover token.</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="flex gap-4 items-start">
+                                <div class="bg-amber-500 text-slate-950 font-black rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0">5</div>
+                                <div>
+                                    <h4 class="font-bold text-white text-base">Anomaly Boss Encounter</h4>
+                                    <p class="text-sm text-slate-300 mt-1">
+                                        When the Boss Anomaly is revealed, players combine dice to strike. 
+                                        <span class="block font-mono text-xs bg-slate-900 text-indigo-300 p-2 rounded mt-1">Boss Damage = Total Dice Score - Boss Armor</span>
+                                        Reduce Boss HP tracker. If HP reaches 0, the loop breaks instantly and you WIN!
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Right Sidebar Column -->
+                <div class="space-y-6">
+                    
+                    <!-- Quick Reference Table -->
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-5">
+                        <h3 class="text-lg font-bold text-amber-400 mb-3">⚡ Quick Mechanics</h3>
+                        <table class="w-full text-xs text-left border-collapse">
+                            <thead>
+                                <tr class="border-b border-slate-800 text-slate-400">
+                                    <th class="py-2">Action</th>
+                                    <th class="py-2">Cost / Requirement</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-800 text-slate-300">
+                                <tr>
+                                    <td class="py-2 font-semibold">Power Dice</td>
+                                    <td class="py-2">Roll Value − Target Distance</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 font-semibold">Target Roll</td>
+                                    <td class="py-2">Sector Def (+1 if no match)</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 font-semibold">Extra Die</td>
+                                    <td class="py-2">Spend 1 Power Level (↓)</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 font-semibold">Bank Die</td>
+                                    <td class="py-2">+1 Power Level (Max 5)</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 font-semibold">Token Recovery</td>
+                                    <td class="py-2">Free on Win / 1 Power on Fail</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Sector Hazards & Tables -->
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-5">
+                        <h3 class="text-lg font-bold text-amber-400 mb-3">🌲 Sector D6 Encounter Table</h3>
+                        <div class="space-y-2 text-xs">
+                            <div class="flex justify-between p-2 bg-slate-900 rounded border border-slate-800">
+                                <span class="font-bold text-amber-400">D6 Roll 1:</span>
+                                <span>Hazard Trap (Search Check)</span>
+                            </div>
+                            <div class="flex justify-between p-2 bg-slate-900 rounded border border-slate-800">
+                                <span class="font-bold text-amber-400">D6 Roll 2-3:</span>
+                                <span>Hostile Mutation / Monster</span>
+                            </div>
+                            <div class="flex justify-between p-2 bg-slate-900 rounded border border-slate-800">
+                                <span class="font-bold text-amber-400">D6 Roll 4-5:</span>
+                                <span>Resource Cell / Supplies</span>
+                            </div>
+                            <div class="flex justify-between p-2 bg-slate-900 rounded border border-slate-800">
+                                <span class="font-bold text-amber-400">D6 Roll 6:</span>
+                                <span>Rare Tech Artifact</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Victory & Scoring -->
+                    <div class="bg-gradient-to-br from-indigo-950 to-slate-950 border border-indigo-900/50 rounded-xl p-5">
+                        <h3 class="text-lg font-bold text-indigo-300 mb-2">🏆 Victory & Scoring</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed mb-3">
+                            The game ends immediately when the Boss Anomaly HP drops to 0. Calculate final score:
+                        </p>
+                        <div class="font-mono text-xs bg-slate-900/80 p-3 rounded border border-indigo-500/30 text-indigo-200">
+                            Score = Sector VP + Boss VP + Unused Power Cells
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: PRINT & PLAY CARD GENERATOR VIEW -->
+        <section id="view-cards" class="hidden space-y-6">
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-6 no-print flex flex-wrap justify-between items-center gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-amber-400">9-Card PnP Deck Layout</h2>
+                    <p class="text-xs text-slate-400">Designed for standard poker card size (2.5 inches × 3.5 inches). Click "Print PnP Cards" to print directly.</p>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="filterDeck('all')" class="px-3 py-1.5 text-xs font-semibold rounded bg-slate-800 text-slate-200 hover:bg-slate-700">Show All (9)</button>
+                    <button onclick="filterDeck('heroes')" class="px-3 py-1.5 text-xs font-semibold rounded bg-slate-800 text-slate-200 hover:bg-slate-700">Heroes (5)</button>
+                    <button onclick="filterDeck('sectors')" class="px-3 py-1.5 text-xs font-semibold rounded bg-slate-800 text-slate-200 hover:bg-slate-700">Sectors & Tracker (4)</button>
+                </div>
+            </div>
+
+            <!-- Card Grid -->
+            <div id="card-grid" class="card-grid flex flex-wrap gap-6 justify-center">
+                
+                <!-- CARD 1: TRACKER CARD -->
+                <div class="pnp-card card-item sectors bg-slate-950 border-2 border-amber-500/60 p-3 text-slate-100">
+                    <div class="flex justify-between items-center border-b border-amber-500/40 pb-1">
+                        <span class="text-[9px] font-bold text-amber-400 uppercase tracking-widest">Master Tracker</span>
+                        <span class="text-[9px] font-mono text-slate-400">Card 1/9</span>
+                    </div>
+                    <div class="my-2 space-y-2 text-center">
+                        <div class="bg-slate-900 p-1.5 rounded border border-slate-800">
+                            <span class="text-[8px] text-slate-400 block font-bold">TURN TRACKER (1 - 10)</span>
+                            <div class="grid grid-cols-5 gap-1 mt-1 font-mono text-[9px]">
+                                <span class="bg-amber-500/20 text-amber-300 rounded border border-amber-500/40">1</span>
+                                <span class="bg-slate-800 rounded">2</span>
+                                <span class="bg-slate-800 rounded">3</span>
+                                <span class="bg-slate-800 rounded">4</span>
+                                <span class="bg-slate-800 rounded">5</span>
+                                <span class="bg-slate-800 rounded">6</span>
+                                <span class="bg-slate-800 rounded">7</span>
+                                <span class="bg-slate-800 rounded">8</span>
+                                <span class="bg-slate-800 rounded">9</span>
+                                <span class="bg-rose-950 text-rose-300 rounded border border-rose-800">10</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-900 p-1.5 rounded border border-slate-800">
+                            <span class="text-[8px] text-rose-400 block font-bold">TEMPORAL WEAVER HP (15 HP)</span>
+                            <div class="grid grid-cols-5 gap-1 mt-1 font-mono text-[8px]">
+                                <span class="bg-slate-800 rounded">1</span><span class="bg-slate-800 rounded">2</span>
+                                <span class="bg-slate-800 rounded">3</span><span class="bg-slate-800 rounded">4</span>
+                                <span class="bg-slate-800 rounded">5</span><span class="bg-slate-800 rounded">6</span>
+                                <span class="bg-slate-800 rounded">7</span><span class="bg-slate-800 rounded">8</span>
+                                <span class="bg-slate-800 rounded">9</span><span class="bg-slate-800 rounded">10</span>
+                                <span class="bg-slate-800 rounded">11</span><span class="bg-slate-800 rounded">12</span>
+                                <span class="bg-slate-800 rounded">13</span><span class="bg-slate-800 rounded">14</span>
+                                <span class="bg-rose-500 text-white font-bold rounded">15</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-[8px] text-slate-400 border-t border-slate-800 pt-1 text-center">
+                        Use tracker cubes to monitor current turn & Boss HP.
+                    </div>
+                </div>
+
+                <!-- HERO CARDS (2 to 6) -->
+                <!-- WARRIOR -->
+                <div class="pnp-card card-item heroes bg-gradient-to-b from-slate-900 to-slate-950 border-2 border-rose-600/70 p-3">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-[8px] font-bold text-rose-400 uppercase tracking-wider block">Class: Vanguard</span>
+                            <h4 class="text-sm font-black text-white">WARRIOR</h4>
+                        </div>
+                        <span class="text-[10px] bg-rose-950 text-rose-300 px-1.5 py-0.5 rounded font-mono font-bold border border-rose-800">F:2 / S:4</span>
+                    </div>
+                    <div class="my-auto text-center border-y border-slate-800 py-3">
+                        <div class="text-3xl mb-1">⚔️</div>
+                        <span class="text-[9px] font-bold text-amber-400 uppercase">Special Ability</span>
+                        <p class="text-[9px] text-slate-300 font-semibold mt-0.5 leading-tight">
+                            "Fight Twice": Roll combat checks twice; any success wins the turn.
+                        </p>
+                    </div>
+                    <div class="flex justify-between items-center text-[8px] text-slate-400">
+                        <span>Card 2/9</span>
+                        <span class="text-rose-400 font-bold">Melee Mastery</span>
+                    </div>
+                </div>
+
+                <!-- WIZARD -->
+                <div class="pnp-card card-item heroes bg-gradient-to-b from-slate-900 to-slate-950 border-2 border-indigo-500/70 p-3">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-[8px] font-bold text-indigo-400 uppercase tracking-wider block">Class: Arcanist</span>
+                            <h4 class="text-sm font-black text-white">WIZARD</h4>
+                        </div>
+                        <span class="text-[10px] bg-indigo-950 text-indigo-300 px-1.5 py-0.5 rounded font-mono font-bold border border-indigo-800">F:4 / S:2</span>
+                    </div>
+                    <div class="my-auto text-center border-y border-slate-800 py-3">
+                        <div class="text-3xl mb-1">🔮</div>
+                        <span class="text-[9px] font-bold text-amber-400 uppercase">Special Ability</span>
+                        <p class="text-[9px] text-slate-300 font-semibold mt-0.5 leading-tight">
+                            "Arcane Mastery": Re-roll any 1 die once per turn during checks.
+                        </p>
+                    </div>
+                    <div class="flex justify-between items-center text-[8px] text-slate-400">
+                        <span>Card 3/9</span>
+                        <span class="text-indigo-400 font-bold">Time Warp</span>
+                    </div>
+                </div>
+
+                <!-- CLERIC -->
+                <div class="pnp-card card-item heroes bg-gradient-to-b from-slate-900 to-slate-950 border-2 border-emerald-500/70 p-3">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-[8px] font-bold text-emerald-400 uppercase tracking-wider block">Class: Support</span>
+                            <h4 class="text-sm font-black text-white">CLERIC</h4>
+                        </div>
+                        <span class="text-[10px] bg-emerald-950 text-emerald-300 px-1.5 py-0.5 rounded font-mono font-bold border border-emerald-800">F:3 / S:4</span>
+                    </div>
+                    <div class="my-auto text-center border-y border-slate-800 py-3">
+                        <div class="text-3xl mb-1">✝️</div>
+                        <span class="text-[9px] font-bold text-amber-400 uppercase">Special Ability</span>
+                        <p class="text-[9px] text-slate-300 font-semibold mt-0.5 leading-tight">
+                            "Exorcism": Defeats 1 Undead automatically. Immune to Tomb Curse.
+                        </p>
+                    </div>
+                    <div class="flex justify-between items-center text-[8px] text-slate-400">
+                        <span>Card 4/9</span>
+                        <span class="text-emerald-400 font-bold">Holy Shield</span>
+                    </div>
+                </div>
+
+                <!-- RANGER -->
+                <div class="pnp-card card-item heroes bg-gradient-to-b from-slate-900 to-slate-950 border-2 border-amber-500/70 p-3">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-[8px] font-bold text-amber-400 uppercase tracking-wider block">Class: Scout</span>
+                            <h4 class="text-sm font-black text-white">RANGER</h4>
+                        </div>
+                        <span class="text-[10px] bg-amber-950 text-amber-300 px-1.5 py-0.5 rounded font-mono font-bold border border-amber-800">F:3 / S:3</span>
+                    </div>
+                    <div class="my-auto text-center border-y border-slate-800 py-3">
+                        <div class="text-3xl mb-1">🏹</div>
+                        <span class="text-[9px] font-bold text-amber-400 uppercase">Special Ability</span>
+                        <p class="text-[9px] text-slate-300 font-semibold mt-0.5 leading-tight">
+                            "Tracker": Re-roll Encounter die when a Monster or Hazard is drawn.
+                        </p>
+                    </div>
+                    <div class="flex justify-between items-center text-[8px] text-slate-400">
+                        <span>Card 5/9</span>
+                        <span class="text-amber-400 font-bold">Eagle Eye</span>
+                    </div>
+                </div>
+
+                <!-- ROGUE -->
+                <div class="pnp-card card-item heroes bg-gradient-to-b from-slate-900 to-slate-950 border-2 border-purple-500/70 p-3">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-[8px] font-bold text-purple-400 uppercase tracking-wider block">Class: Specialist</span>
+                            <h4 class="text-sm font-black text-white">ROGUE</h4>
+                        </div>
+                        <span class="text-[10px] bg-purple-950 text-purple-300 px-1.5 py-0.5 rounded font-mono font-bold border border-purple-800">F:3 / S:2</span>
+                    </div>
+                    <div class="my-auto text-center border-y border-slate-800 py-3">
+                        <div class="text-3xl mb-1">🗡️</div>
+                        <span class="text-[9px] font-bold text-amber-400 uppercase">Special Ability</span>
+                        <p class="text-[9px] text-slate-300 font-semibold mt-0.5 leading-tight">
+                            "Search Twice": Roll Search checks twice per sector investigation.
+                        </p>
+                    </div>
+                    <div class="flex justify-between items-center text-[8px] text-slate-400">
+                        <span>Card 6/9</span>
+                        <span class="text-purple-400 font-bold">Shadow Step</span>
+                    </div>
+                </div>
+
+                <!-- SECTOR CARD A -->
+                <div class="pnp-card card-item sectors bg-slate-950 border-2 border-teal-500/70 p-3">
+                    <div class="flex justify-between items-center border-b border-teal-500/40 pb-1">
+                        <span class="text-[8px] font-bold text-teal-400 uppercase">Sector 1 (Double-Sided)</span>
+                        <span class="text-[8px] font-mono text-slate-400">Card 7/9</span>
+                    </div>
+                    <div class="my-auto space-y-2 text-[8px]">
+                        <div class="bg-slate-900 p-1.5 rounded border border-teal-900">
+                            <span class="font-bold text-emerald-400 block">🌲 FRONT: OVERGROWN FOREST</span>
+                            <span class="text-slate-300">Passive: Hazard Snare on Roll 1. Rewards +1 Supply Cell.</span>
+                        </div>
+                        <div class="bg-slate-900 p-1.5 rounded border border-teal-900">
+                            <span class="font-bold text-amber-400 block">🏛️ BACK: ANCIENT RUIN</span>
+                            <span class="text-slate-300">Passive: Undead Horde on Roll 4. Rewards Artifact Tech.</span>
+                        </div>
+                    </div>
+                    <div class="text-[8px] text-slate-400 text-center border-t border-slate-800 pt-1">
+                        Flip card to change active sub-sector.
+                    </div>
+                </div>
+
+                <!-- SECTOR CARD B -->
+                <div class="pnp-card card-item sectors bg-slate-950 border-2 border-cyan-500/70 p-3">
+                    <div class="flex justify-between items-center border-b border-cyan-500/40 pb-1">
+                        <span class="text-[8px] font-bold text-cyan-400 uppercase">Sector 2 (Double-Sided)</span>
+                        <span class="text-[8px] font-mono text-slate-400">Card 8/9</span>
+                    </div>
+                    <div class="my-auto space-y-2 text-[8px]">
+                        <div class="bg-slate-900 p-1.5 rounded border border-cyan-900">
+                            <span class="font-bold text-cyan-400 block">🕳️ FRONT: CRYSTAL CAVE</span>
+                            <span class="text-slate-300">Passive: Ambush on Roll 1. High Energy Cell chance.</span>
+                        </div>
+                        <div class="bg-slate-900 p-1.5 rounded border border-cyan-900">
+                            <span class="font-bold text-purple-400 block">🪦 BACK: CURSED TOMB</span>
+                            <span class="text-slate-300">Passive: Curse debuff on Roll 1 (Cleric Immune). High VP.</span>
+                        </div>
+                    </div>
+                    <div class="text-[8px] text-slate-400 text-center border-t border-slate-800 pt-1">
+                        Flip card to change active sub-sector.
+                    </div>
+                </div>
+
+                <!-- BOSS ANOMALY CARD -->
+                <div class="pnp-card card-item sectors bg-gradient-to-b from-rose-950 via-slate-950 to-slate-950 border-2 border-rose-500 p-3">
+                    <div class="flex justify-between items-start border-b border-rose-500/40 pb-1">
+                        <div>
+                            <span class="text-[8px] font-bold text-rose-400 uppercase block">Final Anomaly</span>
+                            <h4 class="text-xs font-black text-white">TEMPORAL WEAVER</h4>
+                        </div>
+                        <span class="text-[9px] bg-rose-900 text-rose-200 px-1 rounded font-bold">15 HP</span>
+                    </div>
+                    <div class="my-auto text-center space-y-1.5">
+                        <div class="text-2xl">⏳👾</div>
+                        <p class="text-[8px] text-slate-300 leading-tight">
+                            <b>Phase 5 Encounter:</b> Roll combined team dice. 
+                        </p>
+                        <div class="bg-slate-900 p-1 rounded font-mono text-[8px] text-amber-300 border border-rose-900">
+                            Target Armor = 10 PWR (+1 if unmatched)
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center text-[8px] text-slate-400 border-t border-slate-800 pt-1">
+                        <span>Card 9/9</span>
+                        <span class="text-rose-400 font-bold">Defeat to Break Loop</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 border-t border-slate-800 p-4 text-center text-xs text-slate-500 no-print">
+        Outpost 13: Loop Protocol PnP Edition • Designed for 9 Cards & 18 Tokens • 2026
+    </footer>
+
+    <!-- Interactive Toggle Script -->
+    <script>
+        function toggleView(view) {
+            const rulesSection = document.getElementById('view-rules');
+            const cardsSection = document.getElementById('view-cards');
+            const btnRules = document.getElementById('btn-rules');
+            const btnCards = document.getElementById('btn-cards');
+
+            if (view === 'rules') {
+                rulesSection.classList.remove('hidden');
+                cardsSection.classList.add('hidden');
+                btnRules.className = "px-4 py-2 rounded-lg font-semibold text-sm bg-amber-500 text-slate-950 hover:bg-amber-400 transition";
+                btnCards.className = "px-4 py-2 rounded-lg font-semibold text-sm bg-slate-800 text-slate-300 hover:bg-slate-700 transition";
+            } else {
+                rulesSection.classList.add('hidden');
+                cardsSection.classList.remove('hidden');
+                btnCards.className = "px-4 py-2 rounded-lg font-semibold text-sm bg-amber-500 text-slate-950 hover:bg-amber-400 transition";
+                btnRules.className = "px-4 py-2 rounded-lg font-semibold text-sm bg-slate-800 text-slate-300 hover:bg-slate-700 transition";
+            }
+        }
+
+        function filterDeck(category) {
+            const cardItems = document.querySelectorAll('.card-item');
+            cardItems.forEach(card => {
+                if (category === 'all') {
+                    card.style.display = 'flex';
+                } else if (card.classList.contains(category)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
